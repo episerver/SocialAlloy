@@ -73,12 +73,12 @@
       <HintPath>..\packages\EPiServer.Framework.10.1.0\lib\net45\EPiServer.ApplicationModules.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Cms.Shell.UI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.0\lib\net45\EPiServer.Cms.Shell.UI.dll</HintPath>
+    <Reference Include="EPiServer.Cms.Shell.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Cms.Shell.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Cms.UI.AspNetIdentity, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.AspNetIdentity.10.1.0\lib\net45\EPiServer.Cms.UI.AspNetIdentity.dll</HintPath>
+    <Reference Include="EPiServer.Cms.UI.AspNetIdentity, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.AspNetIdentity.10.1.1\lib\net45\EPiServer.Cms.UI.AspNetIdentity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Configuration, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
@@ -133,16 +133,16 @@
       <HintPath>..\packages\EPiServer.Packaging.UI.3.3.0\lib\net45\EPiServer.Packaging.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Shell, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.0\lib\net45\EPiServer.Shell.dll</HintPath>
+    <Reference Include="EPiServer.Shell, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Shell.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Shell.UI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.0\lib\net45\EPiServer.Shell.UI.dll</HintPath>
+    <Reference Include="EPiServer.Shell.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Shell.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.UI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.0\lib\net45\EPiServer.UI.dll</HintPath>
+    <Reference Include="EPiServer.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Web.WebControls, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
@@ -371,6 +371,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="App_Data\EPiServerDB_fa7b5fde.mdf" />
+    <Content Include="App_Data\EPiServerDB_fa7b5fde_log.ldf">
+      <DependentUpon>EPiServerDB_fa7b5fde.mdf</DependentUpon>
+    </Content>
     <Content Include="ClientResources\Images\icons\layoutIcons24x24.png" />
     <Content Include="ClientResources\Scripts\Editors\StringList.js" />
     <Content Include="ClientResources\Styles\LayoutIcons.css" />
