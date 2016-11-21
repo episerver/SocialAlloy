@@ -18,7 +18,7 @@
                 using (Html.BeginForm("Rate", "ProductPage"))
                 {
                 <div class="clearfix">
-                    <div style="margin-top:1em;"><i>Rate the page</i></div>
+                    <div style="margin-top:0.5em;"><i>Rate the page</i></div>
                     <div>
                         <ul style="margin-left:1em;"  >
                             @for (var numOfRatings = 0; numOfRatings < @Model.PageRatings.Count; numOfRatings++)
@@ -44,9 +44,14 @@
 
         @if (ViewBag.Statistics != null)
         {
-            <div style="margin-top:1em;margin-bottom:1em;">
+            decimal average = 0;
+            if (@ViewBag.Statistics.TotalCount > 0)
+            {
+                average = Decimal.Divide(@ViewBag.Statistics.Sum, @ViewBag.Statistics.TotalCount); //handle Overflow exception?
+            }
+            <div style="margin-top:0.5em;margin-bottom:1em;">
                 <div>Rating Statistics for @Model.CurrentPage.Name</div>
-                <div style="margin-left:0.25em">Average Rating:<strong>@((@ViewBag.Statistics.Sum / @ViewBag.Statistics.TotalCount).ToString())</strong></div>
+                <div style="margin-left:0.25em">Average Rating:<strong>@(average.ToString())</strong></div>
                 <div style="margin-left:0.25em">Total: <strong>@ViewBag.Statistics.TotalCount</strong></div>
             </div>
         }
