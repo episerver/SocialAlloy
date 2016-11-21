@@ -15,14 +15,27 @@ namespace EPiServer.SocialAlloy.Web.Controllers
         public ViewResult Index(ProductPage currentPage)
         {
             var model = ProductViewModel.Create(currentPage);
-            @ViewBag.PageReference = currentPage.ContentLink;
+            if (this.User.Identity.IsAuthenticated)
+            {
+                model.CurrentUserName = this.User.Identity.Name;
+
+                //Get existing rating for logged in user and currentPage
+            }
             return View(string.Format("~/Views/{0}/Index.cshtml", currentPage.GetOriginalType().Name), model);
         }
 
         [HttpPost]
         public ActionResult Rate(ProductPage currentContent, int? userRating)
         {
-            return RedirectToAction("Index");
+            if (this.User.Identity.IsAuthenticated)
+            {
+                string productId = currentContent.ContentLink.ToString();
+
+                //Add the rating submitted by logged in user for currentPage
+                return RedirectToAction("Index");
+            }
+            else
+                throw new Exception("You must login to Rate the page");
         }
     }
 }

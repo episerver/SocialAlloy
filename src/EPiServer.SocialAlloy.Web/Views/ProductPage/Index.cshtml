@@ -1,35 +1,38 @@
 @using EPiServer.SocialAlloy.Web
 @model ProductViewModel<ProductPage>
-<script type="text/javascript">
+@{ Layout = "~/Views/Shared/Layouts/_TwoPlusOne.cshtml"; }
+
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <script type="text/javascript">
                 function Reset() {
                     var dropDownItems = document.getElementsByName("UserRating");
                     for (var i = 0; i < dropDownItems.length; i++) {
                         dropDownItems[i].checked = false;
                     }
                 }
-</script>
-
-@{ Layout = "~/Views/Shared/Layouts/_TwoPlusOne.cshtml"; }
-
-        @using (Html.BeginForm("Rate", "ProductPage"))
-        {
-            <div class="clearfix">
-                <div style="margin-top:1em;"><i>Rate the page</i></div>
-                <div>
-                    <ul style="margin-left:1em;"  >
-                        @for (var numOfRatings = 0; numOfRatings < @Model.PageRatings.Count; numOfRatings++)
-                        {
-                            <li style="list-style-type:none; display:inline">
-                                @Html.RadioButtonFor(r => Model.UserRating, Model.PageRatings[numOfRatings], new { @class = "userrating" })
-                            </li>
-                        }
-                    </ul>
+            </script>
+            
+            using (Html.BeginForm("Rate", "ProductPage"))
+            {
+                <div class="clearfix">
+                    <div style="margin-top:1em;"><i>Rate the page</i></div>
+                    <div>
+                        <ul style="margin-left:1em;"  >
+                            @for (var numOfRatings = 0; numOfRatings < @Model.PageRatings.Count; numOfRatings++)
+                            {
+                                <li style="list-style-type:none; display:inline">
+                                    @Html.RadioButtonFor(r => Model.UserRating, Model.PageRatings[numOfRatings], new { @class = "userrating" })
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
+                        <a href="#" id="btnReset" value="Reset" onclick="Reset(); return false;">Reset</a>
+                    </div>
                 </div>
-                <div>
-                    <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
-                    <a href="#" id="btnReset" value="Reset" onclick="Reset(); return false;">Reset</a>
-                </div>
-            </div>
+            }
         }
 
         <h1 @Html.EditAttributes(x => x.CurrentPage.PageName)>@Model.CurrentPage.PageName</h1>
