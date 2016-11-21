@@ -12,9 +12,11 @@
                     }
                 }
             </script>
-            
-            using (Html.BeginForm("Rate", "ProductPage"))
+
+            if (ViewBag.UserRatingForTarget == null)
             {
+                using (Html.BeginForm("Rate", "ProductPage"))
+                {
                 <div class="clearfix">
                     <div style="margin-top:1em;"><i>Rate the page</i></div>
                     <div>
@@ -32,7 +34,21 @@
                         <a href="#" id="btnReset" value="Reset" onclick="Reset(); return false;">Reset</a>
                     </div>
                 </div>
+                }
             }
+            else
+            {
+                <div style="margin-top:1em;margin-bottom:1em;"><strong>@Model.CurrentUserName</strong> you rated this page as <strong>@ViewBag.UserRatingForTarget.Value.Value</strong> out of <strong>5</strong></div>
+            }
+        }
+
+        @if (ViewBag.Statistics != null)
+        {
+            <div style="margin-top:1em;margin-bottom:1em;">
+                <div>Rating Statistics for @Model.CurrentPage.Name</div>
+                <div style="margin-left:0.25em">Average Rating:<strong>@((@ViewBag.Statistics.Sum / @ViewBag.Statistics.TotalCount).ToString())</strong></div>
+                <div style="margin-left:0.25em">Total: <strong>@ViewBag.Statistics.TotalCount</strong></div>
+            </div>
         }
 
         <h1 @Html.EditAttributes(x => x.CurrentPage.PageName)>@Model.CurrentPage.PageName</h1>

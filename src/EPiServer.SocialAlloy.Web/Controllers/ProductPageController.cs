@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EPiServer.SocialAlloy.Web.Business;
 
 namespace EPiServer.SocialAlloy.Web.Controllers
 {
@@ -21,10 +22,14 @@ namespace EPiServer.SocialAlloy.Web.Controllers
             if (this.User.Identity.IsAuthenticated)
             {
                 model.CurrentUserName = this.User.Identity.Name;
+                var user = Reference.Create(model.CurrentUserName);
+                var target = Reference.Create(currentPage.ContentLink.ToString());
+
+                //Get rating statistics for currentPage
+                @ViewBag.Statistics = target.GetStatistics();
 
                 //Get existing rating for logged in user and currentPage
-                var svc = ServiceLocator.Current.GetInstance<IRatingService>();
-                var list = svc.Get(new Criteria<RatingFilter>());
+                @ViewBag.UserRatingForTarget = user.GetRating(target);
 
             }
             return View(string.Format("~/Views/{0}/Index.cshtml", currentPage.GetOriginalType().Name), model);
@@ -33,11 +38,15 @@ namespace EPiServer.SocialAlloy.Web.Controllers
         [HttpPost]
         public ActionResult Rate(ProductPage currentContent, int? userRating)
         {
-            if (this.User.Identity.IsAuthenticated)
+            if (this.User.Identity.IsAuthenticated && userRating.HasValue)
             {
                 string productId = currentContent.ContentLink.ToString();
 
                 //Add the rating submitted by logged in user for currentPage
+                var user = Reference.Create(this.User.Identity.Name);
+                var target = Reference.Create(currentContent.ContentLink.ToString());
+                user.Rate(target, userRating.Value);
+
                 return RedirectToAction("Index");
             }
             else
