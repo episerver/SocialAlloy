@@ -1,4 +1,7 @@
 ﻿using EPiServer.Framework.DataAnnotations;
+using EPiServer.ServiceLocation;
+using EPiServer.Social.Common;
+using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Models.Pages;
 using EPiServer.SocialAlloy.Web.Models.ViewModels;
 using System;
@@ -20,6 +23,9 @@ namespace EPiServer.SocialAlloy.Web.Controllers
                 model.CurrentUserName = this.User.Identity.Name;
 
                 //Get existing rating for logged in user and currentPage
+                var svc = ServiceLocator.Current.GetInstance<IRatingService>();
+                var list = svc.Get(new Criteria<RatingFilter>());
+
             }
             return View(string.Format("~/Views/{0}/Index.cshtml", currentPage.GetOriginalType().Name), model);
         }
