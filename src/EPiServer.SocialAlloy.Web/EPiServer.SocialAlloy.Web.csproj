@@ -368,7 +368,6 @@
     <Compile Include="Models\ViewModels\VideoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Social\Blocks\CommentsBlock.cs" />
-    <Compile Include="Social\Config\SocialViewEngine.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Models\CommentsDisplayModel.cs" />
     <Compile Include="Startup.cs" />

@@ -11,7 +11,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Comments.Controllers
     {
         public override ActionResult Index(CommentsBlock currentBlock)
         {
-            return PartialView(currentBlock);
+            return PartialView("~/Views/Social/CommentsBlock/CommentsDisplayView.cshtml", currentBlock);
         }
     }
 }

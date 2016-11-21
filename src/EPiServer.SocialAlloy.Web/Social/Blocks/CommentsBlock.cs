@@ -8,7 +8,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Comments.Blocks
     /// <summary>
     /// The CommentBlock class defines the configuration used for rendering comments views.
     /// </summary>
-    [ContentType(DisplayName = "CommentsBlock", GUID = "b8a110ff-a8e2-4c17-9706-ce777694ebd4", Description = "")]
+    [ContentType(DisplayName = "Comments Block", GUID = "b8a110ff-a8e2-4c17-9706-ce777694ebd4", Description = "")]
     public class CommentsBlock : BlockData
     {
         [Display(
