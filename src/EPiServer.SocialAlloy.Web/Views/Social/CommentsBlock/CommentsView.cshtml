@@ -1,0 +1,27 @@
+﻿@*
+This is the comment block frontend view.  It accepts a CommentsBlockView model whose data is used to
+fill in view data.
+*@
+@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Comments.Models
+
+@model CommentsBlockViewModel
+
+<div>
+    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <hr />
+    @using (Html.BeginForm("Submit", null))
+    {
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
+        <div>
+            <textarea rows="10" name="Body" id="Body" placeholder="Enter your comment"></textarea>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Add Comment">
+        </div>
+    }
+</div>
+<div class="border">
+    Most Recent Comments Go Here
+</div>
