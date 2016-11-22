@@ -368,8 +368,11 @@
     <Compile Include="Models\ViewModels\VideoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Social\Blocks\CommentsBlock.cs" />
-    <Compile Include="Social\Controllers\CommentsBlockController.cs" />
-    <Compile Include="Social\Models\CommentsDisplayModel.cs" />
+    <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
+    <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
+    <Compile Include="Social\Controllers\CommentsBlockViewController.cs" />
+    <Compile Include="Social\Models\CommentFormViewModel.cs" />
+    <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -537,7 +540,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <Content Include="Web.config" />
-    <Content Include="Views\Social\CommentsBlock\CommentsDisplayView.cshtml" />
+    <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
