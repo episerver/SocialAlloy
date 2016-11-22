@@ -1,7 +1,7 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Comments.Blocks;
+﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 
-namespace EPiServer.SocialAlloy.Web.Social.Comments.Models
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// The CommentsBlockViewModel class represents the model that will be used to
@@ -27,6 +27,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Comments.Models
         /// The heading for the frontend comments block display.
         /// </summary>
         public string Heading { get; }
+
+        /// <summary>
+        /// A success message that should be flashed in the view.
+        /// </summary>
+        public string SuccessMessage { get; set; }
+
+        /// <summary>
+        /// A error message that should be flashed in the view.
+        /// </summary>
+        public string ErrorMessage { get; set; }
 
         /// <summary>
         /// Gets the username for the user who may currently submit comments.

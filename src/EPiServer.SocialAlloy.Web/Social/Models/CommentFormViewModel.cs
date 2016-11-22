@@ -1,6 +1,6 @@
 ﻿using EPiServer.Core;
 
-namespace EPiServer.SocialAlloy.Web.Social.Comments.Models
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// The CommentFormViewModel class represents the model of a social comment form view.
