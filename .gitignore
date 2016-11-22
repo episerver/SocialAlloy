@@ -248,6 +248,5 @@ paket-files/
 *.sln.iml
 
 # Ignore SocialAlloy Data and Config
-/src/EPiServer.SocialAlloy.Web/web*.config
 /src/EPiServer.SocialAlloy.Web/App_Data/**/*
 
