@@ -3,7 +3,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 
-namespace EPiServer.SocialAlloy.Web.Social.Comments.Blocks
+namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
     /// <summary>
     /// The CommentBlock class defines the configuration used for rendering comments views.
