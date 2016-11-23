@@ -1,0 +1,31 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model RatingBlockViewModel
+
+<div>
+
+  @if (this.User.Identity.IsAuthenticated && Model.CurrentRating.HasValue)
+  {
+    <div>@Model.Rater you rated the page at @Model.CurrentRating</div>
+  }
+  else if (this.User.Identity.IsAuthenticated)
+  {
+      using (Html.BeginForm("Submit", null))
+      {
+        @Html.LabelFor(m => m.CurrentBlockLink)
+        @Html.LabelFor(m => m.CurrentPageLink)
+        @Html.LabelFor(m => m.Rater)
+        <div>Rating option buttons go here</div>
+        <div>
+            <input type="submit" name="submit" value="Submit">
+        </div>
+      }
+  }
+</div>
+<div class="border">
+    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <hr />
+    <div>Average: @Model.Average</div>
+    <div>TotalCount: @Model.TotalCount</div>
+</div>

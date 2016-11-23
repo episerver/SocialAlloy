@@ -26,10 +26,10 @@ namespace EPiServer.SocialAlloy.Web.Controllers
                 var target = Reference.Create(currentPage.ContentLink.ToString());
 
                 //Get rating statistics for currentPage
-                @ViewBag.Statistics = target.GetStatistics();
+                //@ViewBag.Statistics = target.GetStatistics();
 
                 //Get existing rating for logged in user and currentPage
-                @ViewBag.UserRatingForTarget = user.GetRating(target);
+                //@ViewBag.UserRatingForTarget = user.GetRating(target);
 
             }
             return View(string.Format("~/Views/{0}/Index.cshtml", currentPage.GetOriginalType().Name), model);
