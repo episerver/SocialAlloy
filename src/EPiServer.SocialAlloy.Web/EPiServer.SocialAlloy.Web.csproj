@@ -441,6 +441,7 @@
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\RatingPostModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />

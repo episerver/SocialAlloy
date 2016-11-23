@@ -52,15 +52,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="ratingForm">The rating form being submitted.</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Submit(RatingFormViewModel ratingForm)
+        public ActionResult Submit(RatingPostModel ratingForm)
         {
             // TODO:  validate/store the rating here
 
-            //Check with CC, why this?
-            //var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            //var data = contentRepository.Get<IContentData>(commentForm.CurrentBlockLink);
-
-            //var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
 
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
         }
