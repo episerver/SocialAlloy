@@ -55,5 +55,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the reference link of the block containing the comment form.
         /// </summary>
         public ContentReference CurrentBlockLink { get; set; }
+
+        /// <summary>
+        /// The new rating submitted by Rater for CurrentPageLink
+        /// </summary>
+        public int SubmittedRating { get; set; }
     }
 }

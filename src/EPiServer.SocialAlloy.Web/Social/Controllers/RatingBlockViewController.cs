@@ -34,7 +34,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 model.Rater = this.User.Identity.Name; //Do we need to get UserId here instead of name??
                 //fetch Rating from Social API for rater
                 //if (rating found)
-                    model.CurrentRating = 4;
+                    //model.CurrentRating = 4;
             }
 
             //Fetch rating statistics for target and set values in the viewmodel.
@@ -45,23 +45,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", ratingBlockViewModel);
         }
 
-        ///// <summary>
-        ///// Submit handles the submitting of new comments.  It accepts a comment form model,
-        ///// stores the submitted comment, and redirects back to the current page.
-        ///// </summary>
-        ///// <param name="commentForm">The comment form being submitted.</param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public ActionResult Submit(CommentFormViewModel commentForm)
-        //{
-        //    // TODO:  validate/store the comment here
+        /// <summary>
+        /// Submit handles the submitting of new ratings.  It accepts a rating form model,
+        /// stores the submitted rating, and redirects back to the current page.
+        /// </summary>
+        /// <param name="ratingForm">The rating form being submitted.</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Submit(RatingFormViewModel ratingForm)
+        {
+            // TODO:  validate/store the rating here
 
-        //    var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-        //    var data = contentRepository.Get<IContentData>(commentForm.CurrentBlockLink);
+            //Check with CC, why this?
+            //var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            //var data = contentRepository.Get<IContentData>(commentForm.CurrentBlockLink);
 
-        //    var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
+            //var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
 
-        //    return Redirect(UrlResolver.Current.GetUrl(commentForm.CurrentPageLink));
-        //}
+            return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
+        }
     }
 }

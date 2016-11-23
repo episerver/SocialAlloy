@@ -1,6 +1,7 @@
 ﻿using EPiServer.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
+using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
@@ -20,16 +21,29 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             : base(form.CurrentPageLink, form.CurrentBlockLink)
         {
             Heading = block.Heading;
+            //TODO remove the commented lines
+            RatingValues = new List<int>() { 1, 2, 3, 4, 5 };
+            //RatingValues = new List<int>();
+            //RatingValues.AddRange(block.RatingValues);
+
             TotalCount = form.TotalCount;
             Average = form.Average;
             Rater = form.Rater;
             CurrentRating = form.CurrentRating;
+            SubmittedRating = form.SubmittedRating;
         }
 
         /// <summary>
-        /// The heading for the frontend comments block display.
+        /// The heading for the frontend rating block display.
         /// </summary>
         public string Heading { get; }
+
+        /// <summary>
+        /// The rating value settings for the frontend rating block display.
+        /// </summary>
+
+        public List<int> RatingValues { get; set; }
+        //public List<int> RatingValues { get; }
 
         /// <summary>
         /// The total number of ratings found for CurrentPageLink
@@ -47,8 +61,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string Rater { get; set; }
 
         /// <summary>
-        /// The current rating, if any submitted by Rater for CurrentPageLink
+        /// The existing rating, if any submitted by Rater for CurrentPageLink
         /// </summary>
         public int? CurrentRating { get; set; }
+
+        /// <summary>
+        /// The new rating submitted by Rater for CurrentPageLink
+        /// </summary>
+        public int SubmittedRating { get; set; }
     }
 }
