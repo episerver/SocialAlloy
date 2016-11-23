@@ -29,10 +29,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            // Get state data values
-            var successMessage = GetStateValue("SuccessMessage");
-            var errorMessage = GetStateValue("ErrorMessage");
-            var commentBody = GetStateValue("Body");
+            // Get model state
+            var successMessage = GetModelState("SuccessMessage");
+            var errorMessage = GetModelState("ErrorMessage");
+            var commentBody = GetModelState("Body");
 
             // Update the comment form view model with latest state data.
             var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, currentBlockLink);

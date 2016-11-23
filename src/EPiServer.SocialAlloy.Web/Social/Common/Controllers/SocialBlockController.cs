@@ -41,7 +41,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         /// </summary>
         /// <param name="key">The key of the state to get.</param>
         /// <returns>The </returns>
-        protected ModelState GetStateValue(string key)
+        protected ModelState GetModelState(string key)
         {
             ModelState value;
             ViewData.ModelState.TryGetValue(key, out value);
