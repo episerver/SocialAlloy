@@ -30,7 +30,7 @@
         </div>
     }
 
-    <br/>
+    <br />
 
     @if (!String.IsNullOrWhiteSpace(Model.DisplayErrorMessage))
     {
@@ -40,20 +40,17 @@
     {
         foreach (var comment in Model.Comments)
         {
-            if (comment.IsVisible)
+            var author = "anonymous";
+            if (!comment.Author.IsEmpty())
             {
-                var author = "anonymous";
-                if (!comment.Author.IsEmpty())
-                {
-                    author = comment.Author.ToString();
-                }
-                <div style="font-weight: bold;">
-                    @comment.Created @author said:
-                </div>
-                <div>
-                    @comment.Body
-                </div>
+                author = comment.Author.ToString();
             }
+            <div style="font-weight: bold;">
+                @comment.Created @author said:
+            </div>
+            <div>
+                @comment.Body
+            </div>
             <br />
         }
     }

@@ -196,6 +196,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         PageInfo = new PageInfo
                         {
                             PageSize = commentDisplayMax
+                        },
+                        Filter = new CommentFilter
+                        {
+                            Visibility = Visibility.Visible
                         }
                     }
                 ).Results.ToList();
