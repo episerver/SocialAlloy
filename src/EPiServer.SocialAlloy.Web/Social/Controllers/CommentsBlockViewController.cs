@@ -1,8 +1,8 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.SocialAlloy.Web.Social.Comments.Blocks;
-using EPiServer.SocialAlloy.Web.Social.Comments.Models;
+using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.Web.Routing;
 using System.Web.Mvc;
 
