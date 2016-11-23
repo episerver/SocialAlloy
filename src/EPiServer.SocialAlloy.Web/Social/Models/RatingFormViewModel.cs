@@ -15,25 +15,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
             CurrentPageLink = currentPageLink;
             CurrentBlockLink = currentBlockLink;
-            Rater = string.Empty;
-            CurrentRating = null;
+            //SubmittedRating = null; validate if rating was submitted
         }
-
-        //Rating Statistics related properties
-        /// <summary>
-        /// The total number of ratings found for CurrentPageLink
-        /// </summary>
-        public int TotalCount { get; set; }
-
-        /// <summary>
-        /// The average of all ratings submitted for CurrentPageLink
-        /// </summary>
-        public decimal Average { get; set; }
-
-        /// <summary>
-        /// The current rating, if any submitted by Rater for CurrentPageLink
-        /// </summary>
-        public int? CurrentRating { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the page containing the rating block.
@@ -45,15 +28,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
         public ContentReference CurrentBlockLink { get; set; }
 
-        //New Rating related properties
         /// <summary>
-        /// The user who submitted the rating
+        /// The new rating submitted by logged in user for CurrentPageLink
         /// </summary>
-        public string Rater { get; set; }
-
-        /// <summary>
-        /// The new rating submitted by Rater for CurrentPageLink
-        /// </summary>
-        public int SubmittedRating { get; set; }
+        public int? SubmittedRating { get; set; }
     }
 }

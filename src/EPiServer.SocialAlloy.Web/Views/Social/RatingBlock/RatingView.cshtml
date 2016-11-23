@@ -3,42 +3,72 @@
 
 @model RatingBlockViewModel
 
-<div>
-
-  @if (this.User.Identity.IsAuthenticated && Model.CurrentRating.HasValue)
-  {
-    <div>@Model.Rater you rated the page at @Model.CurrentRating</div>
-  }
-  else if (this.User.Identity.IsAuthenticated)
-  {
-      using (Html.BeginForm("Submit", null))
-      {
-        @Html.HiddenFor(m => m.CurrentBlockLink)
-        @Html.HiddenFor(m => m.CurrentPageLink)
-        @Html.HiddenFor(m => m.Rater)
-        <div class="clearfix">
-            <div style="margin-top:0.5em;"><i>How do rate this page?</i></div>
-            <div>
-                <ul style="margin-left:1em;">
-                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
-                    {
-                        <li style="list-style-type:none; display:inline">
-                            @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings], new { @class = "userrating" })
-                        </li>
-                    }
-                </ul>
-            </div>
-            <div>
-                <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
-                @*<a href="#" id="btnReset" value="Reset" onclick="Reset(); return false;">Reset</a>*@
-            </div>
-        </div>
-      }
-  }
-</div>
 <div class="border">
-    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <h2 style="margin-top:0.5em;" @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <div>
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <hr />
+            if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+            {
+                <div style="color: green;">@Model.SubmitSuccessMessage</div>
+            }
+
+            if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+            {
+                <div style="color: red;">@Model.SubmitErrorMessage</div>
+                <div style="color: blue;">Please try submitting your rating again.</div>
+            }
+
+            if (!String.IsNullOrWhiteSpace(Model.GetRatingErrorMessage))
+            {
+                <div style="color: red;">@Model.GetRatingErrorMessage</div>
+            }
+            else
+            {
+                if (Model.CurrentRating.HasValue)
+                {
+                    <div>You rated the page as @Model.CurrentRating out of @Model.RatingValues.Last().ToString()</div>
+                }
+                else
+                {
+                    using (Html.BeginForm("Submit", null))
+                    {
+                        @Html.HiddenFor(m => m.CurrentBlockLink)
+                        @Html.HiddenFor(m => m.CurrentPageLink)
+                        <div class="clearfix">
+                            <div><i>How do rate this page?</i></div>
+                            <div>
+                                <ul>
+                                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
+                                    {
+                                        <li style="list-style-type:none; display:inline">
+                                            @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings])
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        }
+    </div>
     <hr />
-    <div>Average: @Model.Average</div>
-    <div>TotalCount: @Model.TotalCount</div>
+    @if (!String.IsNullOrWhiteSpace(Model.GetStatisticsErrorMessage))
+    {
+        <div style="color: red;">@Model.GetStatisticsErrorMessage</div>
+    }
+    else if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
+    {
+        <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+    }
+    else
+    {
+        <div><strong>Average: @Model.Average</strong></div>
+        <div><strong>Total: @Model.TotalCount</strong></div>
+    }
 </div>

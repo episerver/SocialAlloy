@@ -26,11 +26,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             //RatingValues = new List<int>();
             //RatingValues.AddRange(block.RatingValues);
 
-            TotalCount = form.TotalCount;
-            Average = form.Average;
-            Rater = form.Rater;
-            CurrentRating = form.CurrentRating;
-            SubmittedRating = form.SubmittedRating;
+            if (form.SubmittedRating.HasValue)
+                SubmittedRating = form.SubmittedRating.Value;
         }
 
         /// <summary>
@@ -43,12 +40,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
 
         public List<int> RatingValues { get; set; }
+        //TODO remove above and use this below
         //public List<int> RatingValues { get; }
 
         /// <summary>
         /// The total number of ratings found for CurrentPageLink
         /// </summary>
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; }
 
         /// <summary>
         /// The average of all ratings submitted for CurrentPageLink
@@ -69,5 +67,32 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The new rating submitted by Rater for CurrentPageLink
         /// </summary>
         public int SubmittedRating { get; set; }
+
+        /// <summary>
+        /// Message displayed in rating form if submitted rating saved successfully
+        /// </summary>
+        public string SubmitSuccessMessage { get; set; }
+
+        /// <summary>
+        /// Message displayed in rating form if error encountered while saving submitted rating
+        /// </summary>
+        public string SubmitErrorMessage { get; set; }
+
+        /// <summary>
+        /// Message displayed in rating form if error encountered while retrieving rating for logged in user
+        /// </summary>
+        public string GetRatingErrorMessage { get; set; }
+
+        /// <summary>
+        /// Message displayed in rating form if error encountered while retrieving rating statistics
+        /// </summary>
+        public string GetStatisticsErrorMessage { get; set; }
+
+        /// <summary>
+        /// Message displayed in rating form if no rating statistics are found for the page
+        /// </summary>
+        public string NoStatisticsFoundMessage { get; set; }
+        
+
     }
 }
