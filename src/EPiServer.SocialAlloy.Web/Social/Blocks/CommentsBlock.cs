@@ -17,6 +17,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         [CultureSpecific]
         public virtual string Heading { get; set; }
 
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual int CommentBoxRows { get; set; }
+
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual int CommentMaxLength { get; set; }
+
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual int CommentsDisplayMax { get; set; }
+
         /// <summary>
         /// Sets the default property values on the content data.
         /// </summary>
@@ -25,6 +40,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         {
             base.SetDefaultValues(contentType);
             Heading = "Social Comments";
+            CommentBoxRows = 5;
+            CommentMaxLength = 500;
+            CommentsDisplayMax = 10;
         }
     }
 }

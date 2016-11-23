@@ -1,6 +1,6 @@
 ﻿@*
-This is the comment block frontend view.  It accepts a CommentsBlockView model whose data is used to
-fill in view data.
+    This is the comment block frontend view.  It accepts a CommentsBlockView model whose data is used to
+    fill in view data.
 *@
 @using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models
@@ -10,26 +10,48 @@ fill in view data.
 <div>
     <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
     <hr />
-    @if (!String.IsNullOrWhiteSpace(Model.SuccessMessage))
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
     {
-        <div style="color: green;">@Model.SuccessMessage</div>
+        <div style="color: green;">@Model.SubmitSuccessMessage</div>
     }
-    @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
     {
-        <div style="color: red;">@Model.ErrorMessage</div>
+        <div style="color: red;">@Model.SubmitErrorMessage</div>
     }
     @using (Html.BeginForm("Submit", null))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
         <div>
-            <textarea rows="10" name="Body" id="Body" placeholder="Enter your comment"></textarea>
+            <textarea rows="@Model.CommentBoxRows" maxlength="@Model.CommentMaxLength" name="Body" id="Body" placeholder="Enter your comment"></textarea>
         </div>
         <div>
             <input type="submit" name="submit" value="Add Comment">
         </div>
     }
-</div>
-<div class="border">
-    Most Recent Comments Go Here
+
+    <br />
+
+    @if (!String.IsNullOrWhiteSpace(Model.DisplayErrorMessage))
+    {
+        <div style="color: red;">@Model.DisplayErrorMessage</div>
+    }
+    else
+    {
+        foreach (var comment in Model.Comments)
+        {
+            var author = "anonymous";
+            if (!comment.Author.IsEmpty())
+            {
+                author = comment.Author.ToString();
+            }
+            <div style="font-weight: bold;">
+                @comment.Created @author said:
+            </div>
+            <div>
+                @comment.Body
+            </div>
+            <br />
+        }
+    }
 </div>

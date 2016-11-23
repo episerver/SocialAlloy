@@ -1,5 +1,7 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
+﻿using EPiServer.Social.Comments.Core;
+using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
+using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
@@ -19,6 +21,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             : base(form.CurrentPageLink, form.CurrentBlockLink)
         {
             Heading = block.Heading;
+            CommentBoxRows = block.CommentBoxRows;
+            CommentMaxLength = block.CommentMaxLength;
+            CommentsDisplayMax = block.CommentsDisplayMax;
             CommentAuthor = form.Author;
             CommentBody = form.Body;
         }
@@ -29,14 +34,39 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string Heading { get; }
 
         /// <summary>
+        /// The number of rows in the comment box.
+        /// </summary>
+        public int CommentBoxRows { get; }
+
+        /// <summary>
+        /// The max length of a new comment.
+        /// </summary>
+        public int CommentMaxLength { get; }
+
+        /// <summary>
+        /// The max length of a new comment.
+        /// </summary>
+        public int CommentsDisplayMax { get; }
+
+        /// <summary>
+        /// The comments to show.
+        /// </summary>
+        public List<Comment> Comments { get; set; }
+
+        /// <summary>
         /// A success message that should be flashed in the view.
         /// </summary>
-        public string SuccessMessage { get; set; }
+        public string SubmitSuccessMessage { get; set; }
 
         /// <summary>
         /// A error message that should be flashed in the view.
         /// </summary>
-        public string ErrorMessage { get; set; }
+        public string SubmitErrorMessage { get; set; }
+
+        /// <summary>
+        /// A error message that should be flashed in the message display view.
+        /// </summary>
+        public string DisplayErrorMessage { get; set; }
 
         /// <summary>
         /// Gets the username for the user who may currently submit comments.
