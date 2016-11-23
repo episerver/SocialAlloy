@@ -30,17 +30,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
         public decimal Average { get; set; }
 
-        //New Rating related properties
-        /// <summary>
-        /// The user who submitted the rating
-        /// </summary>
-        public string Rater { get; set; }
-
-        /// <summary>
-        /// The rating submitted by Rater for CurrentPageLink
-        /// </summary>
-        public int RatingValue { get; set; }
-
         /// <summary>
         /// The current rating, if any submitted by Rater for CurrentPageLink
         /// </summary>
@@ -55,6 +44,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the reference link of the block containing the comment form.
         /// </summary>
         public ContentReference CurrentBlockLink { get; set; }
+
+        //New Rating related properties
+        /// <summary>
+        /// The user who submitted the rating
+        /// </summary>
+        public string Rater { get; set; }
 
         /// <summary>
         /// The new rating submitted by Rater for CurrentPageLink
