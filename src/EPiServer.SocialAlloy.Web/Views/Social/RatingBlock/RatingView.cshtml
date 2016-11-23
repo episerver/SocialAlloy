@@ -1,0 +1,44 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model RatingBlockViewModel
+
+<div>
+
+  @if (this.User.Identity.IsAuthenticated && Model.CurrentRating.HasValue)
+  {
+    <div>@Model.Rater you rated the page at @Model.CurrentRating</div>
+  }
+  else if (this.User.Identity.IsAuthenticated)
+  {
+      using (Html.BeginForm("Submit", null))
+      {
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.HiddenFor(m => m.Rater)
+        <div class="clearfix">
+            <div style="margin-top:0.5em;"><i>How do rate this page?</i></div>
+            <div>
+                <ul style="margin-left:1em;">
+                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
+                    {
+                        <li style="list-style-type:none; display:inline">
+                            @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings], new { @class = "userrating" })
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
+                @*<a href="#" id="btnReset" value="Reset" onclick="Reset(); return false;">Reset</a>*@
+            </div>
+        </div>
+      }
+  }
+</div>
+<div class="border">
+    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <hr />
+    <div>Average: @Model.Average</div>
+    <div>TotalCount: @Model.TotalCount</div>
+</div>

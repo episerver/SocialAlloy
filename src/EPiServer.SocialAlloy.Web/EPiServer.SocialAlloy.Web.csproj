@@ -177,6 +177,26 @@
       <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Social.Ratings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.Site.1.0.0\lib\EPiServer.Social.Ratings.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.UI.dll</HintPath>
       <Private>True</Private>
@@ -343,6 +363,7 @@
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
     <Compile Include="Business\PageViewContextFactory.cs" />
+    <Compile Include="Business\RatingExtensions.cs" />
     <Compile Include="Business\Rendering\AlloyContentAreaRenderer.cs" />
     <Compile Include="Business\Rendering\ErrorHandlingContentRenderer.cs" />
     <Compile Include="Business\Rendering\IContainerPage.cs" />
@@ -358,6 +379,7 @@
     <Compile Include="Controllers\PageControllerBase.cs" />
     <Compile Include="Controllers\PageListBlockController.cs" />
     <Compile Include="Controllers\PreviewController.cs" />
+    <Compile Include="Controllers\ProductPageController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SearchPageController.cs" />
     <Compile Include="Controllers\StartPageController.cs" />
@@ -405,15 +427,21 @@
     <Compile Include="Models\ViewModels\PageListModel.cs" />
     <Compile Include="Models\ViewModels\PageViewModel.cs" />
     <Compile Include="Models\ViewModels\PreviewModel.cs" />
+    <Compile Include="Models\ViewModels\ProductViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchContentModel.cs" />
     <Compile Include="Models\ViewModels\VideoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Social\Blocks\CommentsBlock.cs" />
+    <Compile Include="Social\Blocks\RatingBlock.cs" />
     <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
-    <Compile Include="Social\Controllers\CommentsBlockController.cs" />
+    <Compile Include="Social\Controllers\RatingBlockViewController.cs" />
+    <Compile Include="Social\Controllers\CommentsBlockViewController.cs" />
+    <Compile Include="Social\Models\RatingFormViewModel.cs" />
+    <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\RatingPostModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -523,7 +551,9 @@
     <Content Include="Views\Web.config" />
     <Content Include="Global.asax" />
     <None Include="EPiServerLog.config" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="modules\_protected\EPiServer.Packaging.UI\web.config" />
     <Content Include="modules\_protected\EPiServer.Packaging.UI\EPiServer.Packaging.UI.zip" />
     <Content Include="Views\_viewstart.cshtml" />
@@ -582,6 +612,7 @@
     </None>
     <Content Include="Web.config" />
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
+    <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
