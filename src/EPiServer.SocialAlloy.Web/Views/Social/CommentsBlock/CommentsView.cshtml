@@ -3,13 +3,21 @@ This is the comment block frontend view.  It accepts a CommentsBlockView model w
 fill in view data.
 *@
 @using EPiServer.Web.Mvc.Html
-@using EPiServer.SocialAlloy.Web.Social.Comments.Models
+@using EPiServer.SocialAlloy.Web.Social.Models
 
 @model CommentsBlockViewModel
 
 <div>
     <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
     <hr />
+    @if (!String.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div style="color: green;">@Model.SuccessMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div style="color: red;">@Model.ErrorMessage</div>
+    }
     @using (Html.BeginForm("Submit", null))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
