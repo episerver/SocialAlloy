@@ -26,22 +26,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
+            // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            var successMessage = GetSavedState("SuccessMessage");
+            // Get model state
+            var successMessage = GetModelState("SuccessMessage");
+            var errorMessage = GetModelState("ErrorMessage");
+            var commentBody = GetModelState("Body");
 
-            var errorMessage = GetSavedState("ErrorMessage");
-
-            var commentBody = GetSavedState("Body");
-
-            // Update the comment form view model with latest state.
+            // Update the comment form view model with latest state data.
             var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
             if (commentBody != null)
             {
                 commentForm.Body = commentBody.Value.AttemptedValue;
             }
 
-            // Update the comment block view model with latest state.
+            // Update the comment block view model with latest state data.
             var commentBlockViewModel = new CommentsBlockViewModel(currentBlock, commentForm);
             if (successMessage != null)
             {
@@ -81,33 +81,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 commentsViewModel.ErrorMessage = "Failed to submit your comment!";
             }
 
-            var transientState = GetTransientState(commentsViewModel);
-
-            SaveModelState(commentForm.CurrentBlockLink, transientState);
+            SaveModelState(commentForm.CurrentBlockLink, CollectViewModelStateToSave(commentsViewModel));
 
             return Redirect(UrlResolver.Current.GetUrl(commentForm.CurrentPageLink));
         }
 
         /// <summary>
-        /// Attempt to get a saved state given its key.
-        /// </summary>
-        /// <param name="key">The key of the state to get.</param>
-        /// <returns></returns>
-        private ModelState GetSavedState(string key)
-        {
-            ModelState value;
-            ViewData.ModelState.TryGetValue(key, out value);
-            return value;
-        }
-
-        /// <summary>
-        /// Gets comment block view model state that is transient in nature and would be lost during redirection.
+        /// Collects view model state that needs to be saved.
         /// </summary>
         /// <param name="commentsViewModel"></param>
         /// <returns></returns>
-        private static ModelStateDictionary GetTransientState(CommentsBlockViewModel commentsViewModel)
+        private ModelStateDictionary CollectViewModelStateToSave(CommentsBlockViewModel commentsViewModel)
         {
-            return new ModelStateDictionary
+            var transientState = new ModelStateDictionary
             {
                 new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
                 (
@@ -124,6 +110,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     }
                 )
             };
+
+            var modelState = ViewData.ModelState;
+            if (transientState != null)
+            {
+                modelState.Merge(transientState);
+            }
+
+            return modelState;
         }
     }
 }
