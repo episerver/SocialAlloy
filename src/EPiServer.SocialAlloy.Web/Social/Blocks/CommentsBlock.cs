@@ -20,6 +20,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         [Display(
             GroupName = SystemTabNames.Content,
             Order = 1)]
+        public virtual bool ShowHeading { get; set; }
+
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
         public virtual int CommentBoxRows { get; set; }
 
         [Display(
@@ -39,6 +44,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
+            ShowHeading = false;
             Heading = "Social Comments";
             CommentBoxRows = 5;
             CommentMaxLength = 500;

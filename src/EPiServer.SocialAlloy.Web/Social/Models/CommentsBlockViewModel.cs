@@ -20,6 +20,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             : base(form.CurrentPageLink, form.CurrentBlockLink)
         {
             Heading = block.Heading;
+            ShowHeading = block.ShowHeading;
             CommentBoxRows = block.CommentBoxRows;
             CommentMaxLength = block.CommentMaxLength;
             CommentsDisplayMax = block.CommentsDisplayMax;
@@ -32,6 +33,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The heading for the frontend comments block display.
         /// </summary>
         public string Heading { get; }
+
+        /// <summary>
+        /// Whether to show the block heading in the frontend comments block display.
+        /// </summary>
+        public bool ShowHeading { get; }
 
         /// <summary>
         /// The number of rows in the comment box.

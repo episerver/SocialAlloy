@@ -8,8 +8,11 @@
 @model CommentsBlockViewModel
 
 <div>
-    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
-    <hr />
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
     @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
     {
         <div style="color: green;">@Model.SubmitSuccessMessage</div>
