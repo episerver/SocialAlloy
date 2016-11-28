@@ -141,6 +141,62 @@
       <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Shell.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Social.Comments, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Comments.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Comments.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Comments.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Comments.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.Site.1.0.0\lib\EPiServer.Social.Comments.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.1.0.0\lib\EPiServer.Social.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Common.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Common.Rest.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Common.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Ratings.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.Site.1.0.0\lib\EPiServer.Social.Ratings.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.UI.dll</HintPath>
       <Private>True</Private>
@@ -216,6 +272,11 @@
     </Reference>
     <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.web-signed.3.1.6.186\lib\net40\StructureMap.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
@@ -302,6 +363,7 @@
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
     <Compile Include="Business\PageViewContextFactory.cs" />
+    <Compile Include="Business\RatingExtensions.cs" />
     <Compile Include="Business\Rendering\AlloyContentAreaRenderer.cs" />
     <Compile Include="Business\Rendering\ErrorHandlingContentRenderer.cs" />
     <Compile Include="Business\Rendering\IContainerPage.cs" />
@@ -317,6 +379,7 @@
     <Compile Include="Controllers\PageControllerBase.cs" />
     <Compile Include="Controllers\PageListBlockController.cs" />
     <Compile Include="Controllers\PreviewController.cs" />
+    <Compile Include="Controllers\ProductPageController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SearchPageController.cs" />
     <Compile Include="Controllers\StartPageController.cs" />
@@ -364,9 +427,21 @@
     <Compile Include="Models\ViewModels\PageListModel.cs" />
     <Compile Include="Models\ViewModels\PageViewModel.cs" />
     <Compile Include="Models\ViewModels\PreviewModel.cs" />
+    <Compile Include="Models\ViewModels\ProductViewModel.cs" />
     <Compile Include="Models\ViewModels\SearchContentModel.cs" />
     <Compile Include="Models\ViewModels\VideoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Social\Blocks\CommentsBlock.cs" />
+    <Compile Include="Social\Blocks\RatingBlock.cs" />
+    <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
+    <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
+    <Compile Include="Social\Controllers\RatingBlockViewController.cs" />
+    <Compile Include="Social\Controllers\CommentsBlockViewController.cs" />
+    <Compile Include="Social\Models\RatingFormViewModel.cs" />
+    <Compile Include="Social\Models\RatingBlockViewModel.cs" />
+    <Compile Include="Social\Models\CommentFormViewModel.cs" />
+    <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\RatingPostModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -383,6 +458,57 @@
     <Content Include="Resources\LanguageFiles\PropertyNames.xml" />
     <Content Include="Resources\LanguageFiles\Views.xml" />
     <Content Include="Resources\LanguageFiles\_ReadMe.txt" />
+    <Content Include="Setup\App_Data\blobs\0091ff0f37e74ba089ced92bea808ae8\0b29c9305eda43dd83e3981a6ed3a82d.png" />
+    <Content Include="Setup\App_Data\blobs\00edc11506674f64b627be6bbc5e7c2a\26d4468ea1a24ddcb287b129546bc9bb.png" />
+    <Content Include="Setup\App_Data\blobs\04a23bc8ca3742d3a92aa2000a05b8fc\ad15c26de9ae4961bb2684c9fc0e3a22.jpg" />
+    <Content Include="Setup\App_Data\blobs\0a51229b66324a8f9de96368bebc9fc0\3654f95ce9c243b88a097eafa064ebda.png" />
+    <Content Include="Setup\App_Data\blobs\0a51229b66324a8f9de96368bebc9fc0\3654f95ce9c243b88a097eafa064ebda_Thumbnail.png" />
+    <Content Include="Setup\App_Data\blobs\0c5d76287c854472a4799e41abd903ea\73bc58da26334206b2fee86b6f7c0a65.png" />
+    <Content Include="Setup\App_Data\blobs\0d15cb431c0e413db2ead52a0fde5358\f08006eb5ef94dcb812559722f8de4d0.jpg" />
+    <Content Include="Setup\App_Data\blobs\1019c9d226a54e52bcba8d98b33f4baf\8fbb14eb5b8948fd80cbe9b6484ad482.mp4" />
+    <Content Include="Setup\App_Data\blobs\1742caa8b3274e7ea11e0804f8d472d6\415137265cd848ce8736d489f047c8c3.png" />
+    <Content Include="Setup\App_Data\blobs\259c3abe9b804c579534cdf986572b7f\7dba176dd85e4d898462b6f11111b163.png" />
+    <Content Include="Setup\App_Data\blobs\29caea02f4fa4c7680e86618abaa7b7c\364d4d07c3fa4f8db401ce9504688eec.png" />
+    <Content Include="Setup\App_Data\blobs\2f25c5bf0de847d9b87da413fbd2b026\c101fa5b5d844132bd6e0662c89fdd91.png" />
+    <Content Include="Setup\App_Data\blobs\33aae7a927854e77a1a195f9b20a5686\36444e66f2354570b131138f502e14d4.png" />
+    <Content Include="Setup\App_Data\blobs\3a847b60b61347829a2fe7fc3e97aa1b\78e08f306fc44c03888da8bab14fee3e.png" />
+    <Content Include="Setup\App_Data\blobs\3a847b60b61347829a2fe7fc3e97aa1b\78e08f306fc44c03888da8bab14fee3e_Thumbnail.png" />
+    <Content Include="Setup\App_Data\blobs\3f321441dd7d4f12a3692b69095de26a\7dc53b1842e240979311291983a7ae66.png" />
+    <Content Include="Setup\App_Data\blobs\46822d8cfcd541af988264e7a9d00f84\642752e9ab914dbc8bfbff7b158c1a0b.jpg" />
+    <Content Include="Setup\App_Data\blobs\4fc6e596878942bcaf4d881ee02f3c70\ecc95455fbcf46dfb11d8a8515dacf79.jpg" />
+    <Content Include="Setup\App_Data\blobs\553f39d2aa7a4c1dac06f1c3a575e0c4\4e5447acdec14f9d9e64357b785304fd.png" />
+    <Content Include="Setup\App_Data\blobs\5a51bf68c3fc4c8aaf149929c9a239a7\9b4566cb57114c5d82f8b011b3317164.png" />
+    <Content Include="Setup\App_Data\blobs\5aa23633fc004e738a64fcaebd63f000\4744fa764ccc4f51876166ac614abe10.png" />
+    <Content Include="Setup\App_Data\blobs\61ad2d746c494a819755e67c5d853d9b\2aedf124d98949208342b1ec395f07c3.png" />
+    <Content Include="Setup\App_Data\blobs\6999ff3a1a954ca7b8e0c26e8f552a55\75b9ce805d054490bca033587498917a.png" />
+    <Content Include="Setup\App_Data\blobs\6999ff3a1a954ca7b8e0c26e8f552a55\75b9ce805d054490bca033587498917a_Thumbnail.png" />
+    <Content Include="Setup\App_Data\blobs\6a611025609145d29e5d1aa489f46356\930770cbd8c9437da02cb1c0468945c2.jpg" />
+    <Content Include="Setup\App_Data\blobs\7268674766db404ea6ff4907f66a9ec5\eb53bd3a3bd442d98db93e8d2c3fc1af.png" />
+    <Content Include="Setup\App_Data\blobs\7526af227d6d4963a974089e5dd5b368\4f5f01fe279d4e468b5ac5334b34134f.png" />
+    <Content Include="Setup\App_Data\blobs\79d6718ca85042a6b5cc362e40d8ea2e\649294cc796f41929a1965718dffd37a.png" />
+    <Content Include="Setup\App_Data\blobs\8160f11de10047f197cdf020f1a1bad7\e5b75ca76f414e5a8a7b7ca19ee41841.png" />
+    <Content Include="Setup\App_Data\blobs\848aeecb132b443c9222de9be533796b\1d2e8fda4a944335b2f2fd05c1c0eec7.png" />
+    <Content Include="Setup\App_Data\blobs\91826f94a18e42c0a8fc76dcd937cd65\5af56c1426724c0ca388e9c2ea6399d0.jpg" />
+    <Content Include="Setup\App_Data\blobs\91826f94a18e42c0a8fc76dcd937cd65\5af56c1426724c0ca388e9c2ea6399d0_Thumbnail.jpg" />
+    <Content Include="Setup\App_Data\blobs\954f68437f824d39bf68a27753c53eef\bd34e19f5c0f4a2ba1c1c8d5f01808ae.png" />
+    <Content Include="Setup\App_Data\blobs\9b5c0ea3ac174ab3a8273f76acbf75c0\e6b6a9b869714ea485f3fd17c38b537f.png" />
+    <Content Include="Setup\App_Data\blobs\a14834ad6f264976a77cef6b4015cb3f\92c46e048fef43d6978fb9afed9f5aaa.jpg" />
+    <Content Include="Setup\App_Data\blobs\a584bfd38d9a434baa097994917561eb\4e473727445d48b983ee4b7dd5900e83.png" />
+    <Content Include="Setup\App_Data\blobs\a7766b600d14409e94f2a9a8097e5645\7e0637ed94d34711a656619e53f487e8.png" />
+    <Content Include="Setup\App_Data\blobs\b7273d1993e74aeb98083da9ee359779\ccdc110de0d64864b73fcb36c1b77a53.png" />
+    <Content Include="Setup\App_Data\blobs\bb9e4449e857497e9a86bbb9519c0ecd\1a8e1607451f46508bc92399484aac6b.png" />
+    <Content Include="Setup\App_Data\blobs\bb9e4449e857497e9a86bbb9519c0ecd\1a8e1607451f46508bc92399484aac6b_Thumbnail.png" />
+    <Content Include="Setup\App_Data\blobs\c203d1f0834344bebea05c28678d1841\6598d114649f403494a5e39ae0e52e12.png" />
+    <Content Include="Setup\App_Data\blobs\c203d1f0834344bebea05c28678d1841\6598d114649f403494a5e39ae0e52e12_Thumbnail.png" />
+    <Content Include="Setup\App_Data\blobs\d64bd1f987494bd9af2e260db68dc30d\0e06c4e11a794b428ab4f881663b88e8.png" />
+    <Content Include="Setup\App_Data\blobs\e7eb6a10c0844f80ae547f8670aba26f\17183bbd93a049bb9911f4baeebeff3e.png" />
+    <Content Include="Setup\App_Data\blobs\ed3b7840fac94392a0c2f3a22a21cc32\723817a183ac4ada82e87421f1bf4033.png" />
+    <Content Include="Setup\App_Data\blobs\f254cc59032345d5890d59d0fc3a23c2\14a448bd83c44587807a4aab90d730b1.png" />
+    <Content Include="Setup\App_Data\blobs\f28e86fbe36b42cdb4e921a9a1e88809\0a3b3bfc98c644458cf557c98a999c1a.jpg" />
+    <Content Include="Setup\App_Data\EPiServerDB_0c0a2111.mdf" />
+    <Content Include="Setup\App_Data\EPiServerDB_0c0a2111_log.ldf">
+      <DependentUpon>EPiServerDB_0c0a2111.mdf</DependentUpon>
+    </Content>
     <Content Include="Static\css\bootstrap-collapse.js" />
     <Content Include="Static\css\bootstrap-responsive.css" />
     <Content Include="Static\css\bootstrap.css" />
@@ -424,11 +550,10 @@
     <Content Include="Static\jwplayer\video.mp4" />
     <Content Include="Views\Web.config" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
-    <Content Include="App_Data\DefaultSiteContent.episerverdata" />
-    <Content Include="App_Data\GeoLiteCity.dat" />
     <None Include="EPiServerLog.config" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="modules\_protected\EPiServer.Packaging.UI\web.config" />
     <Content Include="modules\_protected\EPiServer.Packaging.UI\EPiServer.Packaging.UI.zip" />
     <Content Include="Views\_viewstart.cshtml" />
@@ -476,6 +601,18 @@
     <Content Include="modules\_protected\Shell\Shell.zip" />
     <Content Include="modules\_protected\CMS\web.config" />
     <Content Include="modules\_protected\CMS\CMS.zip" />
+    <Content Include="Setup\App_Data\DefaultSiteContent.episerverdata" />
+    <Content Include="Setup\App_Data\GeoLiteCity.dat" />
+    <Content Include="Setup\Web.config" />
+    <None Include="Setup\Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Setup\Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Web.config" />
+    <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
+    <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
