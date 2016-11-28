@@ -1,5 +1,4 @@
-﻿using EPiServer.Social.Comments.Core;
-using EPiServer.SocialAlloy.Web.Social.Blocks;
+﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
@@ -26,6 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             CommentsDisplayMax = block.CommentsDisplayMax;
             CommentAuthor = form.Author;
             CommentBody = form.Body;
+            Comments = new List<SocialComment>();
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// The comments to show.
         /// </summary>
-        public List<Comment> Comments { get; set; }
+        public IEnumerable<SocialComment> Comments { get; set; }
 
         /// <summary>
         /// A success message that should be flashed in the view.
