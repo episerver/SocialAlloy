@@ -5,6 +5,7 @@ using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Models;
+using EPiServer.SocialAlloy.Web.Social.User;
 using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
@@ -49,13 +50,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var target = pageRouteHelper.PageLink.ID;
-
+            var target = pageRouteHelper.Page.ContentGuid.ToString();
+            
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
             //Populate the view model
-            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
+            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, target, currentBlockLink);
             var ratingViewBlockModel = new RatingBlockViewModel(currentBlock, formModel);
 
             // Set model state from saved model state/prior form submission
@@ -71,7 +72,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             //Check if user has already rated the page
             if (this.User.Identity.IsAuthenticated)
             {
-                GetRating(this.User.Identity.Name, target, ratingViewBlockModel);
+                GetRating(target, ratingViewBlockModel);
             }
 
             //Check if there are any rating statistics for the page
@@ -102,7 +103,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             if (IsValid(ratingForm.SubmittedRating))
             {
                 //save rating
-                AddRating(this.User.Identity.Name, ratingForm.CurrentPageLink.ID, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                AddRating(ratingForm.PageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
             }
             else
                 ratingViewBlockModel.SubmitErrorMessage = "Please select a valid rating";
@@ -112,20 +113,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
         }
 
-        private void AddRating(string user, int target, int value, RatingBlockViewModel ratingViewBlockModel)
+        private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.SubmitErrorMessage = String.Empty;
             ratingViewBlockModel.SubmitSuccessMessage = String.Empty;
 
             try
             {
-                var result = ratingService.Add(new Rating(
-                                        Reference.Create(user), 
-                                        Reference.Create(target.ToString()),
+                var user = (new MembershipUserSession(this.User)).Current;
+                if (user != Social.User.User.Anonymous)
+                {
+                    var result = ratingService.Add(new Rating(
+                                        user.Reference,
+                                        Reference.Create(target),
                                         new RatingValue(value))
-                );
-
-                ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
+                    );
+                    ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
+                }
+                else
+                {
+                    ratingViewBlockModel.SubmitErrorMessage = "There was an error identifying the logged in user, please re-login and try again.";
+                }
             }
             catch (Exception e)
             {
@@ -172,25 +180,29 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return modelState;
         }
 
-        private void GetRating(string user, int target, RatingBlockViewModel ratingViewBlockModel)
+        private void GetRating(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.CurrentRating = null;
             ratingViewBlockModel.GetRatingErrorMessage = String.Empty;
 
             try
             {
-                var result = ratingService.Get(new Criteria<RatingFilter>()
+                var user = (new MembershipUserSession(this.User)).Current;
+                if (user != Social.User.User.Anonymous)
                 {
-                    Filter = new RatingFilter()
+                    var result = ratingService.Get(new Criteria<RatingFilter>()
                     {
-                        Rater = Reference.Create(user),
-                        Targets = new List<Reference> { Reference.Create(target.ToString()) }
-                    },
-                    PageInfo = new PageInfo() { PageSize = 1 }
-                });
+                        Filter = new RatingFilter()
+                        {
+                            Rater = user.Reference,
+                            Targets = new List<Reference> { Reference.Create(target) }
+                        },
+                        PageInfo = new PageInfo() { PageSize = 1 }
+                    });
 
-                if (result.Results.Count() > 0)
-                    ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;
+                    if (result.Results.Count() > 0)
+                        ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;
+                }
             }
             catch (Exception e)
             {
@@ -198,7 +210,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
         }
 
-        private void GetRatingStatistics(int target, RatingBlockViewModel ratingViewBlockModel)
+        private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.GetStatisticsErrorMessage = String.Empty;
             ratingViewBlockModel.NoStatisticsFoundMessage = String.Empty;
@@ -209,7 +221,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     Filter = new RatingStatisticsFilter()
                     {
-                        Targets = new List<Reference> { Reference.Create(target.ToString()) }
+                        Targets = new List<Reference> { Reference.Create(target) }
                     },
                     PageInfo = new PageInfo() { PageSize = 1 }
                 });

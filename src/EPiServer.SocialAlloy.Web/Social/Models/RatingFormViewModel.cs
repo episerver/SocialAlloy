@@ -11,9 +11,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
         }
 
-        public RatingFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
+        public RatingFormViewModel(PageReference currentPageLink, string pageId, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;
+            PageId = pageId;
             CurrentBlockLink = currentBlockLink;
             //SubmittedRating = null; validate if rating was submitted
         }
@@ -22,6 +23,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the reference link of the page containing the rating block.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the page containing the rating block.
+        /// </summary>
+        public string PageId { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the block containing the rating block.

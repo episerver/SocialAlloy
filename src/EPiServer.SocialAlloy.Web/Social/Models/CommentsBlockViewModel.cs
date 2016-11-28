@@ -18,7 +18,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="form"></param>
         public CommentsBlockViewModel(CommentsBlock block, 
                                       CommentFormViewModel form)
-            : base(form.CurrentPageLink, form.CurrentBlockLink)
+            : base(form.CurrentPageLink, form.CurrentBlockLink, form.PageId)
         {
             Heading = block.Heading;
             CommentBoxRows = block.CommentBoxRows;

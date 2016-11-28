@@ -13,11 +13,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Models
         /// </summary>
         /// <param name="currentPageLink"></param>
         /// <param name="currentBlockLink"></param>
-        public SocialBlockViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
+        public SocialBlockViewModel(PageReference currentPageLink, ContentReference currentBlockLink, string pageId)
         {
             CurrentPageLink = currentPageLink;
             CurrentBlockLink = currentBlockLink;
+            PageId = pageId;
         }
+
+        /// <summary>
+        /// Gets the identifier of the page containing the frontend social block.
+        /// </summary>
+        public string PageId { get; }
 
         /// <summary>
         /// Gets the reference link of the page containing the frontend social block.

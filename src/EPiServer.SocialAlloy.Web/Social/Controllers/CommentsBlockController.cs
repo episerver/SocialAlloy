@@ -59,7 +59,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var commentBody = GetModelState("Body");
 
             // Update the comment form view model with latest state data.
-            var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
+            var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, 
+                                                       pageRouteHelper.Page.ContentGuid.ToString(),
+                                                       currentBlockLink);
             if (commentBody != null)
             {
                 commentForm.Body = commentBody.Value.AttemptedValue;
