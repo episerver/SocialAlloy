@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using EPiServer.Cms.UI.AspNetIdentity;
+using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Social.Common;
 using EPiServer.Social.Ratings.Core;
@@ -7,6 +8,8 @@ using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.User;
 using EPiServer.Web.Routing;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -70,6 +73,42 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                                             : string.Empty;
 
             //Check if user has already rated the page
+            //if (this.User.Identity.IsAuthenticated)
+            //{
+            //    var isAuth = this.User.Identity.IsAuthenticated;
+            //    //var loggedInuser = System.Web.Security.Membership.GetUser();
+            //    //var user = System.Web.Security.Membership.GetUser(this.User.Identity.Name);
+
+            //    var profile = EPiServer.Personalization.EPiServerProfile.Get(this.User.Identity.Name);
+            //    //ApplicationUserManager<ApplicationUser> mgr = new ApplicationUserManager<ApplicationUser>();
+
+            //    var userProvider = ServiceLocator.Current.GetInstance<UIUserProvider>();
+            //    int num;
+            //    var uiUserList = userProvider.FindUsersByName(this.User.Identity.Name, 0, 10, out num);
+            //    //var x = uiUser.Id;
+            //    //IdentityUser user1 = uiUser as IdentityUser;
+            //    //var x = user1.Id;
+
+            //    var string1 = this.User.Identity.GetUserId();
+
+            //    Microsoft.AspNet.Identity.UserManager<ApplicationUser> mgr = new UserManager<ApplicationUser>(
+            //            new UserStore<ApplicationUser>(new Cms.UI.AspNetIdentity.ApplicationDbContext<ApplicationUser>()));
+            //    var userData = mgr.FindById(string1);
+
+            //    Microsoft.AspNet.Identity.UserManager<IdentityUser> mgr2 = new UserManager<IdentityUser>(
+            //            new UserStore<IdentityUser>(new Cms.UI.AspNetIdentity.ApplicationDbContext<IdentityUser>()));
+            //    var userData2 = mgr2.FindById(string1);
+
+            //    //Microsoft.AspNet.Identity.UserManager<IdentityUser> mgr3 = new UserManager<IdentityUser>(
+            //    //        new UserStore<IdentityUser>(new IdentityDbContext<IdentityUser>()));
+            //    //var userData3 = mgr.FindById(string1);
+
+            //    //IUser<string> uiUser = userProvider.GetUser(this.User.Identity.Name) as IUser<string>;
+            //    //uiUser.Id
+            //    GetRating(target, ratingViewBlockModel);
+            //}
+
+            //If user logged in, check if logged in user has already rated the page
             if (this.User.Identity.IsAuthenticated)
             {
                 GetRating(target, ratingViewBlockModel);
@@ -120,14 +159,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var user = (new MembershipUserSession(this.User)).Current;
-                if (user != Social.User.User.Anonymous)
+                var userService = new UserService();
+                var userReference = userService.GetUserReference(this.User);
+                if (userReference != Reference.Empty)
                 {
                     var result = ratingService.Add(new Rating(
-                                        user.Reference,
+                                        userReference,
                                         Reference.Create(target),
                                         new RatingValue(value))
                     );
+
+                    //Remove this, this is only to test this for Comments
+                    var user = userService.GetUser(userReference);
+
                     ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
                 }
                 else
@@ -187,14 +231,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var user = (new MembershipUserSession(this.User)).Current;
-                if (user != Social.User.User.Anonymous)
+                var userService = new UserService();
+                var userReference = userService.GetUserReference(this.User);
+                if (userReference != Reference.Empty)
                 {
                     var result = ratingService.Get(new Criteria<RatingFilter>()
                     {
                         Filter = new RatingFilter()
                         {
-                            Rater = user.Reference,
+                            Rater = userReference,
                             Targets = new List<Reference> { Reference.Create(target) }
                         },
                         PageInfo = new PageInfo() { PageSize = 1 }
@@ -202,6 +247,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
                     if (result.Results.Count() > 0)
                         ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;
+                }
+                else
+                {
+                    //display error retreiving user information?
                 }
             }
             catch (Exception e)

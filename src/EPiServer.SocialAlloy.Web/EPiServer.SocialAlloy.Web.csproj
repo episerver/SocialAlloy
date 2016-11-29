@@ -442,9 +442,9 @@
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
-    <Compile Include="Social\User\MembershipUserService.cs" />
-    <Compile Include="Social\User\MembershipUserSession.cs" />
+    <Compile Include="Social\User\IUserService.cs" />
     <Compile Include="Social\User\User.cs" />
+    <Compile Include="Social\User\UserService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />
