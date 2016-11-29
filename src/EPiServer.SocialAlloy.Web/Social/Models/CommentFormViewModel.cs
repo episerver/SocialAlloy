@@ -7,10 +7,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// </summary>
     public class CommentFormViewModel
     {
+        /// <summary>
+        /// Default parameterless constructor required for view form submitting.
+        /// </summary>
         public CommentFormViewModel()
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="currentPageLink"></param>
+        /// <param name="currentBlockLink"></param>
         public CommentFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;

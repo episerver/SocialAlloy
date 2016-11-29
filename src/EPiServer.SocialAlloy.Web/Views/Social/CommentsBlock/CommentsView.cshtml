@@ -49,7 +49,7 @@
                 author = comment.Author.ToString();
             }
             <div style="font-weight: bold;">
-                @comment.Created @author said:
+                @comment.Created.ToLocalTime() @author said:
             </div>
             <div>
                 @comment.Body

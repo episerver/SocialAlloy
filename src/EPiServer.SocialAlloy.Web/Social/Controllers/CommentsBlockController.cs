@@ -24,7 +24,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
         public CommentsBlockController()
         {
-            this.commentRepository = new SocialCommentRepository();
+            this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         }
 
@@ -156,17 +156,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var transientState = new ModelStateDictionary
             {
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
                     "SuccessMessage",
-                    new System.Web.Mvc.ModelState() {
+                    new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitSuccessMessage, commentsViewModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
                     }
                 ),
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
                     "ErrorMessage",
-                    new System.Web.Mvc.ModelState() {
+                    new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitErrorMessage, commentsViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
                     }
                 )

@@ -10,6 +10,7 @@ using System.Linq;
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
 
+    [ServiceConfiguration(ServiceType = typeof(ISocialCommentRepository))]
     public class SocialCommentRepository : ISocialCommentRepository
     {
         private readonly ICommentService commentService;
@@ -23,7 +24,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             var newComment = AdaptComment(comment);
             Comment addedComment = null;
-            var error = "";
 
             try
             {
@@ -31,40 +31,35 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (ArgumentNullException ex)
             {
-                error = "ArgumentNullException: " + ex.Message;
+                throw new SocialRepositoryException("ArgumentNullException: " + ex.Message, ex);
             }
             catch (ArgumentException ex)
             {
-                error = "ArgumentException: " + ex.Message;
+                throw new SocialRepositoryException("ArgumentException: " + ex.Message, ex);
             }
             catch (InvalidCommentException ex)
             {
-                error = "InvalidCommentException: " + ex.Message;
+                throw new SocialRepositoryException("InvalidCommentException: " + ex.Message, ex);
             }
             catch (SocialAuthenticationException ex)
             {
-                error = "SocialAuthenticationException: " + ex.Message;
+                throw new SocialRepositoryException("SocialAuthenticationException: " + ex.Message, ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                error = "MaximumDataSizeExceededException: " + ex.Message;
+                throw new SocialRepositoryException("MaximumDataSizeExceededException: " + ex.Message, ex);
             }
             catch (SocialCommunicationException ex)
             {
-                error = "SocialCommunicationException: " + ex.Message;
+                throw new SocialRepositoryException("SocialCommunicationException: " + ex.Message, ex);
             }
             catch (SocialException ex)
             {
-                error = "SocialException: " + ex.Message;
+                throw new SocialRepositoryException("SocialException: " + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                error = "Exception: " + ex.Message;
-            }
-
-            if (!String.IsNullOrWhiteSpace(error))
-            {
-                throw new SocialRepositoryException(error);
+                throw new SocialRepositoryException("Exception: " + ex.Message, ex);
             }
 
             return addedComment;
@@ -72,8 +67,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
         public IEnumerable<SocialComment> Get(SocialCommentFilter filter)
         {
-            var error = "";
             var comments = new List<Comment>();
+            var visibility = GetVisibilityFilter(filter);
 
             try
             {
@@ -86,47 +81,44 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                         },
                         Filter = new CommentFilter
                         {
-                            Visibility = filter.Visible ? Visibility.Visible : Visibility.All
+                            Visibility = visibility
                         }
+                        ,
+                        OrderBy = { new SortInfo(CommentSortFields.Created, false) }
                     }
                 ).Results.ToList();
             }
             catch (ArgumentNullException ex)
             {
-                error = "ArgumentNullException: " + ex.Message;
+                throw new SocialRepositoryException("ArgumentNullException: " + ex.Message, ex);
             }
             catch (ArgumentException ex)
             {
-                error = "ArgumentException: " + ex.Message;
+                throw new SocialRepositoryException("ArgumentException: " + ex.Message, ex);
             }
             catch (InvalidCommentException ex)
             {
-                error = "InvalidCommentException: " + ex.Message;
+                throw new SocialRepositoryException("InvalidCommentException: " + ex.Message, ex);
             }
             catch (SocialAuthenticationException ex)
             {
-                error = "SocialAuthenticationException: " + ex.Message;
+                throw new SocialRepositoryException("SocialAuthenticationException: " + ex.Message, ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                error = "MaximumDataSizeExceededException: " + ex.Message;
+                throw new SocialRepositoryException("MaximumDataSizeExceededException: " + ex.Message, ex);
             }
             catch (SocialCommunicationException ex)
             {
-                error = "SocialCommunicationException: " + ex.Message;
+                throw new SocialRepositoryException("SocialCommunicationException: " + ex.Message, ex);
             }
             catch (SocialException ex)
             {
-                error = "SocialException: " + ex.Message;
+                throw new SocialRepositoryException("SocialException: " + ex.Message, ex);
             }
             catch (Exception ex)
             {
-                error = "Exception: " + ex.Message;
-            }
-
-            if (!String.IsNullOrWhiteSpace(error))
-            {
-                throw new SocialRepositoryException(error);
+                throw new SocialRepositoryException("Exception: " + ex.Message, ex);
             }
 
             return AdaptSocialComment(comments);
@@ -145,9 +137,30 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     Author = c.Author.ToString(),
                     Body = c.Body,
                     Target = c.Parent.ToString(),
-                    Created = c.Created.ToString()
+                    Created = c.Created
                 }
             );
+        }
+
+        private Visibility GetVisibilityFilter(SocialCommentFilter filter)
+        {
+            Visibility visibility = Visibility.All;
+
+            switch(filter.Visibility)
+            {
+                case SocialCommentFilter.VisibilityFilter.Visible:
+                    visibility = Visibility.Visible;
+                    break;
+
+                case SocialCommentFilter.VisibilityFilter.NotVisible:
+                    visibility = Visibility.NotVisible;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return visibility;
         }
     }
 }
