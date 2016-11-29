@@ -25,8 +25,9 @@
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.ValidationMessageFor(f => f.CommentBody)
         <div>
-            <textarea rows="@Model.CommentBoxRows" maxlength="@Model.CommentMaxLength" name="Body" id="Body" placeholder="Enter your comment"></textarea>
+            <textarea rows="@Model.CommentBoxRows" maxlength="@Model.CommentMaxLength" name="Body" id="Body" placeholder="Enter your comment">@Model.CommentBody</textarea>
         </div>
         <div>
             <input type="submit" name="submit" value="Add Comment">

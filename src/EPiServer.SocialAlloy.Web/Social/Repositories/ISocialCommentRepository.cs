@@ -14,14 +14,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// Adds a comment to the underlying comment repository.
         /// </summary>
         /// <param name="comment">The comment to add.</param>
-        /// <returns></returns>
+        /// <returns>The added comment.</returns>
         Comment Add(SocialComment comment);
 
         /// <summary>
-        /// Gets comments based on the given filter.
+        /// Gets comments from the underlying comment repository based on a filter.
         /// </summary>
         /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <returns>A list of comments.</returns>
         IEnumerable<SocialComment> Get(SocialCommentFilter filter);
     }
 }

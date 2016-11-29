@@ -6,6 +6,7 @@ using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -21,40 +22,41 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly ISocialCommentRepository commentRepository;
         private readonly IContentRepository contentRepository;
+        private readonly IPageRouteHelper pageRouteHelper;
 
+        private const string SubmitSuccessMessage = "SubmitSuccessMessage";
+        private const string SubmitErrorMessage = "SubmitErrorMessage";
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CommentsBlockController()
         {
             this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+
         }
 
         /// <summary>
         /// Render the comment block frontend view.
         /// </summary>
         /// <param name="currentBlock">The current frontend block instance.</param>
-        /// <returns></returns>
+        /// <returns>The action's result.</returns>
         public override ActionResult Index(CommentsBlock currentBlock)
         {
-            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            // Get model state
-            var successMessage = GetModelState("SuccessMessage");
-            var errorMessage = GetModelState("ErrorMessage");
-            var commentBody = GetModelState("Body");
+            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
 
-            // Update the comment form view model with latest state data.
-            var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
-            if (commentBody != null)
-            {
-                commentForm.Body = commentBody.Value.AttemptedValue;
-            }
-
-            // Create a comments block view model
+            // Create a comments block view model to fill the frontend block view
             var commentBlockViewModel = new CommentsBlockViewModel(currentBlock, commentForm);
+
+            // Apply current model state to the comment block view model
+            ApplyModelStateToCommentBlockViewModel(commentBlockViewModel);
 
             // Try to get recent comments
             IEnumerable<SocialComment> recentComments = new List<SocialComment>();
@@ -66,11 +68,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         PageSize = currentBlock.CommentsDisplayMax
                     }
                 );
-                commentBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
             }
             catch (SocialRepositoryException ex)
             {
-                commentBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
                 commentBlockViewModel.DisplayErrorMessage = ex.Message;
             }
 
@@ -82,7 +82,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// validates the form, stores the submitted comment, and redirects back to the current page.
         /// </summary>
         /// <param name="commentForm">The comment form being submitted.</param>
-        /// <returns></returns>
+        /// <returns>The submit action result.</returns>
         [HttpPost]
         public ActionResult Submit(CommentFormViewModel commentForm)
         {
@@ -103,11 +103,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 catch (SocialRepositoryException ex)
                 {
                     commentsViewModel.SubmitErrorMessage = ex.Message;
+                    ModelState.AddModelError("CommentBody", ex.Message);
                 }
             }
             else
             {
-                commentsViewModel.SubmitErrorMessage = errors.First();
+                // Flag the CommentBody model state with validation error
+                ModelState.AddModelError("CommentBody", errors.First());
             }
 
             SaveModelState(commentForm.CurrentBlockLink, CollectViewModelStateToSave(commentsViewModel));
@@ -118,8 +120,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Adapts the comment form to a social comment model.
         /// </summary>
-        /// <param name="commentForm"></param>
-        /// <returns>A comment.</returns>
+        /// <param name="commentForm">The comment form view model.</param>
+        /// <returns>A social comment.</returns>
         private SocialComment AdaptCommentFormViewModelToSocialComment(CommentFormViewModel commentForm)
         {
             return new SocialComment
@@ -133,7 +135,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Validates the body in the comment form.
         /// </summary>
-        /// <param name="commentForm"></param>
+        /// <param name="commentForm">The comment form view model.</param>
         /// <returns>Returns a list of validation errors.</returns>
         private List<string> ValidateBody(CommentFormViewModel commentForm)
         {
@@ -148,24 +150,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Collects view model state that needs to be saved.
+        /// Collects comment block view model state that needs to be saved.
         /// </summary>
-        /// <param name="commentsViewModel"></param>
-        /// <returns></returns>
+        /// <param name="commentsViewModel">The comment block view model.</param>
+        /// <returns>A model state dictionary.</returns>
         private ModelStateDictionary CollectViewModelStateToSave(CommentsBlockViewModel commentsViewModel)
         {
             var transientState = new ModelStateDictionary
             {
                 new KeyValuePair<string, ModelState>
                 (
-                    "SuccessMessage",
+                    SubmitSuccessMessage,
                     new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitSuccessMessage, commentsViewModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
                     }
                 ),
                 new KeyValuePair<string, ModelState>
                 (
-                    "ErrorMessage",
+                    SubmitErrorMessage,
                     new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitErrorMessage, commentsViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
                     }
@@ -179,6 +181,32 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             return modelState;
+        }
+
+        /// <summary>
+        /// Applies current model state to the comment block view model.
+        /// </summary>
+        /// <param name="commentBlockViewModel">The comment block view model to apply model state to.</param>
+        private void ApplyModelStateToCommentBlockViewModel(CommentsBlockViewModel commentBlockViewModel)
+        {
+            // Get success/error model state
+            var successMessage = GetModelState(SubmitSuccessMessage);
+            var errorMessage = GetModelState(SubmitErrorMessage);
+
+            // Apply success/error model state to the view model
+            commentBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
+            commentBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
+
+            // if there was an error submitting the message then leave the current body in the comment box
+            // so the user does not have to retype it.
+            if (errorMessage != null && !String.IsNullOrWhiteSpace(errorMessage.Value.AttemptedValue))
+            {
+                var commentBody = GetModelState("Body");
+                if (commentBody != null)
+                {
+                    commentBlockViewModel.CommentBody = commentBody.Value.AttemptedValue;
+                }
+            }
         }
     }
 }

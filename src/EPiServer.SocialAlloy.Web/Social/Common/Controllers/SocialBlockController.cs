@@ -7,26 +7,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
     /// <summary>
     /// The SocialBlockController may contain social data/logic common to all social controllers.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The social block type.</typeparam>
     public abstract class SocialBlockController<T> : BlockController<T> where T : BlockData
     {
         /// <summary>
         /// Save model state.
         /// </summary>
-        /// <param name="blockLink"></param>
-        /// <param name="state"></param>
-        protected virtual void SaveModelState(ContentReference blockLink, ModelStateDictionary state)
+        /// <param name="block">A block reference to use as a key under which to save the model state.</param>
+        /// <param name="state">The model state dictionary to save.</param>
+        protected virtual void SaveModelState(ContentReference block, ModelStateDictionary state)
         {
-            TempData[StateKey(blockLink)] = state;
+            TempData[GetModelStateKey(block)] = state;
         }
 
         /// <summary>
         /// Load previously saved model state.
         /// </summary>
-        /// <param name="blockLink"></param>
-        protected virtual void LoadModelState(ContentReference blockLink)
+        /// <param name="block">A block reference to use as the key from which to load the model state.</param>
+        protected virtual void LoadModelState(ContentReference block)
         {
-            var key = StateKey(blockLink);
+            var key = GetModelStateKey(block);
             var modelState = TempData[key] as ModelStateDictionary;
 
             if (modelState != null)
@@ -40,7 +40,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         /// Attempt to get a model state given its key.
         /// </summary>
         /// <param name="key">The key of the state to get.</param>
-        /// <returns>The </returns>
+        /// <returns>The model state.</returns>
         protected ModelState GetModelState(string key)
         {
             ModelState value;
@@ -48,9 +48,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
             return value;
         }
 
-        private string StateKey(ContentReference blockLink)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="block">A block reference used to composed a qualified model state key.</param>
+        /// <returns>The fully qualified model state key.</returns>
+        private string GetModelStateKey(ContentReference block)
         {
-            return "FormBlock_" + blockLink.ID;
+            return "SocialFormBlock_" + block.ID;
         }
     }
 }

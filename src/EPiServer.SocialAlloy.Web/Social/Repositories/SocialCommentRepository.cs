@@ -3,23 +3,34 @@ using EPiServer.Social.Comments.Core;
 using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using static EPiServer.SocialAlloy.Web.Social.Models.SocialCommentFilter;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
-
+    /// <summary>
+    /// The SocialCommentRepository interface defines the operations that can be issued
+    /// against the EPiServer Social comment repository.
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(ISocialCommentRepository))]
     public class SocialCommentRepository : ISocialCommentRepository
     {
         private readonly ICommentService commentService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SocialCommentRepository()
         {
             this.commentService = ServiceLocator.Current.GetInstance<ICommentService>();
         }
 
+        /// <summary>
+        /// Adds a comment to the EPiServer Social comment repository.
+        /// </summary>
+        /// <param name="comment">The comment to add.</param>
+        /// <returns>The added comment.</returns>
         public Comment Add(SocialComment comment)
         {
             var newComment = AdaptComment(comment);
@@ -49,10 +60,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return addedComment;
         }
 
+        /// <summary>
+        /// Gets comments from the EPiServer Social comment repository based on a filter.
+        /// </summary>
+        /// <param name="filter">The application comment filtering specification.</param>
+        /// <returns>A list of comments.</returns>
         public IEnumerable<SocialComment> Get(SocialCommentFilter filter)
         {
             var comments = new List<Comment>();
-            var visibility = GetVisibilityFilter(filter);
+            var visibility = AdaptVisibilityFilter(filter.Visibility);
 
             try
             {
@@ -92,11 +108,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return AdaptSocialComment(comments);
         }
 
+        /// <summary>
+        /// Adapt the application SocialComment to the EPiServer Social Comment 
+        /// </summary>
+        /// <param name="comment">The application's SocialComment.</param>
+        /// <returns>The EPiServer Social Comment.</returns>
         private Comment AdaptComment(SocialComment comment)
         {
             return new Comment(Reference.Create(comment.Target), Reference.Create(comment.Author), comment.Body, true);
         }
 
+        /// <summary>
+        /// Adapt a list of EPiServer Social Comment to application's SocialComment.
+        /// </summary>
+        /// <param name="comment">The list of EPiServer Social Comment.</param>
+        /// <returns>The list of application SocialComment.</returns>
         private IEnumerable<SocialComment> AdaptSocialComment(List<Comment> comments)
         {
             return comments.Select(c =>
@@ -110,11 +136,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             );
         }
 
-        private Visibility GetVisibilityFilter(SocialCommentFilter filter)
+        /// <summary>
+        /// Adapt the application's VisibilityFilter filter to the EPiServer Social Visibility filter.
+        /// </summary>
+        /// <param name="filter">The application's VisibilityFilter</param>
+        /// <returns>EPiServer Social Visibility filter.</returns>
+        private Visibility AdaptVisibilityFilter(VisibilityFilter filter)
         {
             Visibility visibility = Visibility.All;
 
-            switch(filter.Visibility)
+            switch(filter)
             {
                 case SocialCommentFilter.VisibilityFilter.Visible:
                     visibility = Visibility.Visible;
