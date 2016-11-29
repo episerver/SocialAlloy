@@ -5,14 +5,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Models
     /// <summary>
     /// The SocialBlockViewModel class contains common social block view model configuration.
     /// </summary>
-    /// <typeparam name="T">The type of the social block.</typeparam>
+    /// <typeparam name="T">The social block type.</typeparam>
     public abstract class SocialBlockViewModel<T> where T : BlockData
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="currentPageLink"></param>
-        /// <param name="currentBlockLink"></param>
+        /// <param name="currentPageLink">The current page containing the social block.</param>
+        /// <param name="currentBlockLink">The current block instance.</param>
         public SocialBlockViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;
