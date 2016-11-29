@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Social.Common;
-using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using EPiServer.Cms.UI.AspNetIdentity;
+using System;
+using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.User
 {
