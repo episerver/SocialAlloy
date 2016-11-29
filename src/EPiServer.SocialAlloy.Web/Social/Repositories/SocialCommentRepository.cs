@@ -29,37 +29,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 addedComment = this.commentService.Add(newComment);
             }
-            catch (ArgumentNullException ex)
-            {
-                throw new SocialRepositoryException("ArgumentNullException: " + ex.Message, ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new SocialRepositoryException("ArgumentException: " + ex.Message, ex);
-            }
-            catch (InvalidCommentException ex)
-            {
-                throw new SocialRepositoryException("InvalidCommentException: " + ex.Message, ex);
-            }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("SocialAuthenticationException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("MaximumDataSizeExceededException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("SocialCommunicationException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("SocialException: " + ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new SocialRepositoryException("Exception: " + ex.Message, ex);
+                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
             return addedComment;
@@ -88,37 +72,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     }
                 ).Results.ToList();
             }
-            catch (ArgumentNullException ex)
-            {
-                throw new SocialRepositoryException("ArgumentNullException: " + ex.Message, ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new SocialRepositoryException("ArgumentException: " + ex.Message, ex);
-            }
-            catch (InvalidCommentException ex)
-            {
-                throw new SocialRepositoryException("InvalidCommentException: " + ex.Message, ex);
-            }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("SocialAuthenticationException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("MaximumDataSizeExceededException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("SocialCommunicationException: " + ex.Message, ex);
+                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("SocialException: " + ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new SocialRepositoryException("Exception: " + ex.Message, ex);
+                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
             return AdaptSocialComment(comments);
