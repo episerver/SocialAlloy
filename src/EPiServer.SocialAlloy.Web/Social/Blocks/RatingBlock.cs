@@ -40,7 +40,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
-            Heading = "Social Ratings & Statistics";
+            Heading = "Ratings & Statistics";
             RatingValues = new List<int> { 1, 2, 3, 4, 5 };
             ShowHeading = false;
         }
