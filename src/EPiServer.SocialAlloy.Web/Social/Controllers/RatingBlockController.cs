@@ -23,11 +23,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IRatingService ratingService;
         private readonly IContentRepository contentRepository;
+        private readonly IPageRouteHelper pageRouteHelper;
 
         public RatingBlockController()
         {
             this.ratingService = ServiceLocator.Current.GetInstance<IRatingService>();
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
         }
 
         /// <summary>
@@ -35,10 +37,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="ratingService"></param>
         /// <param name="contentRepository"></param>
-        public RatingBlockController(IRatingService ratingService, IContentRepository contentRepository)
+        public RatingBlockController(IRatingService ratingService, IContentRepository contentRepository, IPageRouteHelper pageRouteHelper)
         {
             this.ratingService = ratingService;
             this.contentRepository = contentRepository;
+            this.pageRouteHelper = pageRouteHelper;
         }
 
         /// <summary>
@@ -48,10 +51,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns></returns>
         public override ActionResult Index(RatingBlock currentBlock)
         {
-            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
             var target = pageRouteHelper.Page.ContentGuid.ToString();
-            
+
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
@@ -76,7 +78,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             //Check if there are any rating statistics for the page
-            GetRatingStatistics(target, ratingViewBlockModel);
+            if (String.IsNullOrWhiteSpace(ratingViewBlockModel.ErrorMessage))
+            {
+                GetRatingStatistics(target, ratingViewBlockModel);
+            }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", ratingViewBlockModel);
         }
@@ -185,7 +190,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private void GetRating(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.CurrentRating = null;
-            ratingViewBlockModel.GetRatingErrorMessage = String.Empty;
+            ratingViewBlockModel.ErrorMessage = String.Empty;
 
             try
             {
@@ -209,20 +214,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     if (result.Results.Count() > 0)
                         ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;
                 }
-                else
-                {
-                    //display error retreiving user information?
-                }
             }
             catch (Exception e)
             {
-                ratingViewBlockModel.GetRatingErrorMessage = String.Format("Error getting user rating. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
+                ratingViewBlockModel.ErrorMessage = String.Format("Error getting user rating. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
             }
+            ratingViewBlockModel.ErrorMessage = "GetRating Error";
         }
 
         private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
         {
-            ratingViewBlockModel.GetStatisticsErrorMessage = String.Empty;
+            ratingViewBlockModel.ErrorMessage = String.Empty;
             ratingViewBlockModel.NoStatisticsFoundMessage = String.Empty;
 
             try
@@ -249,8 +251,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (Exception e)
             {
-                ratingViewBlockModel.GetStatisticsErrorMessage = String.Format("Error getting rating statistics. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
+                ratingViewBlockModel.ErrorMessage = String.Format("Error getting rating statistics. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
             }
+            ratingViewBlockModel.ErrorMessage = "GetRatingStatistics Error";
         }
     }
 }

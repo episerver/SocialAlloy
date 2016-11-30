@@ -79,14 +79,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string SubmitErrorMessage { get; set; }
 
         /// <summary>
-        /// Message displayed in rating form if error encountered while retrieving rating for logged in user
+        /// Message displayed in rating block if error encountered while retrieving rating statistics or ratings for logged in user. 
         /// </summary>
-        public string GetRatingErrorMessage { get; set; }
-
-        /// <summary>
-        /// Message displayed in rating form if error encountered while retrieving rating statistics
-        /// </summary>
-        public string GetStatisticsErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }
 
         /// <summary>
         /// Message displayed in rating form if no rating statistics are found for the page

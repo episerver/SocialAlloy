@@ -20,9 +20,9 @@
                 <div style="color: blue;">Please try submitting your rating again.</div>
             }
 
-            if (!String.IsNullOrWhiteSpace(Model.GetRatingErrorMessage))
+            if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
             {
-                <div style="color: red;">@Model.GetRatingErrorMessage</div>
+                <div style="color: red;">@Model.ErrorMessage</div>
             }
             else
             {
@@ -55,21 +55,17 @@
                         </div>
                     }
                 }
+
+                if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
+                {
+                    <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+                }
+                else
+                {
+                    <div><strong>Average: @Model.Average.ToString("F")</strong></div>
+                    <div><strong>Total: @Model.TotalCount</strong></div>
+                }
             }
         }
     </div>
-    <hr />
-    @if (!String.IsNullOrWhiteSpace(Model.GetStatisticsErrorMessage))
-    {
-        <div style="color: red;">@Model.GetStatisticsErrorMessage</div>
-    }
-    else if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
-    {
-        <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
-    }
-    else
-    {
-        <div><strong>Average: @Model.Average</strong></div>
-        <div><strong>Total: @Model.TotalCount</strong></div>
-    }
 </div>
