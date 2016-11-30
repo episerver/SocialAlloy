@@ -43,16 +43,11 @@
                         <div class="clearfix">
                             <div><i>How do you rate this page?</i></div>
                             <div>
-                                <ul>
                                     @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
                                     {
-                                        <label>Mylabel
-                                            <li style="list-style-type:none; display:inline">
-                                                @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings])
-                                            </li>
-                                        </label>
+                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings], new { @style = "display:inline;" })
+                                        <label style="display:inline;margin-right:0.5em;">@Model.RatingValues[numOfRatings].ToString()</label>
                                     }
-                                </ul>
                             </div>
                             <div>
                                 <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
