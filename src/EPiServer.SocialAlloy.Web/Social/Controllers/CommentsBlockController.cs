@@ -127,7 +127,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             return new SocialComment
             {
-                Target = commentForm.CurrentPageLink.ToString(),
+                Target = commentForm.PageId,
                 Body = commentForm.Body,
                 Author = this.User.Identity.Name
             };
