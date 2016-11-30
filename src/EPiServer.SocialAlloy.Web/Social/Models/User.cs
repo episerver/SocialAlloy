@@ -1,7 +1,7 @@
 ﻿using EPiServer.Social.Common;
 using System;
 
-namespace EPiServer.SocialAlloy.Web.Social.User
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// A class encapsulates the Reference and the Name of a user.  

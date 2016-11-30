@@ -1,11 +1,12 @@
 ﻿using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Social.Common;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Security.Principal;
 
-namespace EPiServer.SocialAlloy.Web.Social.User
+namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// This class is used to perform common user functions used by Social samples to obtain user 

@@ -2,7 +2,7 @@
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.SocialAlloy.Web.Social.User;
+using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;

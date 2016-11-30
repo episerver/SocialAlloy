@@ -1,7 +1,8 @@
 ﻿using EPiServer.Social.Common;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using System.Security.Principal;
 
-namespace EPiServer.SocialAlloy.Web.Social.User
+namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// This interface represents common user functions used by Social samples to obtain 

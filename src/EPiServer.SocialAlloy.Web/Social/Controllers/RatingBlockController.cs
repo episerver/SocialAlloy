@@ -5,7 +5,7 @@ using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.User;
+using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
