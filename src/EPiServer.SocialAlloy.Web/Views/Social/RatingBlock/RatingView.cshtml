@@ -4,11 +4,14 @@
 @model RatingBlockViewModel
 
 <div class="border">
-    <h2 style="margin-top:0.5em;" @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
-    <div>
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+    <div style="margin-top:0.5em">
         @if (this.User.Identity.IsAuthenticated)
         {
-            <hr />
             if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
             {
                 <div style="color: green;">@Model.SubmitSuccessMessage</div>
@@ -62,7 +65,7 @@
                 }
                 else
                 {
-                    <div><strong>Average: @Model.Average.ToString("F")</strong></div>
+                    <div style="margin-top:0.5em"><strong>Average: @Model.Average.ToString("F")</strong></div>
                     <div><strong>Total: @Model.TotalCount</strong></div>
                 }
             }

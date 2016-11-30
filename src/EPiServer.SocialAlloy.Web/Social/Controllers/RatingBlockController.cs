@@ -219,7 +219,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 ratingViewBlockModel.ErrorMessage = String.Format("Error getting user rating. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
             }
-            ratingViewBlockModel.ErrorMessage = "GetRating Error";
         }
 
         private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
@@ -253,7 +252,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 ratingViewBlockModel.ErrorMessage = String.Format("Error getting rating statistics. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
             }
-            ratingViewBlockModel.ErrorMessage = "GetRatingStatistics Error";
         }
     }
 }

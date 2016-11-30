@@ -21,6 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             : base(form.CurrentPageLink, form.CurrentBlockLink, form.PageId)
         {
             Heading = block.Heading;
+            ShowHeading = block.ShowHeading;
             //TODO remove the commented lines
             RatingValues = new List<int>() { 1, 2, 3, 4, 5 };
             //RatingValues = new List<int>();
@@ -34,6 +35,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The heading for the frontend rating block display.
         /// </summary>
         public string Heading { get; }
+
+        /// <summary>
+        /// Gets or sets whether to show the block heading in the frontend rating block display.
+        /// </summary>
+        public bool ShowHeading { get; set; }
 
         /// <summary>
         /// The rating value settings for the frontend rating block display.
