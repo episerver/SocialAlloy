@@ -46,7 +46,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(CommentsBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var target = pageRouteHelper.Page.ContentGuid.ToString();
 
             // Restore the saved model state
             LoadModelState(currentBlockLink);
