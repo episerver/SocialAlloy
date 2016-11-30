@@ -46,9 +46,11 @@
                                 <ul>
                                     @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
                                     {
-                                        <li style="list-style-type:none; display:inline">
-                                            @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings])
-                                        </li>
+                                        <label>Mylabel
+                                            <li style="list-style-type:none; display:inline">
+                                                @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings])
+                                            </li>
+                                        </label>
                                     }
                                 </ul>
                             </div>

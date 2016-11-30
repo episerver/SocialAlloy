@@ -8,7 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
 using System;
 
-namespace EPiServer.SocialAlloy.Web.Business.Initialization
+namespace EPiServer.SocialAlloy.Web.Social.Initialization
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
