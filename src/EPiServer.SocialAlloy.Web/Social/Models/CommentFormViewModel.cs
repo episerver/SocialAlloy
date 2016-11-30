@@ -15,9 +15,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         }
 
         /// <summary>
-        /// Constructor
+        /// 
         /// </summary>
         /// <param name="currentPageLink"></param>
+        /// <param name="pageId"></param>
         /// <param name="currentBlockLink"></param>
         public CommentFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {

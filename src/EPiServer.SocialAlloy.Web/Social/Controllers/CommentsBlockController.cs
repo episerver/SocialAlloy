@@ -126,10 +126,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             return new SocialComment
             {
-                Target = commentForm.CurrentPageLink.ToString(),
+                Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
                 Author = this.User.Identity.Name
             };
+        }
+
+        private string GetPageId(PageReference pageLink)
+        {
+            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
+            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
         }
 
         /// <summary>

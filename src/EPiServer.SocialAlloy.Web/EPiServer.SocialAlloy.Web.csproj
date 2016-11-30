@@ -360,6 +360,7 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
+    <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
     <Compile Include="Business\PageViewContextFactory.cs" />
@@ -437,16 +438,18 @@
     <Compile Include="Social\Common\Exceptions\SocialRepositoryException.cs" />
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
-    <Compile Include="Social\Controllers\RatingBlockViewController.cs" />
+    <Compile Include="Social\Controllers\RatingBlockController.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
-    <Compile Include="Social\Models\RatingPostModel.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />
     <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
+    <Compile Include="Social\Repositories\IUserRepository.cs" />
+    <Compile Include="Social\Models\User.cs" />
+    <Compile Include="Social\Repositories\UserRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />

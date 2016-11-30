@@ -19,6 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Models
             CurrentBlockLink = currentBlockLink;
         }
 
+        
         /// <summary>
         /// Gets the reference link of the page containing the frontend social block.
         /// </summary>
