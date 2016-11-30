@@ -1,8 +1,5 @@
 ﻿using EPiServer.Social.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EPiServer.SocialAlloy.Web.Social.User
 {
@@ -30,8 +27,7 @@ namespace EPiServer.SocialAlloy.Web.Social.User
         public Reference Reference { get; set; }
 
         /// <summary>
-        /// Used to denote anonymous users. 
-        /// When a user is not authenticated they will have a populated User object with a name of Anonymous and an empty Reference. 
+        /// Used to denote anonymous users with a name of Anonymous and an empty Reference. 
         /// </summary>
         public static User Anonymous
         {

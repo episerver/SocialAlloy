@@ -3,6 +3,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.User;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
 using System;
@@ -21,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Business.Initialization
 
         private static void ConfigureContainer(ConfigurationExpression configuration)
         {
-            configuration.For<IUserService>().Use<UserService>();
+            configuration.For<IUserRepository>().Use(() => CreateUserRepository());
         }
 
         public void Initialize(InitializationEngine context)
@@ -30,6 +31,13 @@ namespace EPiServer.SocialAlloy.Web.Business.Initialization
 
         public void Uninitialize(InitializationEngine context)
         {
+        }
+
+        private static IUserRepository CreateUserRepository()
+        {
+            return new UserRepository(new UserManager<IdentityUser>(
+                    new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()))
+            );
         }
     }
 }

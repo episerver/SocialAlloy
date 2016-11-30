@@ -120,7 +120,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var userService = ServiceLocator.Current.GetInstance<IUserService>();
+                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
                 var userReference = userService.GetUserReference(this.User);
                 if (userReference != Reference.Empty)
                 {
@@ -129,9 +129,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                                         Reference.Create(target),
                                         new RatingValue(value))
                     );
-
-                    //Remove this, this is only to test this for Comments
-                    var user = userService.GetUser(userReference);
 
                     ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
                 }
@@ -192,7 +189,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var userService = ServiceLocator.Current.GetInstance<IUserService>();
+                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
                 var userReference = userService.GetUserReference(this.User);
                 if (userReference != Reference.Empty)
                 {
@@ -205,6 +202,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         },
                         PageInfo = new PageInfo() { PageSize = 1 }
                     });
+
+                    //Remove this, this is only to test this for Comments
+                    var user = userService.GetUser(userReference);
 
                     if (result.Results.Count() > 0)
                         ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;

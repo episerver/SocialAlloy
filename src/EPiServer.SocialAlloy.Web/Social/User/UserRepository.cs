@@ -7,8 +7,24 @@ using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.User
 {
-    public class UserService : IUserService
+    /// <summary>
+    /// This class is used to perform common user functions used by Social samples to obtain user 
+    /// reference of a user from Identity or display the name of 
+    /// </summary>
+    public class UserRepository : IUserRepository
     {
+        private UserManager<IdentityUser> manager;
+
+        public UserRepository(UserManager<IdentityUser> manager)
+        {
+            this.manager = manager;
+        }
+
+        /// <summary>
+        /// Returns the user reference of the user from the identity.
+        /// </summary>
+        /// <param name="Identity"></param>
+        /// <returns></returns>
         public Reference GetUserReference(IPrincipal user)
         {
             string userId = String.Empty;
@@ -20,16 +36,16 @@ namespace EPiServer.SocialAlloy.Web.Social.User
         }
 
         /// <summary>
-        /// Return the user the underlying datastore to that whose 
-        /// identifier matches by the specified reference identifier.
+        /// Queries the underlying datastore and returns the user whose identifier 
+        /// matches the specified reference identifier.
         /// </summary>
         /// <param name="id">User reference to search by</param>
         /// <returns></returns>
         public User GetUser(Reference id)
         {
-            var userManager = new UserManager<IdentityUser>(
-                    new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()));
-            var user = userManager.FindById(id.Id);
+            //var userManager = new UserManager<IdentityUser>(
+            //        new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()));
+            var user = manager.FindById(id.Id);
 
             return user != null ?
                 new User
