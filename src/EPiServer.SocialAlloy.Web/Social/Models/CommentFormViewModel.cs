@@ -20,11 +20,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="currentPageLink"></param>
         /// <param name="pageId"></param>
         /// <param name="currentBlockLink"></param>
-        public CommentFormViewModel(PageReference currentPageLink, string pageId, ContentReference currentBlockLink)
+        public CommentFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;
             CurrentBlockLink = currentBlockLink;
-            PageId = pageId;
         }
 
         /// <summary>
@@ -45,11 +44,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the reference link of the page containing the comment form.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the page containing the rating block.
-        /// </summary>
-        public string PageId { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the block containing the comment form.

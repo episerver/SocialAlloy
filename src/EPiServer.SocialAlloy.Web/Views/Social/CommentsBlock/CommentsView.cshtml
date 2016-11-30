@@ -25,7 +25,6 @@
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
-        @Html.HiddenFor(m => m.PageId)
         @Html.ValidationMessageFor(f => f.CommentBody)
         <div>
             <textarea rows="@Model.CommentBoxRows" maxlength="@Model.CommentMaxLength" name="Body" id="Body" placeholder="Enter your comment">@Model.CommentBody</textarea>

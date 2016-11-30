@@ -58,7 +58,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             LoadModelState(currentBlockLink);
 
             //Populate the view model
-            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, target, currentBlockLink);
+            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
             var ratingViewBlockModel = new RatingBlockViewModel(currentBlock, formModel);
 
             // Set model state from saved model state/prior form submission
@@ -107,8 +107,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // validate rating != null and was submitted, TODO UI shd validate too. submit button shd be enabled iff 1 radio btn is selected
             if (IsValid(ratingForm.SubmittedRating))
             {
-                //save rating
-                AddRating(ratingForm.PageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                //Get the page Id 
+                var pageId = GetPageId(ratingForm.CurrentPageLink);
+                if (!string.IsNullOrWhiteSpace(pageId))
+                {
+                    //save rating
+                    AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                }
+                else
+                {
+                    ratingViewBlockModel.SubmitErrorMessage = "The page id of this page could not be determined, please try again.";
+                }
             }
             else
                 ratingViewBlockModel.SubmitErrorMessage = "Please select a valid rating";
@@ -116,6 +125,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SaveModelState(ratingForm.CurrentBlockLink, CollectViewModelStateToSave(ratingViewBlockModel));
 
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
+        }
+
+        private string GetPageId(PageReference pageLink)
+        {
+            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
+            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
         }
 
         private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)

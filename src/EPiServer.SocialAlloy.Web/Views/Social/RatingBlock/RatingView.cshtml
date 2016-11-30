@@ -10,24 +10,25 @@
         <hr />
     }
     <div style="margin-top:0.5em">
-        @if (this.User.Identity.IsAuthenticated)
+        
+        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
         {
-            if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
-            {
-                <div style="color: green;">@Model.SubmitSuccessMessage</div>
-            }
+            <div style="color: green;">@Model.SubmitSuccessMessage</div>
+        }
 
-            if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-            {
-                <div style="color: red;">@Model.SubmitErrorMessage</div>
-                <div style="color: blue;">Please try submitting your rating again.</div>
-            }
+        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+        {
+            <div style="color: red;">@Model.SubmitErrorMessage</div>
+            <div style="color: blue;">Please try submitting your rating again.</div>
+        }
 
-            if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
-            {
-                <div style="color: red;">@Model.ErrorMessage</div>
-            }
-            else
+        @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div style="color: red;">@Model.ErrorMessage</div>
+        }
+        else
+        {
+            if (this.User.Identity.IsAuthenticated)
             {
                 if (Model.CurrentRating.HasValue)
                 {
@@ -39,7 +40,6 @@
                     {
                         @Html.HiddenFor(m => m.CurrentBlockLink)
                         @Html.HiddenFor(m => m.CurrentPageLink)
-                        @Html.HiddenFor(m => m.PageId)
                         <div class="clearfix">
                             <div><i>How do you rate this page?</i></div>
                             <div>
@@ -58,16 +58,16 @@
                         </div>
                     }
                 }
+            }
 
-                if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
-                {
-                    <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
-                }
-                else
-                {
-                    <div style="margin-top:0.5em"><strong>Average: @Model.Average.ToString("F")</strong></div>
-                    <div><strong>Total: @Model.TotalCount</strong></div>
-                }
+            if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
+            {
+                <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+            }
+            else
+            {
+                <div style="margin-top:0.5em"><strong>Average rating: @Model.Average.ToString("F")</strong></div>
+                <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
             }
         }
     </div>

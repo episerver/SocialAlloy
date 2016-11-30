@@ -16,7 +16,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="block">A block reference to use as a key under which to save the model state.</param>
         /// <param name="form">A comment form view model to get current form values for the block view model</param>
         public CommentsBlockViewModel(CommentsBlock block, CommentFormViewModel form)
-            : base(form.CurrentPageLink, form.CurrentBlockLink, form.PageId)
+            : base(form.CurrentPageLink, form.CurrentBlockLink)
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;

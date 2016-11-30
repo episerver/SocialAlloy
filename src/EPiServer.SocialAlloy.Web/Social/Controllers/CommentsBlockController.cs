@@ -51,7 +51,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, target, currentBlockLink);
+            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
 
             // Create a comments block view model to fill the frontend block view
             var commentBlockViewModel = new CommentsBlockViewModel(currentBlock, commentForm);
@@ -127,10 +127,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             return new SocialComment
             {
-                Target = commentForm.PageId,
+                Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
                 Author = this.User.Identity.Name
             };
+        }
+
+        private string GetPageId(PageReference pageLink)
+        {
+            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
+            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
         }
 
         /// <summary>
