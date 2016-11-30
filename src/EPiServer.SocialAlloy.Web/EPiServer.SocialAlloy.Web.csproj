@@ -457,8 +457,10 @@
     <Compile Include="Social\Blocks\Groups\GroupAdmissionBlock.cs" />
     <Compile Include="Social\Blocks\RatingBlock.cs" />
     <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
+    <Compile Include="Social\Common\Exceptions\SocialRepositoryException.cs" />
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\GroupCreationBlockController.cs" />
+    <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockViewController.cs" />
     <Compile Include="Social\Controllers\CommentsBlockViewController.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockModel.cs" />
@@ -468,6 +470,10 @@
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
     <Compile Include="Social\Models\RatingPostModel.cs" />
+    <Compile Include="Social\Models\SocialCommentFilter.cs" />
+    <Compile Include="Social\Models\SocialComment.cs" />
+    <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
+    <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup />

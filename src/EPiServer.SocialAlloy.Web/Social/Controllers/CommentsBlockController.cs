@@ -1,10 +1,10 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Comments.Core;
-using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
+using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
@@ -20,72 +20,58 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
     {
-        private readonly ICommentService commentService;
+        private readonly ISocialCommentRepository commentRepository;
         private readonly IContentRepository contentRepository;
+        private readonly IPageRouteHelper pageRouteHelper;
 
-        public CommentsBlockController()
-        {
-            this.commentService = ServiceLocator.Current.GetInstance<ICommentService>();
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-        }
+        private const string SubmitSuccessMessage = "SubmitSuccessMessage";
+        private const string SubmitErrorMessage = "SubmitErrorMessage";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="commentService"></param>
-        /// <param name="contentRepository"></param>
-        public CommentsBlockController(ICommentService commentService, IContentRepository contentRepository)
+        public CommentsBlockController()
         {
-            this.commentService = commentService;
-            this.contentRepository = contentRepository;
+            this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
+            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+
         }
 
         /// <summary>
         /// Render the comment block frontend view.
         /// </summary>
         /// <param name="currentBlock">The current frontend block instance.</param>
-        /// <returns></returns>
+        /// <returns>The action's result.</returns>
         public override ActionResult Index(CommentsBlock currentBlock)
         {
-            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            // Get model state
-            var successMessage = GetModelState("SuccessMessage");
-            var errorMessage = GetModelState("ErrorMessage");
-            var commentBody = GetModelState("Body");
+            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
 
-            // Update the comment form view model with latest state data.
-            var commentForm = new CommentFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
-            if (commentBody != null)
-            {
-                commentForm.Body = commentBody.Value.AttemptedValue;
-            }
-
-            List<Comment> recentComments;
-
-            var getCommentErrors = TryGetComments(currentBlock.CommentsDisplayMax, out recentComments);
-
-            // Update the comment block view model with latest state data.
+            // Create a comments block view model to fill the frontend block view
             var commentBlockViewModel = new CommentsBlockViewModel(currentBlock, commentForm);
-            if (successMessage != null)
+
+            // Apply current model state to the comment block view model
+            ApplyModelStateToCommentBlockViewModel(commentBlockViewModel);
+
+            // Try to get recent comments
+            IEnumerable<SocialComment> recentComments = new List<SocialComment>();
+            try
             {
-                commentBlockViewModel.SubmitSuccessMessage = successMessage.Value.AttemptedValue;
+                commentBlockViewModel.Comments = this.commentRepository.Get(
+                    new SocialCommentFilter
+                    {
+                        PageSize = currentBlock.CommentsDisplayMax
+                    }
+                );
             }
-            if (errorMessage != null)
+            catch (SocialRepositoryException ex)
             {
-                commentBlockViewModel.SubmitErrorMessage = errorMessage.Value.AttemptedValue;
-            }
-            if (getCommentErrors.Count() == 0)
-            {
-                commentBlockViewModel.Comments = recentComments;
-            }
-            else
-            {
-                commentBlockViewModel.DisplayErrorMessage = getCommentErrors.First();
+                commentBlockViewModel.DisplayErrorMessage = ex.Message;
             }
 
             return PartialView("~/Views/Social/CommentsBlock/CommentsView.cshtml", commentBlockViewModel);
@@ -93,10 +79,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
         /// <summary>
         /// Submit handles the submitting of new comments.  It accepts a comment form model,
-        /// stores the submitted comment, and redirects back to the current page.
+        /// validates the form, stores the submitted comment, and redirects back to the current page.
         /// </summary>
         /// <param name="commentForm">The comment form being submitted.</param>
-        /// <returns></returns>
+        /// <returns>The submit action result.</returns>
         [HttpPost]
         public ActionResult Submit(CommentFormViewModel commentForm)
         {
@@ -104,23 +90,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
 
-            var comment = this.BuildComment(commentForm);
+            var errors = ValidateBody(commentForm);
 
-            if (comment != null)
+            if (errors.Count() == 0)
             {
-                var errors = TryAddComment(comment);
-                if (errors.Count() > 0)
+                var comment = this.AdaptCommentFormViewModelToSocialComment(commentForm);
+                try
                 {
-                    commentsViewModel.SubmitErrorMessage = errors.First();
-                }
-                else
-                {
+                    this.commentRepository.Add(comment);
                     commentsViewModel.SubmitSuccessMessage = "Your comment was submitted successfully!";
+                }
+                catch (SocialRepositoryException ex)
+                {
+                    commentsViewModel.SubmitErrorMessage = ex.Message;
+                    ModelState.AddModelError("CommentBody", ex.Message);
                 }
             }
             else
             {
-                commentsViewModel.SubmitErrorMessage = "Your comment is not valid!";
+                // Flag the CommentBody model state with validation error
+                ModelState.AddModelError("CommentBody", errors.First());
             }
 
             SaveModelState(commentForm.CurrentBlockLink, CollectViewModelStateToSave(commentsViewModel));
@@ -129,164 +118,57 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Try to add the comment via the social comment service.
+        /// Adapts the comment form to a social comment model.
         /// </summary>
-        /// <param name="comment">The comment to add.</param>
-        /// <returns>A list of any errors encountered.</returns>
-        private IEnumerable<string> TryAddComment(Comment comment)
+        /// <param name="commentForm">The comment form view model.</param>
+        /// <returns>A social comment.</returns>
+        private SocialComment AdaptCommentFormViewModelToSocialComment(CommentFormViewModel commentForm)
         {
-            var errors = new List<string>();
-
-            try
+            return new SocialComment
             {
-                this.commentService.Add(comment);
-            }
-            catch (ArgumentNullException ex)
-            {
-                errors.Add("ArgumentNullException: " + ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                errors.Add("ArgumentException: " + ex.Message);
-            }
-            catch (InvalidCommentException ex)
-            {
-                errors.Add("InvalidCommentException: " + ex.Message);
-            }
-            catch (SocialAuthenticationException ex)
-            {
-                errors.Add("SocialAuthenticationException: " + ex.Message);
-            }
-            catch (MaximumDataSizeExceededException ex)
-            {
-                errors.Add("MaximumDataSizeExceededException: " + ex.Message);
-            }
-            catch (SocialCommunicationException ex)
-            {
-                errors.Add("SocialCommunicationException: " + ex.Message);
-            }
-            catch (SocialException ex)
-            {
-                errors.Add("SocialException: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                errors.Add("Exception: " + ex.Message);
-            }
-
-            return errors;
-        }
-
-        /// <summary>
-        /// Attempt to get recent comments via the social comment service.
-        /// </summary>
-        /// <param name="comment">The comment to add.</param>
-        /// <param name="comments">The retrieved comments</param>
-        /// <returns>A list of any errors encountered.</returns>
-        private List<string> TryGetComments(int commentDisplayMax, out List<Comment> comments)
-        {
-            var errors = new List<string>();
-            comments = new List<Comment>();
-
-            try
-            {
-                comments = this.commentService.Get(
-                    new Criteria<CommentFilter>
-                    {
-                        PageInfo = new PageInfo
-                        {
-                            PageSize = commentDisplayMax
-                        },
-                        Filter = new CommentFilter
-                        {
-                            Visibility = Visibility.Visible
-                        }
-                    }
-                ).Results.ToList();
-            }
-            catch (ArgumentNullException ex)
-            {
-                errors.Add("ArgumentNullException: " + ex.Message);
-            }
-            catch (ArgumentException ex)
-            {
-                errors.Add("ArgumentException: " + ex.Message);
-            }
-            catch (InvalidCommentException ex)
-            {
-                errors.Add("InvalidCommentException: " + ex.Message);
-            }
-            catch (SocialAuthenticationException ex)
-            {
-                errors.Add("SocialAuthenticationException: " + ex.Message);
-            }
-            catch (MaximumDataSizeExceededException ex)
-            {
-                errors.Add("MaximumDataSizeExceededException: " + ex.Message);
-            }
-            catch (SocialCommunicationException ex)
-            {
-                errors.Add("SocialCommunicationException: " + ex.Message);
-            }
-            catch (SocialException ex)
-            {
-                errors.Add("SocialException: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                errors.Add("Exception: " + ex.Message);
-            }
-
-            return errors;
-        }
-
-        /// <summary>
-        /// Build the comment from the comment form.
-        /// </summary>
-        /// <param name="commentForm"></param>
-        /// <returns>A comment.</returns>
-        private Comment BuildComment(CommentFormViewModel commentForm)
-        {
-            Comment comment = null;
-
-            if (ValidBody(commentForm))
-            {
-                comment = new Comment(Reference.Create(commentForm.CurrentPageLink.ToString()), commentForm.Body, true);
-            }
-
-            return comment;
+                Target = commentForm.CurrentPageLink.ToString(),
+                Body = commentForm.Body,
+                Author = this.User.Identity.Name
+            };
         }
 
         /// <summary>
         /// Validates the body in the comment form.
         /// </summary>
-        /// <param name="commentForm"></param>
-        /// <returns>Whether the comment body is valid.</returns>
-        private static bool ValidBody(CommentFormViewModel commentForm)
+        /// <param name="commentForm">The comment form view model.</param>
+        /// <returns>Returns a list of validation errors.</returns>
+        private List<string> ValidateBody(CommentFormViewModel commentForm)
         {
-            return !string.IsNullOrWhiteSpace(commentForm.Body);
+            var errors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(commentForm.Body))
+            {
+                errors.Add("Cannot add an empty comment.");
+            }
+
+            return errors;
         }
 
         /// <summary>
-        /// Collects view model state that needs to be saved.
+        /// Collects comment block view model state that needs to be saved.
         /// </summary>
-        /// <param name="commentsViewModel"></param>
-        /// <returns></returns>
+        /// <param name="commentsViewModel">The comment block view model.</param>
+        /// <returns>A model state dictionary.</returns>
         private ModelStateDictionary CollectViewModelStateToSave(CommentsBlockViewModel commentsViewModel)
         {
             var transientState = new ModelStateDictionary
             {
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
-                    "SuccessMessage",
-                    new System.Web.Mvc.ModelState() {
+                    SubmitSuccessMessage,
+                    new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitSuccessMessage, commentsViewModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
                     }
                 ),
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
-                    "ErrorMessage",
-                    new System.Web.Mvc.ModelState() {
+                    SubmitErrorMessage,
+                    new ModelState() {
                         Value = new ValueProviderResult(commentsViewModel.SubmitErrorMessage, commentsViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
                     }
                 )
@@ -299,6 +181,32 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             return modelState;
+        }
+
+        /// <summary>
+        /// Applies current model state to the comment block view model.
+        /// </summary>
+        /// <param name="commentBlockViewModel">The comment block view model to apply model state to.</param>
+        private void ApplyModelStateToCommentBlockViewModel(CommentsBlockViewModel commentBlockViewModel)
+        {
+            // Get success/error model state
+            var successMessage = GetModelState(SubmitSuccessMessage);
+            var errorMessage = GetModelState(SubmitErrorMessage);
+
+            // Apply success/error model state to the view model
+            commentBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
+            commentBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
+
+            // if there was an error submitting the message then leave the current body in the comment box
+            // so the user does not have to retype it.
+            if (errorMessage != null && !String.IsNullOrWhiteSpace(errorMessage.Value.AttemptedValue))
+            {
+                var commentBody = GetModelState("Body");
+                if (commentBody != null)
+                {
+                    commentBlockViewModel.CommentBody = commentBody.Value.AttemptedValue;
+                }
+            }
         }
     }
 }
