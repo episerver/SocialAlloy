@@ -20,9 +20,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
     {
+        private readonly IUserRepository userRepository;
         private readonly ISocialCommentRepository commentRepository;
-        private readonly IContentRepository contentRepository;
-        private readonly IPageRouteHelper pageRouteHelper;
 
         private const string SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string SubmitErrorMessage = "SubmitErrorMessage";
@@ -32,10 +31,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public CommentsBlockController()
         {
+            this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-
         }
 
         /// <summary>
@@ -103,7 +100,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 catch (SocialRepositoryException ex)
                 {
                     commentsViewModel.SubmitErrorMessage = ex.Message;
-                    ModelState.AddModelError("CommentBody", ex.Message);
                 }
             }
             else
@@ -128,14 +124,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
-                Author = this.User.Identity.Name
+                Author = this.userRepository.GetUserReference(this.User).ToString()
             };
-        }
-
-        private string GetPageId(PageReference pageLink)
-        {
-            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
-            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
         }
 
         /// <summary>
