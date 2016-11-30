@@ -19,7 +19,6 @@
         @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
         {
             <div style="color: red;">@Model.SubmitErrorMessage</div>
-            <div style="color: blue;">Please try submitting your rating again.</div>
         }
 
         @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))

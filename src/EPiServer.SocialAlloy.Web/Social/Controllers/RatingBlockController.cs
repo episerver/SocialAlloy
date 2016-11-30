@@ -100,27 +100,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             if (!this.User.Identity.IsAuthenticated)
             {
-                ratingViewBlockModel.SubmitErrorMessage = "Session timed out, You have to be logged in to submit your rating, please re-login and try again.";
-                return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
-            }
-
-            // validate rating != null and was submitted, TODO UI shd validate too. submit button shd be enabled iff 1 radio btn is selected
-            if (IsValid(ratingForm.SubmittedRating))
-            {
-                //Get the page Id 
-                var pageId = GetPageId(ratingForm.CurrentPageLink);
-                if (!string.IsNullOrWhiteSpace(pageId))
-                {
-                    //save rating
-                    AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
-                }
-                else
-                {
-                    ratingViewBlockModel.SubmitErrorMessage = "The page id of this page could not be determined, please try again.";
-                }
+                ratingViewBlockModel.SubmitErrorMessage = "Session timed out, you have to be logged in to submit your rating, please re-login and try again.";
             }
             else
-                ratingViewBlockModel.SubmitErrorMessage = "Please select a valid rating";
+            {
+                // validate rating != null and was submitted, TODO UI shd validate too. submit button shd be enabled iff 1 radio btn is selected
+                if (IsValid(ratingForm.SubmittedRating))
+                {
+                    //Get the page Id 
+                    var pageId = GetPageId(ratingForm.CurrentPageLink);
+                    if (!string.IsNullOrWhiteSpace(pageId))
+                    {
+                        //save rating
+                        AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                    }
+                    else
+                    {
+                        ratingViewBlockModel.SubmitErrorMessage = "The page id of this page could not be determined, please try again.";
+                    }
+                }
+                else
+                    ratingViewBlockModel.SubmitErrorMessage = "Please select a valid rating";
+            }
 
             SaveModelState(ratingForm.CurrentBlockLink, CollectViewModelStateToSave(ratingViewBlockModel));
 
