@@ -1,9 +1,6 @@
-﻿using EPiServer.Cms.UI.AspNetIdentity;
-using EPiServer.Social.Common;
-using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
 using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
@@ -26,33 +23,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="Identity"></param>
         /// <returns></returns>
-        public Reference GetUserReference(IPrincipal user)
+        public string GetUserId(IPrincipal user)
         {
-            string userId = String.Empty;
-            userId = user.Identity.GetUserId();
-
-            return String.IsNullOrWhiteSpace(userId) ?
-                   Reference.Empty :
-                   Reference.Create(userId);
+            return user.Identity.GetUserId();
         }
 
         /// <summary>
         /// Queries the underlying datastore and returns the user whose identifier 
         /// matches the specified reference identifier.
         /// </summary>
-        /// <param name="id">User reference to search by</param>
+        /// <param name="id">User Id to search by</param>
         /// <returns></returns>
-        public User GetUser(Reference id)
+        public User GetUser(string id)
         {
-            //var userManager = new UserManager<IdentityUser>(
-            //        new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()));
-            var user = manager.FindById(id.Id);
+            var user = manager.FindById(id);
 
             return user != null ?
                 new User
                 {
                     Name = user.UserName,
-                    Reference = id
+                    Id = id
                 } :
                 User.Anonymous;
         }

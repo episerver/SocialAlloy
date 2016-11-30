@@ -81,7 +81,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         /// <returns>The fully qualified model state key.</returns>
         private string GetModelStateKey(ContentReference block)
         {
-            return "SocialFormBlock_" + block.ID;
+            return "SocialBlock_" + block.ID;
         }
     }
 }

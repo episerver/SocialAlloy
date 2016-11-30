@@ -87,7 +87,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
 
-            var errors = ValidateBody(commentForm);
+            var errors = ValidateCommentForm(commentForm);
 
             if (errors.Count() == 0)
             {
@@ -124,19 +124,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
-                Author = this.userRepository.GetUserReference(this.User).ToString()
+                Author = this.userRepository.GetUserId(this.User)
             };
         }
 
         /// <summary>
-        /// Validates the body in the comment form.
+        /// Validates the comment form.
         /// </summary>
         /// <param name="commentForm">The comment form view model.</param>
         /// <returns>Returns a list of validation errors.</returns>
-        private List<string> ValidateBody(CommentFormViewModel commentForm)
+        private List<string> ValidateCommentForm(CommentFormViewModel commentForm)
         {
             var errors = new List<string>();
 
+            // Make sure that a logged in user is submitting the form.
+            var userId = this.userRepository.GetUserId(this.User);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                errors.Add("There was an error identifying the logged in user.  Please make sure you are logged in and try again.");
+            }
+
+            // Make sure the comment body has some text
             if (string.IsNullOrWhiteSpace(commentForm.Body))
             {
                 errors.Add("Cannot add an empty comment.");

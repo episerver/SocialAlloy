@@ -11,18 +11,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public interface IUserRepository
     {
         /// <summary>
-        /// Returns the user reference of the user from the identity.
+        /// Returns the user Id of the user from the identity.
         /// </summary>
-        /// <param name="Identity"></param>
-        /// <returns></returns>
-        Reference GetUserReference(IPrincipal Identity);
+        /// <param name="Identity">The user identity.</param>
+        /// <returns>The user id.</returns>
+        string GetUserId(IPrincipal Identity);
 
         /// <summary>
         /// Queries the underlying datastore and returns the user whose identifier 
         /// matches the specified reference identifier.
         /// </summary>
-        /// <param name="id">User reference to search by</param>
-        /// <returns></returns>
-        User GetUser(Reference id);
+        /// <param name="id">User Id to search by</param>
+        /// <returns>The user identity.</returns>
+        User GetUser(string id);
     }
 }

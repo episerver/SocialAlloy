@@ -141,11 +141,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userReference = userService.GetUserReference(this.User);
-                if (userReference != Reference.Empty)
+                var userId = userService.GetUserId(this.User);
+                if (!string.IsNullOrWhiteSpace(userId))
                 {
                     var result = ratingService.Add(new Rating(
-                                        userReference,
+                                        Reference.Create(userId),
                                         Reference.Create(target),
                                         new RatingValue(value))
                     );
@@ -210,21 +210,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userReference = userService.GetUserReference(this.User);
-                if (userReference != Reference.Empty)
+                var userId = userService.GetUserId(this.User);
+                if (!string.IsNullOrWhiteSpace(userId))
                 {
                     var result = ratingService.Get(new Criteria<RatingFilter>()
                     {
                         Filter = new RatingFilter()
                         {
-                            Rater = userReference,
+                            Rater = Reference.Create(userId),
                             Targets = new List<Reference> { Reference.Create(target) }
                         },
                         PageInfo = new PageInfo() { PageSize = 1 }
                     });
 
                     //Remove this, this is only to test this for Comments
-                    var user = userService.GetUser(userReference);
+                    var user = userService.GetUser(userId);
 
                     if (result.Results.Count() > 0)
                         ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;

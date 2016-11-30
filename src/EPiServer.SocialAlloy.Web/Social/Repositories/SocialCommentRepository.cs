@@ -128,7 +128,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return comments.Select(c =>
                 new SocialComment
                 {
-                    Author = this.userRepository.GetUser(c.Author).Name,
+                    Author = this.userRepository.GetUser(c.Author.Id).Name,
                     Body = c.Body,
                     Target = c.Parent.ToString(),
                     Created = c.Created
