@@ -39,6 +39,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the reference link of the block containing the comment form.
         /// </summary>
-        public ContentReference CurrentBlockLink { get; set; }
+        public ContentReference CurrentBlockLink { get; set; }  
     }
 }
