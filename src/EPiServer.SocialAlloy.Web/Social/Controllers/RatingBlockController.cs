@@ -4,6 +4,7 @@ using EPiServer.Social.Common;
 using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
@@ -21,27 +22,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
-        private readonly IRatingService ratingService;
+        private readonly ISocialRatingRepository ratingRepository;
         private readonly IContentRepository contentRepository;
         private readonly IPageRouteHelper pageRouteHelper;
 
         public RatingBlockController()
         {
-            this.ratingService = ServiceLocator.Current.GetInstance<IRatingService>();
+            this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ratingService"></param>
-        /// <param name="contentRepository"></param>
-        public RatingBlockController(IRatingService ratingService, IContentRepository contentRepository, IPageRouteHelper pageRouteHelper)
-        {
-            this.ratingService = ratingService;
-            this.contentRepository = contentRepository;
-            this.pageRouteHelper = pageRouteHelper;
         }
 
         /// <summary>
@@ -58,32 +47,25 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             LoadModelState(currentBlockLink);
 
             //Populate the view model
-            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
-            var ratingViewBlockModel = new RatingBlockViewModel(currentBlock, formModel);
+            var ratingFormViewModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
+            var ratingBlockViewModel = new RatingBlockViewModel(currentBlock, ratingFormViewModel);
 
-            // Set model state from saved model state/prior form submission
-            var submitErrorMessage = GetModelState("SubmitErrorMessage");
-            var submitSuccessMessage = GetModelState("SubmitSuccessMessage");
-            ratingViewBlockModel.SubmitErrorMessage = (submitErrorMessage != null && submitErrorMessage.Value != null)
-                                            ? submitErrorMessage.Value.AttemptedValue
-                                            : string.Empty;
-            ratingViewBlockModel.SubmitSuccessMessage = (submitSuccessMessage != null && submitSuccessMessage.Value != null)
-                                            ? submitSuccessMessage.Value.AttemptedValue
-                                            : string.Empty;
+            // Apply current model state to the rating block view model
+            ApplyModelStateToRatingBlockViewModel(ratingBlockViewModel);
 
             //If user logged in, check if logged in user has already rated the page
             if (this.User.Identity.IsAuthenticated)
             {
-                GetRating(target, ratingViewBlockModel);
+                GetRating(target, ratingBlockViewModel);
             }
 
-            //Check if there are any rating statistics for the page
-            if (String.IsNullOrWhiteSpace(ratingViewBlockModel.ErrorMessage))
+            //If no errors so far, retrieve rating statistics, if any, for this page
+            if (String.IsNullOrWhiteSpace(ratingBlockViewModel.ErrorMessage))
             {
-                GetRatingStatistics(target, ratingViewBlockModel);
+                GetRatingStatistics(target, ratingBlockViewModel);
             }
 
-            return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", ratingViewBlockModel);
+            return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", ratingBlockViewModel);
         }
 
         /// <summary>
@@ -132,36 +114,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
             return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
-        }
-
-        private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
-        {
-            ratingViewBlockModel.SubmitErrorMessage = String.Empty;
-            ratingViewBlockModel.SubmitSuccessMessage = String.Empty;
-
-            try
-            {
-                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userReference = userService.GetUserReference(this.User);
-                if (userReference != Reference.Empty)
-                {
-                    var result = ratingService.Add(new Rating(
-                                        userReference,
-                                        Reference.Create(target),
-                                        new RatingValue(value))
-                    );
-
-                    ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
-                }
-                else
-                {
-                    ratingViewBlockModel.SubmitErrorMessage = "There was an error identifying the logged in user, please re-login and try again.";
-                }
-            }
-            catch (Exception e)
-            {
-                ratingViewBlockModel.SubmitErrorMessage = String.Format("Error adding rating. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
-            }
         }
 
         private bool IsValid(int? submittedRating)
@@ -214,26 +166,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var userReference = userService.GetUserReference(this.User);
                 if (userReference != Reference.Empty)
                 {
-                    var result = ratingService.Get(new Criteria<RatingFilter>()
-                    {
-                        Filter = new RatingFilter()
+                    ratingViewBlockModel.CurrentRating =
+                        this.ratingRepository.GetRating(new SocialRatingFilter
                         {
-                            Rater = userReference,
-                            Targets = new List<Reference> { Reference.Create(target) }
-                        },
-                        PageInfo = new PageInfo() { PageSize = 1 }
-                    });
-
-                    //Remove this, this is only to test this for Comments
-                    var user = userService.GetUser(userReference);
-
-                    if (result.Results.Count() > 0)
-                        ratingViewBlockModel.CurrentRating = result.Results.ToList().FirstOrDefault().Value.Value;
+                            Rater = userReference.ToString(),
+                            Target = target
+                        });
+                }
+                else
+                {
+                    ratingViewBlockModel.ErrorMessage = String.Format("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
                 }
             }
-            catch (Exception e)
+            catch (SocialRepositoryException ex)
             {
-                ratingViewBlockModel.ErrorMessage = String.Format("Error getting user rating. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
+                ratingViewBlockModel.ErrorMessage = ex.Message;
             }
         }
 
@@ -244,30 +191,65 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var result = ratingService.Get(new Criteria<RatingStatisticsFilter>()
-                {
-                    Filter = new RatingStatisticsFilter()
-                    {
-                        Targets = new List<Reference> { Reference.Create(target) }
-                    },
-                    PageInfo = new PageInfo() { PageSize = 1 }
-                });
-
-                if (result.Results.Count() > 0)
-                {
-                    var statistics = result.Results.ToList().FirstOrDefault();
-                    ratingViewBlockModel.Average = Decimal.Divide(statistics.Sum, statistics.TotalCount);
-                    ratingViewBlockModel.TotalCount = statistics.TotalCount;
+                var result = ratingRepository.GetRatingStatistics(target);
+                if (result != null)
+                { 
+                    ratingViewBlockModel.Average = result.Average;
+                    ratingViewBlockModel.TotalCount = result.TotalCount;
                 }
                 else
                 {
                     ratingViewBlockModel.NoStatisticsFoundMessage = "Be the first one to rate this page!";
                 }
             }
-            catch (Exception e)
+            catch (SocialRepositoryException ex)
             {
-                ratingViewBlockModel.ErrorMessage = String.Format("Error getting rating statistics. Exception Type: {0} Message: {1}", e.GetType().Name, e.Message);
+                ratingViewBlockModel.ErrorMessage = ex.Message;
             }
+        }
+
+        private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
+        {
+            ratingViewBlockModel.SubmitErrorMessage = String.Empty;
+            ratingViewBlockModel.SubmitSuccessMessage = String.Empty;
+
+            try
+            {
+                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
+                var userReference = userService.GetUserReference(this.User);
+                if (userReference != Reference.Empty)
+                {
+                    ratingRepository.AddRating(userReference.Id, target, value);
+
+                    ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
+                }
+                else
+                {
+                    ratingViewBlockModel.SubmitErrorMessage = "There was an error identifying the logged in user.  Please make sure you are logged in and try again.";
+                }
+            }
+            catch (SocialRepositoryException ex)
+            {
+                ratingViewBlockModel.SubmitErrorMessage = ex.Message; ;
+            }
+        }
+
+        /// <summary>
+        /// Applies current model state to the rating block view model.
+        /// </summary>
+        /// <param name="ratingBlockViewModel">The rating block view model to apply model state to.</param>
+        private void ApplyModelStateToRatingBlockViewModel(RatingBlockViewModel ratingBlockViewModel)
+        {
+            // Set model state from saved model state/prior form submission
+            var submitErrorMessage = GetModelState("SubmitErrorMessage");
+            var submitSuccessMessage = GetModelState("SubmitSuccessMessage");
+
+            ratingBlockViewModel.SubmitErrorMessage = (submitErrorMessage != null && submitErrorMessage.Value != null)
+                                            ? submitErrorMessage.Value.AttemptedValue
+                                            : string.Empty;
+            ratingBlockViewModel.SubmitSuccessMessage = (submitSuccessMessage != null && submitSuccessMessage.Value != null)
+                                            ? submitSuccessMessage.Value.AttemptedValue
+                                            : string.Empty;
         }
     }
 }

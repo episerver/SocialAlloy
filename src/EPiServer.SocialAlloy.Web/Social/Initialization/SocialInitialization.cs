@@ -23,6 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         private static void ConfigureContainer(ConfigurationExpression configuration)
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
+            configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
         }
 
         public void Initialize(InitializationEngine context)

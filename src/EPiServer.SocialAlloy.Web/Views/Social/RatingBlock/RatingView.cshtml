@@ -40,8 +40,8 @@
                         @Html.HiddenFor(m => m.CurrentBlockLink)
                         @Html.HiddenFor(m => m.CurrentPageLink)
                         <div class="clearfix">
-                            <div><i>How do you rate this page?</i></div>
-                            <div>
+                            <div style="margin-bottom:0.15em;"><i>How do you rate this page?</i></div>
+                            <div style="margin-bottom:0.5em;">
                                     @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
                                     {
                                         @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings], new { @style = "display:inline;" })
