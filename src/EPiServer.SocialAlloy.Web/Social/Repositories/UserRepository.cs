@@ -33,7 +33,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// matches the specified reference identifier.
         /// </summary>
         /// <param name="id">User Id to search by</param>
-        /// <returns></returns>
+        /// <returns>The User object.</returns>
         public User GetUser(string id)
         {
             var user = manager.FindById(id);

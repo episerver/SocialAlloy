@@ -141,7 +141,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var userId = this.userRepository.GetUserId(this.User);
             if (string.IsNullOrWhiteSpace(userId))
             {
-                errors.Add("There was an error identifying the logged in user.  Please make sure you are logged in and try again.");
+                errors.Add("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
             }
 
             // Make sure the comment body has some text

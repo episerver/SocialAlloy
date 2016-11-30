@@ -22,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// matches the specified reference identifier.
         /// </summary>
         /// <param name="id">User Id to search by</param>
-        /// <returns>The user identity.</returns>
+        /// <returns>The User object.</returns>
         User GetUser(string id);
     }
 }
