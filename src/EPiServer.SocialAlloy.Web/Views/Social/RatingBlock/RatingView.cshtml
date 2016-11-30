@@ -1,0 +1,76 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model RatingBlockViewModel
+
+<div class="border">
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+    <div style="margin-top:0.5em">
+        
+        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+        {
+            <div style="color: green;">@Model.SubmitSuccessMessage</div>
+        }
+
+        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+        {
+            <div style="color: red;">@Model.SubmitErrorMessage</div>
+            <div style="color: blue;">Please try submitting your rating again.</div>
+        }
+
+        @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div style="color: red;">@Model.ErrorMessage</div>
+        }
+        else
+        {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                if (Model.CurrentRating.HasValue)
+                {
+                    <div>You rated the page as @Model.CurrentRating out of @Model.RatingValues.Last().ToString()</div>
+                }
+                else
+                {
+                    using (Html.BeginForm("Submit", null))
+                    {
+                        @Html.HiddenFor(m => m.CurrentBlockLink)
+                        @Html.HiddenFor(m => m.CurrentPageLink)
+                        <div class="clearfix">
+                            <div><i>How do you rate this page?</i></div>
+                            <div>
+                                <ul>
+                                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
+                                    {
+                                        <label>Mylabel
+                                            <li style="list-style-type:none; display:inline">
+                                                @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings])
+                                            </li>
+                                        </label>
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+
+            if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
+            {
+                <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+            }
+            else
+            {
+                <div style="margin-top:0.5em"><strong>Average rating: @Model.Average.ToString("F")</strong></div>
+                <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
+            }
+        }
+    </div>
+</div>

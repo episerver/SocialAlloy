@@ -1,0 +1,61 @@
+﻿@*
+    This is the comment block frontend view.  It accepts a CommentsBlockView model whose data is used to
+    fill in view data.
+*@
+@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model CommentsBlockViewModel
+
+<div>
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+    {
+        <div style="color: green;">@Model.SubmitSuccessMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+    {
+        <div style="color: red;">@Model.SubmitErrorMessage</div>
+    }
+    @using (Html.BeginForm("Submit", null))
+    {
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.ValidationMessageFor(f => f.CommentBody)
+        <div>
+            <textarea rows="@Model.CommentBoxRows" maxlength="@Model.CommentMaxLength" name="Body" id="Body" placeholder="Enter your comment">@Model.CommentBody</textarea>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Add Comment">
+        </div>
+    }
+
+    <br />
+
+    @if (!String.IsNullOrWhiteSpace(Model.DisplayErrorMessage))
+    {
+        <div style="color: red;">@Model.DisplayErrorMessage</div>
+    }
+    else
+    {
+        foreach (var comment in Model.Comments)
+        {
+            var author = "anonymous";
+            if (!comment.Author.IsEmpty())
+            {
+                author = comment.Author.ToString();
+            }
+            <div style="font-weight: bold;">
+                @comment.Created.ToLocalTime() @author said:
+            </div>
+            <div>
+                @comment.Body
+            </div>
+            <br />
+        }
+    }
+</div>
