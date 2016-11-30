@@ -12,14 +12,8 @@ namespace EPiServer.SocialAlloy.Web.Social.User
         public Reference GetUserReference(IPrincipal user)
         {
             string userId = String.Empty;
-            try
-            {
-                userId = user.Identity.GetUserId();
-            }
-            catch
-            {
+            userId = user.Identity.GetUserId();
 
-            }
             return String.IsNullOrWhiteSpace(userId) ?
                    Reference.Empty :
                    Reference.Create(userId);
@@ -33,15 +27,11 @@ namespace EPiServer.SocialAlloy.Web.Social.User
         /// <returns></returns>
         public User GetUser(Reference id)
         {
-            IdentityUser user = null;
-            try
-            {
-                var userManager = new UserManager<IdentityUser>(
-                        new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()));
-                user = userManager.FindById(id.Id);
-            }
-            catch { }
-            return user != null ? 
+            var userManager = new UserManager<IdentityUser>(
+                    new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()));
+            var user = userManager.FindById(id.Id);
+
+            return user != null ?
                 new User
                 {
                     Name = user.UserName,
