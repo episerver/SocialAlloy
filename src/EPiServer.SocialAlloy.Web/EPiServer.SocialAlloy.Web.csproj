@@ -462,7 +462,6 @@
     <Compile Include="Social\Controllers\GroupCreationBlockController.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockViewController.cs" />
-    <Compile Include="Social\Controllers\CommentsBlockViewController.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockModel.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationFormModel.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
