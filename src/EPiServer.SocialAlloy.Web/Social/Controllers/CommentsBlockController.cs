@@ -46,11 +46,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(CommentsBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
+            var target = pageRouteHelper.Page.ContentGuid.ToString();
 
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
+            var commentForm = new CommentFormViewModel(this.pageRouteHelper.PageLink, target, currentBlockLink);
 
             // Create a comments block view model to fill the frontend block view
             var commentBlockViewModel = new CommentsBlockViewModel(currentBlock, commentForm);

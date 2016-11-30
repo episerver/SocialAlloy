@@ -444,7 +444,6 @@
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
-    <Compile Include="Social\Models\RatingPostModel.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />
     <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
