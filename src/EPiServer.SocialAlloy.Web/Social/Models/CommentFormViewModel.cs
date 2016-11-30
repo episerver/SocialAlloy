@@ -7,6 +7,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// </summary>
     public class CommentFormViewModel
     {
+        /// <summary>
+        /// Default parameterless constructor required for view form submitting.
+        /// </summary>
         public CommentFormViewModel()
         {
         }

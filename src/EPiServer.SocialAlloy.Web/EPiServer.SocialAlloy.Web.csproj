@@ -435,6 +435,7 @@
     <Compile Include="Social\Blocks\CommentsBlock.cs" />
     <Compile Include="Social\Blocks\RatingBlock.cs" />
     <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
+    <Compile Include="Social\Common\Exceptions\SocialRepositoryException.cs" />
     <Compile Include="Social\Common\Extensions\ReferenceExtensions.cs" />
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
@@ -443,6 +444,11 @@
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\RatingPostModel.cs" />
+    <Compile Include="Social\Models\SocialCommentFilter.cs" />
+    <Compile Include="Social\Models\SocialComment.cs" />
+    <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
+    <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
     <Compile Include="Social\User\IUserService.cs" />
     <Compile Include="Social\User\User.cs" />
     <Compile Include="Social\User\UserService.cs" />
