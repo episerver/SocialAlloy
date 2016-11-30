@@ -20,9 +20,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
     {
+        private readonly IUserRepository userRepository;
         private readonly ISocialCommentRepository commentRepository;
-        private readonly IContentRepository contentRepository;
-        private readonly IPageRouteHelper pageRouteHelper;
 
         private const string SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string SubmitErrorMessage = "SubmitErrorMessage";
@@ -32,10 +31,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public CommentsBlockController()
         {
+            this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-
         }
 
         /// <summary>
@@ -90,7 +87,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             var commentsViewModel = new CommentsBlockViewModel(data as CommentsBlock, commentForm);
 
-            var errors = ValidateBody(commentForm);
+            var errors = ValidateCommentForm(commentForm);
 
             if (errors.Count() == 0)
             {
@@ -103,7 +100,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 catch (SocialRepositoryException ex)
                 {
                     commentsViewModel.SubmitErrorMessage = ex.Message;
-                    ModelState.AddModelError("CommentBody", ex.Message);
                 }
             }
             else
@@ -128,25 +124,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
-                Author = this.User.Identity.Name
+                Author = this.userRepository.GetUserId(this.User)
             };
         }
 
-        private string GetPageId(PageReference pageLink)
-        {
-            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
-            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
-        }
-
         /// <summary>
-        /// Validates the body in the comment form.
+        /// Validates the comment form.
         /// </summary>
         /// <param name="commentForm">The comment form view model.</param>
         /// <returns>Returns a list of validation errors.</returns>
-        private List<string> ValidateBody(CommentFormViewModel commentForm)
+        private List<string> ValidateCommentForm(CommentFormViewModel commentForm)
         {
             var errors = new List<string>();
 
+            // Make sure that a logged in user is submitting the form.
+            var userId = this.userRepository.GetUserId(this.User);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                errors.Add("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
+            }
+
+            // Make sure the comment body has some text
             if (string.IsNullOrWhiteSpace(commentForm.Body))
             {
                 errors.Add("Cannot add an empty comment.");
