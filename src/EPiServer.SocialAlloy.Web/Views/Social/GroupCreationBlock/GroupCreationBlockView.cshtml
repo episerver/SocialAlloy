@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "GroupCreationBlockView";
+}
+
+<h2>GroupCreationBlockView</h2>
+
+
+@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models.Groups
+@model GroupCreationBlockModel
+<div>
+    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <hr />
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+    {
+        <div style="color: green;">@Model.SubmitSuccessMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+    {
+        <div style="color: red;">@Model.SubmitErrorMessage</div>
+    }
+    @using (Html.BeginForm("Submit", null))
+    {
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
+        <div>
+            @Html.TextBoxFor(m => m.GroupName, 1) Without Extension<br />
+            <label>Group Name</label><input type="text" name="groupName"/>
+            <label>Group Description</label><textarea name="groupDescription" placeholder="Enter your description"></textarea>
+        </div>
+        <div>
+            <input type="submit" name="submit" value="Add Comment">
+        </div>
+    }
+    <br />
+    
+</div>
+
+
