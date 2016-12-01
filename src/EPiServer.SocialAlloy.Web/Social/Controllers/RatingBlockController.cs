@@ -1,7 +1,5 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Common;
-using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -11,19 +9,21 @@ using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
     /// The RatingBlockViewController handles the rendering the rating statistics frontend view as well
-    /// as the posting of a new rating.
+    /// as the posting of a new user rating.
     /// </summary>
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
         private readonly ISocialRatingRepository ratingRepository;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RatingBlockController()
         {
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
@@ -33,7 +33,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Render the rating block frontend view.
         /// </summary>
         /// <param name="currentBlock">The current frontend block instance.</param>
-        /// <returns></returns>
+        /// <returns>The index action result.</returns>
         public override ActionResult Index(RatingBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
@@ -55,7 +55,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetRating(target, ratingBlockViewModel);
             }
 
-            //If no errors so far, retrieve rating statistics, if any, for this page
+            //If no errors communicating with Social services so far, 
+            // retrieve rating statistics for this page
             if (String.IsNullOrWhiteSpace(ratingBlockViewModel.ErrorMessage))
             {
                 GetRatingStatistics(target, ratingBlockViewModel);
@@ -69,7 +70,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// stores the submitted rating, and redirects back to the current page.
         /// </summary>
         /// <param name="ratingForm">The rating form being submitted.</param>
-        /// <returns></returns>
+        /// <returns>The submit action result.</returns>
         [HttpPost]
         public ActionResult Submit(RatingFormViewModel ratingForm)
         {
@@ -106,6 +107,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
         }
 
+        /// <summary>
+        /// Ensures the user submitted a valid rating
+        /// </summary>
+        /// <param name="submittedRating"></param>
+        /// <returns></returns>
         private bool IsValid(int? submittedRating)
         {
             return submittedRating.HasValue;
@@ -114,23 +120,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Collects view model state that needs to be saved.
         /// </summary>
-        /// <param name="commentsViewModel"></param>
-        /// <returns></returns>
+        /// <param name="ratingBlockViewModel">the RatingBlockViewModel containing the state to save</param>
+        /// <returns>The dictionary containing the posted form state</returns>
         private ModelStateDictionary CollectViewModelStateToSave(RatingBlockViewModel ratingBlockViewModel)
         {
             var transientState = new ModelStateDictionary
             {
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
                     "SubmitSuccessMessage",
-                    new System.Web.Mvc.ModelState() {
+                    new ModelState() {
                         Value = new ValueProviderResult(ratingBlockViewModel.SubmitSuccessMessage, ratingBlockViewModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
                     }
                 ),
-                new System.Collections.Generic.KeyValuePair<string, System.Web.Mvc.ModelState>
+                new KeyValuePair<string, ModelState>
                 (
                     "SubmitErrorMessage",
-                    new System.Web.Mvc.ModelState() {
+                    new ModelState() {
                         Value = new ValueProviderResult(ratingBlockViewModel.SubmitErrorMessage, ratingBlockViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
                     }
                 )
@@ -145,6 +151,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return modelState;
         }
 
+        /// <summary>
+        /// Gets the rating for the logged in user
+        /// </summary>
+        /// <param name="target">The current page on which the RatingBlock resides</param>
+        /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
+        /// update with errors if any</param>
         private void GetRating(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.CurrentRating = null;
@@ -174,6 +186,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the rating for the logged in user
+        /// </summary>
+        /// <param name="target">The current page on which the RatingBlock resides</param>
+        /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
+        /// update with errors if any</param>
         private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.ErrorMessage = String.Empty;
@@ -198,6 +216,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds the rating submitted by the logged in user
+        /// </summary>
+        /// <param name="target">The current page on which the RatingBlock resides</param>
+        /// <param name="value">The value of the submitted rating</param>
+        /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
+        /// update with errors if any</param>
         private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.SubmitErrorMessage = String.Empty;

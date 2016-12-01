@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.SocialAlloy.Web.Social.Blocks;
+﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
@@ -75,12 +74,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public int SubmittedRating { get; set; }
 
         /// <summary>
-        /// Message displayed in rating form if submitted rating saved successfully
+        /// Message displayed in rating block if submitted rating saved successfully
         /// </summary>
         public string SubmitSuccessMessage { get; set; }
 
         /// <summary>
-        /// Message displayed in rating form if error encountered while saving submitted rating
+        /// Message displayed in rating block if error encountered while saving submitted rating
         /// </summary>
         public string SubmitErrorMessage { get; set; }
 
@@ -90,7 +89,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string ErrorMessage { get; set; }
 
         /// <summary>
-        /// Message displayed in rating form if no rating statistics are found for the page
+        /// Message displayed in rating block if no rating statistics are found for the page 
+        /// to prompt user to submit a rating for this page.
         /// </summary>
         public string NoStatisticsFoundMessage { get; set; }
         

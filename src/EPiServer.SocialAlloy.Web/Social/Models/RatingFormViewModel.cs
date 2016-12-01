@@ -7,10 +7,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// </summary>
     public class RatingFormViewModel
     {
+        /// <summary>
+        /// Default parameterless constructor required for view form submitting.
+        /// </summary>
         public RatingFormViewModel()
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="currentPageLink">the reference link of the page containing the social rating block</param>
+        /// <param name="currentBlockLink">the reference of the social rating block</param></param>
         public RatingFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;
@@ -23,7 +31,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public PageReference CurrentPageLink { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference link of the block containing the rating block.
+        /// Gets or sets the reference link of the rating block.
         /// </summary>
         public ContentReference CurrentBlockLink { get; set; }
 
