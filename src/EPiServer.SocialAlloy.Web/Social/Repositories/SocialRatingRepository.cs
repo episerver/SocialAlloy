@@ -111,13 +111,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 if (ratingStatisticsPage.Results.Count() > 0)
                 {
                     var statistics = ratingStatisticsPage.Results.ToList().FirstOrDefault();
-                    result = new SocialRatingStatistics
+                    if (statistics.TotalCount > 0)
                     {
-                        Average = statistics.TotalCount > 0 ?
-                                    Decimal.Divide(statistics.Sum, statistics.TotalCount) : 0,
-                        TotalCount = statistics.TotalCount
-                    };
-
+                        result = new SocialRatingStatistics
+                        {
+                            Average = statistics.TotalCount > 0 ?
+                                        Decimal.Divide(statistics.Sum, statistics.TotalCount) : 0,
+                            TotalCount = statistics.TotalCount
+                        };
+                    }
                 }
             }
             catch (SocialAuthenticationException ex)

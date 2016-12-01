@@ -189,7 +189,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    ratingViewBlockModel.NoStatisticsFoundMessage = "Be the first one to rate this page!";
+                    ratingViewBlockModel.NoStatisticsFoundMessage = "This page not been rated, be the first one to rate this page!";
                 }
             }
             catch (SocialRepositoryException ex)
