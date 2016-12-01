@@ -21,10 +21,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
-            //TODO remove the commented lines
+            //For the sake of this sample we allow items to be rated
+            //on a scale of 1 through 5.
             RatingValues = new List<int>() { 1, 2, 3, 4, 5 };
-            //RatingValues = new List<int>();
-            //RatingValues.AddRange(block.RatingValues);
 
             if (form.SubmittedRating.HasValue)
                 SubmittedRating = form.SubmittedRating.Value;
@@ -45,8 +44,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
 
         public List<int> RatingValues { get; set; }
-        //TODO remove above and use this below
-        //public List<int> RatingValues { get; }
 
         /// <summary>
         /// The total number of ratings found for CurrentPageLink
