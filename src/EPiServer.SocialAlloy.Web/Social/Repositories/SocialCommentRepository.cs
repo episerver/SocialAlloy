@@ -1,5 +1,4 @@
-﻿using EPiServer.ServiceLocation;
-using EPiServer.Social.Comments.Core;
+﻿using EPiServer.Social.Comments.Core;
 using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
@@ -10,20 +9,21 @@ using static EPiServer.SocialAlloy.Web.Social.Models.SocialCommentFilter;
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
-    /// The SocialCommentRepository interface defines the operations that can be issued
+    /// The SocialCommentRepository class defines the operations that can be issued
     /// against the EPiServer Social comment repository.
     /// </summary>
-    [ServiceConfiguration(ServiceType = typeof(ISocialCommentRepository))]
     public class SocialCommentRepository : ISocialCommentRepository
     {
+        private readonly IUserRepository userRepository;
         private readonly ICommentService commentService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SocialCommentRepository()
+        public SocialCommentRepository(IUserRepository userRepository, ICommentService commentService)
         {
-            this.commentService = ServiceLocator.Current.GetInstance<ICommentService>();
+            this.userRepository = userRepository;
+            this.commentService = commentService;
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return comments.Select(c =>
                 new SocialComment
                 {
-                    Author = c.Author.ToString(),
+                    Author = this.userRepository.GetUser(c.Author.Id).Name,
                     Body = c.Body,
                     Target = c.Parent.ToString(),
                     Created = c.Created
@@ -145,7 +145,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             Visibility visibility = Visibility.All;
 
-            switch(filter)
+            switch (filter)
             {
                 case SocialCommentFilter.VisibilityFilter.Visible:
                     visibility = Visibility.Visible;

@@ -1,15 +1,30 @@
 ﻿using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using EPiServer.Web.Mvc;
+using EPiServer.Web.Routing;
+using System;
 using System.Web.Mvc;
 
-namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers 
+namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
 {
     /// <summary> 
-    /// The SocialBlockController may contain social data/logic common to all social controllers.
+    /// The SocialBlockController may contain social data/logic common to all social controllers. 
     /// </summary>
     /// <typeparam name="T">The social block type.</typeparam>
     public abstract class SocialBlockController<T> : BlockController<T> where T : BlockData
     {
+        protected readonly IContentRepository contentRepository;
+        protected readonly IPageRouteHelper pageRouteHelper;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SocialBlockController()
+        {
+            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+        }
+
         /// <summary>
         /// Save model state.
         /// </summary>
@@ -49,13 +64,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         }
 
         /// <summary>
+        /// Gets the page Id given its page reference.
+        /// </summary>
+        /// <param name="pageLink">The page reference.</param>
+        /// <returns>The page Id.</returns>
+        protected string GetPageId(PageReference pageLink)
+        {
+            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
+            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="block">A block reference used to composed a qualified model state key.</param>
         /// <returns>The fully qualified model state key.</returns>
         private string GetModelStateKey(ContentReference block)
         {
-            return "SocialFormBlock_" + block.ID;
+            return "SocialBlock_" + block.ID;
         }
     }
 }
