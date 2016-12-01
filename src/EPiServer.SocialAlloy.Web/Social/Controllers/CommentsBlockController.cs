@@ -128,12 +128,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             };
         }
 
-        private string GetPageId(PageReference pageLink)
-        {
-            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
-            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
-        }
-
         /// <summary>
         /// Validates the comment form.
         /// </summary>
