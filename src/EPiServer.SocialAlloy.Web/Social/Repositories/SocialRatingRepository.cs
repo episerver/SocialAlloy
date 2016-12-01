@@ -9,7 +9,7 @@ using System.Linq;
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
-    /// The SocialRatingRepository interface defines the operations that can be issued
+    /// The SocialRatingRepository class defines the operations that can be issued
     /// against the EPiServer Social rating repository.
     /// </summary>
     public class SocialRatingRepository : ISocialRatingRepository
