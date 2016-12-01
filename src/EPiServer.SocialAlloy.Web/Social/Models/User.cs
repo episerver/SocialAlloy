@@ -13,7 +13,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
         public User()
         {
-            Reference = Reference.Empty;
+            Id = String.Empty;
             Name = String.Empty;
         }
         /// <summary>
@@ -24,7 +24,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// An identifier that can be used to retrieve a user from the membership provider.
         /// </summary>
-        public Reference Reference { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Used to denote anonymous users with a name of Anonymous and an empty Reference. 
@@ -36,7 +36,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
                 return new User
                 {
                     Name = "Anonymous",
-                    Reference = Reference.Empty
+                    Id = String.Empty
                 };
             }
         }
