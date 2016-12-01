@@ -1,14 +1,6 @@
-﻿
-@{
-    ViewBag.Title = "GroupCreationBlockView";
-}
-
-<h2>GroupCreationBlockView</h2>
-
-
-@using EPiServer.Web.Mvc.Html
+﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
-@model GroupCreationBlockModel
+@model GroupCreationBlockViewModel
 <div>
     <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
     <hr />
@@ -20,17 +12,18 @@
     {
         <div style="color: red;">@Model.SubmitErrorMessage</div>
     }
-    @using (Html.BeginForm("Submit", null))
+   
+    @using (Html.BeginForm("Submit", "GroupCreationBlock", FormMethod.Post))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.HiddenFor(m => m.PageId)
         <div>
-            @Html.TextBoxFor(m => m.GroupName, 1) Without Extension<br />
-            <label>Group Name</label><input type="text" name="groupName"/>
-            <label>Group Description</label><textarea name="groupDescription" placeholder="Enter your description"></textarea>
+            @Html.TextBoxFor(m => m.GroupName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
+            @Html.TextAreaFor(m => m.GroupDescription, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
         </div>
         <div>
-            <input type="submit" name="submit" value="Add Comment">
+            <input type="submit" name="submit" value="Add group">
         </div>
     }
     <br />
