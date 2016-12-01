@@ -25,7 +25,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns></returns>
         public string GetUserId(IPrincipal user)
         {
-            return user.Identity.GetUserId();
+            var userId = user.Identity.GetUserId();
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return string.Empty;
+            }
+
+            return userId;
         }
 
         /// <summary>

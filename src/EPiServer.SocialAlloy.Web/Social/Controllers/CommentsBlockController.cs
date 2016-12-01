@@ -124,18 +124,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
-                Author = GetUserId()
+                Author = this.userRepository.GetUserId(this.User)
             };
-        }
-
-        /// <summary>
-        /// Gets the user's id.
-        /// </summary>
-        /// <returns>The user id.</returns>
-        private string GetUserId()
-        {
-            var userId = this.userRepository.GetUserId(this.User);
-            return this.userRepository.GetUser(userId).Id;
         }
 
         /// <summary>
