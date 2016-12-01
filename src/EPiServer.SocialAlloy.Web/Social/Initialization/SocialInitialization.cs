@@ -3,6 +3,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.Social.Comments.Core;
+using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -51,6 +52,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<ISocialCommentRepository>().Use(() => CreateSocialCommentRepository());
+            configuration.For<ISocialGroupRepository>().Use(() => CreateSocialGroupRepository());
         }
 
         /// <summary>
@@ -71,6 +73,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         private static ISocialCommentRepository CreateSocialCommentRepository()
         {
             return new SocialCommentRepository(CreateUserRepository(), ServiceLocator.Current.GetInstance<ICommentService>());
+        }
+
+        /// <summary>
+        /// Create an instance of ISocialGroupRepository.
+        /// </summary>
+        /// <returns>The created SocialGroupRepository instance.</returns>
+        private static ISocialGroupRepository CreateSocialGroupRepository()
+        {
+            var groupService = ServiceLocator.Current.GetInstance<IGroupService>();
+            return new SocialGroupRepository(groupService);
         }
     }
 }

@@ -28,12 +28,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// <summary>
         /// Gets the name of the group.
         /// </summary>
-        public string GroupName { get; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets the group description.
         /// </summary>
-        public string GroupDescription { get; }
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference string of the page containing the group creation form.
+        /// </summary>
+        public string CurrentPageLinkString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference string of the block containing the group creation form.
+        /// </summary>
+        public string CurrentBlockLinkString { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the page containing the group creation form.

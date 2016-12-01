@@ -2,28 +2,29 @@
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
 @model GroupCreationBlockViewModel
 <div>
-    <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+    <h2 @Html.EditAttributes(m => m.Heading)>@Model.Heading</h2>
     <hr />
     @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
     {
-        <div style="color: green;">@Model.SubmitSuccessMessage</div>
+        <div id="successMessage" style="color: green;">@Model.SubmitSuccessMessage</div>
     }
     @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
     {
-        <div style="color: red;">@Model.SubmitErrorMessage</div>
+        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
     }
    
     @using (Html.BeginForm("Submit", "GroupCreationBlock", FormMethod.Post))
     {
-        @Html.HiddenFor(m => m.CurrentBlockLink)
-        @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.HiddenFor(m => m.CurrentBlockLinkString)
+        @Html.HiddenFor(m => m.CurrentPageLinkString)
         @Html.HiddenFor(m => m.PageId)
         <div>
-            @Html.TextBoxFor(m => m.GroupName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
-            @Html.TextAreaFor(m => m.GroupDescription, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
+            @Html.TextBoxFor(m => m.Name,  new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
+
+            @Html.TextAreaFor(m => m.Description, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
         </div>
         <div>
-            <input type="submit" name="submit" value="Add group">
+            <input type="submit" name="submit" value="Add new group">
         </div>
     }
     <br />

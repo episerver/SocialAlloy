@@ -1,18 +1,16 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
-using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.SocialAlloy.Web.Social.Blocks;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.Web.Routing;
-using System.Web.Mvc;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.Social.Groups.Core;
-using EPiServer.Web.Mvc;
-using System;
+using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
+using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Models;
+using EPiServer.SocialAlloy.Web.Social.Models.Groups;
+using EPiServer.SocialAlloy.Web.Social.Repositories;
+using EPiServer.Web.Routing;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
@@ -22,18 +20,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
-
-        private readonly IGroupService groupService;
-        private readonly IContentRepository contentRepository;
-
+        private readonly ISocialGroupRepository groupRepository;
         private const string SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string SubmitErrorMessage = "SubmitErrorMessage";
-        
 
         public GroupCreationBlockController()
         {
-            this.groupService = ServiceLocator.Current.GetInstance<IGroupService>();
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
         }
 
         /// <summary>
@@ -41,10 +34,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="groupService"></param>
         /// <param name="contentRepository"></param>
-        public GroupCreationBlockController(IGroupService groupService, IContentRepository contentRepository)
+        public GroupCreationBlockController(ISocialGroupRepository groupRepository)
         {
-            this.groupService = groupService;
-            this.contentRepository = contentRepository;
+            this.groupRepository = groupRepository;
         }
 
         /// <summary>
@@ -54,22 +46,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns></returns>
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
-            var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            var target = pageRouteHelper.Page.ContentGuid.ToString();
-
-            //Populate the view model
-            var groupCreationBlockModel = new GroupCreationBlockViewModel() { Heading = currentBlock.Heading, CurrentBlockLink = currentBlockLink, PageId = target, CurrentPageLink = pageRouteHelper.PageLink };
+            //populate model to pass to block view
+            var groupCreationBlockModel = new GroupCreationBlockViewModel()
+            {
+                Heading = currentBlock.Heading,
+                CurrentBlockLinkString = currentBlockLink.ToString(),
+                PageId = pageRouteHelper.Page.ContentGuid.ToString(),
+                CurrentPageLinkString = pageRouteHelper.PageLink.ToString()
+            };
 
             // Apply current model state to the group block view model
             ApplyModelStateToGroupCreationBlockViewModel(groupCreationBlockModel);
 
+            //remove existing values from input fields
+            ModelState.Clear();
 
+            //return block view
             return PartialView("~/Views/Social/GroupCreationBlock/Index.cshtml", groupCreationBlockModel);
         }
 
@@ -80,48 +77,43 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="groupCreationForm">The group form being submitted.</param>
         /// <returns></returns>
         [HttpPost]
-        //public ActionResult Submit(GroupCreationBlockModel model)
-        public ActionResult Submit(string groupName, string groupDescription , string currentBlockLink , string pageId , string currentPageLink)
+        public ActionResult Submit(GroupCreationBlockViewModel model)
         {
-            var cCurrentBlockLink = ContentReference.Parse(currentBlockLink);
-            var data = this.contentRepository.Get<IContentData>(cCurrentBlockLink);
+            model.CurrentBlockLink = ContentReference.Parse(model.CurrentBlockLinkString);
+            var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
 
-            var validatedInputs = IsValid(groupName, groupDescription);
-            var groupModel = new GroupCreationBlockViewModel()
-            {
-                SubmitErrorMessage = validatedInputs ? null : "Group name and description cannot be null or whitespace",
-                SubmitSuccessMessage = validatedInputs ? "Group name and description were added successfully" : null,
-                CurrentBlockLink = cCurrentBlockLink,
-                CurrentPageLink = PageReference.Parse(currentPageLink),
-                PageId = pageId
-            };
+            var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
+            model.SubmitErrorMessage = validatedInputs ? null : "Group name and description cannot be null or whitespace";
+            model.CurrentPageLink = PageReference.Parse(model.CurrentPageLinkString);
 
             if (validatedInputs)
             {
                 try
                 {
-                    this.groupService.Add(new Group(groupName, groupDescription));
-                    groupModel.SubmitSuccessMessage = "Your group was added successfully!";
+                    var group = new Group(model.Name, model.Description);
+                    this.groupRepository.Add(group);
+                    model.SubmitSuccessMessage = "Your group: " + model.Name + " was added successfully!";
                 }
                 catch (SocialRepositoryException ex)
                 {
-                    groupModel.SubmitErrorMessage = ex.Message;
-                    ModelState.AddModelError("CommentBody", ex.Message);
+                    model.SubmitErrorMessage = ex.Message;
+                    ModelState.AddModelError("GroupCreation", ex.Message);
                 }
             }
             else
             {
                 // Flag the CommentBody model state with validation error
-                ModelState.AddModelError("CommentBody", groupModel.SubmitErrorMessage);
+                ModelState.AddModelError("GroupCreation", model.SubmitErrorMessage);
             }
 
-            SaveModelState(cCurrentBlockLink, CollectViewModelStateToSave(groupModel));
+            SaveModelState(model.CurrentBlockLink, CollectViewModelStateToSave(model));
 
-            return Redirect(UrlResolver.Current.GetUrl(groupModel.CurrentPageLink));
+            return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
-        private bool IsValid(string groupName, string groupDescription)
+
+        private bool ValidateGroupInputs(string groupName, string groupDescription)
         {
-            return !string.IsNullOrWhiteSpace(groupName) &&  !string.IsNullOrWhiteSpace(groupDescription);
+            return !string.IsNullOrWhiteSpace(groupName) && !string.IsNullOrWhiteSpace(groupDescription);
         }
 
         /// <summary>
@@ -137,6 +129,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Apply success/error model state to the view model
             groupCreationBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
             groupCreationBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
+
         }
 
         /// <summary>
