@@ -23,14 +23,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
         private readonly ISocialRatingRepository ratingRepository;
-        private readonly IContentRepository contentRepository;
-        private readonly IPageRouteHelper pageRouteHelper;
 
         public RatingBlockController()
         {
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
         }
 
         /// <summary>
@@ -110,12 +106,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
         }
 
-        private string GetPageId(PageReference pageLink)
-        {
-            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
-            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
-        }
-
         private bool IsValid(int? submittedRating)
         {
             return submittedRating.HasValue;
@@ -163,13 +153,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userReference = userService.GetUserReference(this.User);
-                if (userReference != Reference.Empty)
+                var userId = userService.GetUserId(this.User);
+                if (!String.IsNullOrWhiteSpace(userId))
                 {
                     ratingViewBlockModel.CurrentRating =
                         this.ratingRepository.GetRating(new SocialRatingFilter
                         {
-                            Rater = userReference.ToString(),
+                            Rater = userId,
                             Target = target
                         });
                 }
@@ -216,10 +206,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userReference = userService.GetUserReference(this.User);
-                if (userReference != Reference.Empty)
+                var userId = userService.GetUserId(this.User);
+                if (!String.IsNullOrWhiteSpace(userId))
                 {
-                    ratingRepository.AddRating(userReference.Id, target, value);
+                    ratingRepository.AddRating(userId, target, value);
 
                     ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
                 }
