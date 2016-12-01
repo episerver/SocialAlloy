@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
 {
-    /// <summary>
+    /// <summary> 
     /// The SocialBlockController may contain social data/logic common to all social controllers.
     /// </summary>
     /// <typeparam name="T">The social block type.</typeparam>
