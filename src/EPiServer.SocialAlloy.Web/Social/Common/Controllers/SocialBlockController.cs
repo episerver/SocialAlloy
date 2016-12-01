@@ -2,7 +2,7 @@
 using EPiServer.Web.Mvc;
 using System.Web.Mvc;
 
-namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
+namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers 
 {
     /// <summary> 
     /// The SocialBlockController may contain social data/logic common to all social controllers.
