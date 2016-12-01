@@ -156,7 +156,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
-        /// update with errors if any</param>
+        /// populate with errors, if any</param>
         private void GetRating(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.CurrentRating = null;
@@ -187,11 +187,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Gets the rating for the logged in user
+        /// Gets the rating statistics for the page on which the RatingBlock resides
         /// </summary>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
-        /// update with errors if any</param>
+        /// populate with errors, if any</param>
         private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.ErrorMessage = String.Empty;
@@ -222,7 +222,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="value">The value of the submitted rating</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
-        /// update with errors if any</param>
+        /// populate with errors, if any</param>
         private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.SubmitErrorMessage = String.Empty;
