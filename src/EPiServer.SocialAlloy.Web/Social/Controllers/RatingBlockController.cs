@@ -14,8 +14,10 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The RatingBlockViewController handles the rendering the rating statistics frontend view as well
-    /// as the posting of a new user rating.
+    /// The RatingBlockController handles the rendering of any existing rating statistics
+    /// for the page on which the RatingBlock resides.
+    /// This controller also allows logged in users to submit ratings for pages they have not yet 
+    /// rated or view any rating they have already submitted for a page.
     /// </summary>
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
