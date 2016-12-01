@@ -15,7 +15,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The CommentsBlockController handles the rendering the comment block frontend view as well
+    /// The CommentsBlockController handles the rendering of the comment block frontend view as well
     /// as the posting of new comments.
     /// </summary>
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
