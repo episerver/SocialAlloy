@@ -124,8 +124,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Target = GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
-                Author = this.userRepository.GetUserId(this.User)
+                Author = GetUserId()
             };
+        }
+
+        /// <summary>
+        /// Gets the user's id.
+        /// </summary>
+        /// <returns>The user id.</returns>
+        private string GetUserId()
+        {
+            var userId = this.userRepository.GetUserId(this.User);
+            return this.userRepository.GetUser(userId).Id;
         }
 
         /// <summary>
@@ -136,13 +146,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private List<string> ValidateCommentForm(CommentFormViewModel commentForm)
         {
             var errors = new List<string>();
-
-            // Make sure that a logged in user is submitting the form.
-            var userId = this.userRepository.GetUserId(this.User);
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                errors.Add("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
-            }
 
             // Make sure the comment body has some text
             if (string.IsNullOrWhiteSpace(commentForm.Body))
