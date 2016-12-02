@@ -2,6 +2,11 @@
 @using EPiServer.SocialAlloy.Web.Social.Models
 
 @model RatingBlockViewModel
+<script type="text/javascript">
+    function EnableRatingSubmitButton() {
+        $("button[name='submitsocialrating']").removeAttr("disabled");
+    }
+</script>
 
 <div class="border">
     @if (Model.ShowHeading)
@@ -44,12 +49,13 @@
                             <div style="margin-bottom:0.5em;">
                                     @for (var numOfRatings = 0; numOfRatings < @Model.RatingSettings.Count; numOfRatings++)
                                     {
-                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingSettings[numOfRatings], new { @style = "display:inline;" })
+                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingSettings[numOfRatings], 
+                                                    new { @style = "display:inline;", @onchange = "EnableRatingSubmitButton();" })
                                         <label style="display:inline;margin-right:0.5em;">@Model.RatingSettings[numOfRatings].ToString().ToString()</label>
                                     }
                             </div>
                             <div>
-                                <button type="submit" role="button" class="btn btn-primary" style="width:20%">Submit</button>
+                                <button type="submit" name="submitsocialrating" role="button" disabled="disabled" class="btn btn-primary" style="width:20%">Submit</button>
                             </div>
                         </div>
                     }
