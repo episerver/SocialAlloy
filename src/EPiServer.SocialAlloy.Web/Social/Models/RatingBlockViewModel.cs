@@ -71,7 +71,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// The average of all ratings submitted for CurrentPageLink
         /// </summary>
-        public decimal Average { get; set; }
+        public double Average { get; set; }
 
         /// <summary>
         /// User who submitted the rating

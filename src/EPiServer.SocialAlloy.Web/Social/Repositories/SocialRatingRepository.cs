@@ -140,8 +140,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     {
                         result = new SocialRatingStatistics
                         {
-                            Average = statistics.TotalCount > 0 ?
-                                        Decimal.Divide(statistics.Sum, statistics.TotalCount) : 0,
+                            Average = (double)statistics.Sum/statistics.TotalCount,
                             TotalCount = statistics.TotalCount
                         };
                     }

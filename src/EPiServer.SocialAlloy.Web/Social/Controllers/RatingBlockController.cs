@@ -21,6 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
+        private readonly IUserRepository userRepository;
         private readonly ISocialRatingRepository ratingRepository;
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public RatingBlockController()
         {
+            this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
         }
 
@@ -166,8 +168,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userId = userService.GetUserId(this.User);
+                var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
                     ratingViewBlockModel.CurrentRating =
@@ -232,8 +233,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                var userService = ServiceLocator.Current.GetInstance<IUserRepository>();
-                var userId = userService.GetUserId(this.User);
+                var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
                     ratingRepository.AddRating(userId, target, value);

@@ -9,7 +9,7 @@
         /// <summary>
         /// Gets the average value of ratings for an item.
         /// </summary>
-        public decimal Average { get; set; }
+        public double Average { get; set; }
 
         /// <summary>
         /// Gets the total number of ratings for an item.
