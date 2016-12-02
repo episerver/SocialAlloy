@@ -194,7 +194,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             commentBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
             commentBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
 
-            // if there was an error submitting the message then leave the current body in the comment box
+            // If there was an error submitting the message then leave the current body in the comment box
             // so the user does not have to retype it.
             if (errorMessage != null && !String.IsNullOrWhiteSpace(errorMessage.Value.AttemptedValue))
             {
