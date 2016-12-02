@@ -1,0 +1,32 @@
+﻿@*
+    This is the subscription block frontend view.  It accepts a SubscriptionBlockView model whose data is used to
+    fill in view data.
+*@
+@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model SubscriptionBlockViewModel
+
+<div>
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+    {
+        <div style="color: green;">@Model.SubmitSuccessMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+    {
+        <div style="color: red;">@Model.SubmitErrorMessage</div>
+    }
+    @using (Html.BeginForm("Submit", null))
+    {
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
+        <div>
+            <input type="submit" name="submit" value="Subscribe/Unsubscribe">
+        </div>
+    }
+</div>

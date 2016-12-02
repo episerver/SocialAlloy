@@ -141,6 +141,26 @@
       <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Shell.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Social.ActivityStreams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.ActivityStreams.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.ActivityStreams.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.ActivityStreams.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.ActivityStreams.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.Site.1.0.0\lib\EPiServer.Social.ActivityStreams.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer.Social.Comments, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.dll</HintPath>
       <Private>True</Private>
@@ -362,6 +382,8 @@
     <Compile Include="Business\Initialization\FilterConfig.cs" />
     <Compile Include="Social\Blocks\RatingSetting.cs" />
     <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
+    <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
+    <Compile Include="Social\Controllers\SubscriptionBlockController.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
@@ -447,8 +469,13 @@
     <Compile Include="Social\Models\SocialComment.cs" />
     <Compile Include="Social\Models\SocialRatingStatistics.cs" />
     <Compile Include="Social\Models\SocialRatingFilter.cs" />
+    <Compile Include="Social\Models\SocialSubscription.cs" />
+    <Compile Include="Social\Models\SocialSubscriptionFilter.cs" />
+    <Compile Include="Social\Models\SubscriptionBlockViewModel.cs" />
+    <Compile Include="Social\Models\SubscriptionFormViewModel.cs" />
     <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\ISocialRatingRepository.cs" />
+    <Compile Include="Social\Repositories\ISocialSubscriptionRepository.cs" />
     <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\IUserRepository.cs" />
     <Compile Include="Social\Models\User.cs" />
@@ -625,6 +652,7 @@
     <Content Include="Web.config" />
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
+    <Content Include="Views\Social\SubscriptionBlock\SubscriptionView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
