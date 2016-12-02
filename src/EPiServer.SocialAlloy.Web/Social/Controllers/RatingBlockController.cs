@@ -16,8 +16,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// <summary>
     /// The RatingBlockController handles the rendering of any existing rating statistics
     /// for the page on which the RatingBlock resides.
-    /// This controller also allows logged in users to submit ratings for pages they have not yet 
-    /// rated or view any rating they have already submitted for a page.
+    /// This controller also allows a logged in user to rate a page which that user has not
+    /// yet rated or view the rating that user has already submitted in the past for that page.
     /// </summary>
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
@@ -46,20 +46,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Restore the saved model state
             LoadModelState(currentBlockLink);
 
-            //Populate the view model
+            // Create a rating block view model to fill the frontend block view
             var ratingFormViewModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
             var ratingBlockViewModel = new RatingBlockViewModel(currentBlock, ratingFormViewModel);
 
             // Apply current model state to the rating block view model
             ApplyModelStateToRatingBlockViewModel(ratingBlockViewModel);
 
-            //If user logged in, check if logged in user has already rated the page
+            // If user logged in, check if logged in user has already rated the page
             if (this.User.Identity.IsAuthenticated)
             {
                 GetRating(target, ratingBlockViewModel);
             }
 
-            //If no errors communicating with Social services so far, 
+            // If there are no errors so far communicating with Social services, 
             // retrieve rating statistics for this page
             if (String.IsNullOrWhiteSpace(ratingBlockViewModel.ErrorMessage))
             {
@@ -70,7 +70,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Submit handles the submitting of new ratings.  It accepts a rating form model,
+        /// Submit handles the submission of a new rating.  It accepts a rating form model,
         /// stores the submitted rating, and redirects back to the current page.
         /// </summary>
         /// <param name="ratingForm">The rating form being submitted.</param>
@@ -87,14 +87,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             else
             {
-                // validate rating != null and was submitted, TODO UI shd validate too. submit button shd be enabled iff 1 radio btn is selected
                 if (IsValid(ratingForm.SubmittedRating))
                 {
-                    //Get the page Id 
+                    // Retrieve the page identifier of the page that was rated 
                     var pageId = GetPageId(ratingForm.CurrentPageLink);
                     if (!string.IsNullOrWhiteSpace(pageId))
                     {
-                        //save rating
+                        // Save the rating
                         AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
                     }
                     else
@@ -112,10 +111,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Ensures the user submitted a valid rating
+        /// Validates the rating value that was submitted 
         /// </summary>
-        /// <param name="submittedRating"></param>
-        /// <returns></returns>
+        /// <param name="submittedRating">the rating value that was submitted</param>
+        /// <returns>true if rating value is non-null, false otherwise</returns>
         private bool IsValid(int? submittedRating)
         {
             return submittedRating.HasValue;
@@ -257,10 +256,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="ratingBlockViewModel">The rating block view model to apply model state to.</param>
         private void ApplyModelStateToRatingBlockViewModel(RatingBlockViewModel ratingBlockViewModel)
         {
-            // Set model state from saved model state/prior form submission
+            // Get success/error model state
             var submitErrorMessage = GetModelState("SubmitErrorMessage");
             var submitSuccessMessage = GetModelState("SubmitSuccessMessage");
 
+            // Apply success/error model state to the view model
             ratingBlockViewModel.SubmitErrorMessage = (submitErrorMessage != null && submitErrorMessage.Value != null)
                                             ? submitErrorMessage.Value.AttemptedValue
                                             : string.Empty;

@@ -18,7 +18,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Constructor
         /// </summary>
         /// <param name="currentPageLink">the reference link of the page containing the social rating block</param>
-        /// <param name="currentBlockLink">the reference of the social rating block</param></param>
+        /// <param name="currentBlockLink">the reference of the social rating block</param>
         public RatingFormViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
         {
             CurrentPageLink = currentPageLink;
@@ -36,7 +36,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public ContentReference CurrentBlockLink { get; set; }
 
         /// <summary>
-        /// The new rating submitted by logged in user for CurrentPageLink
+        /// The new rating submitted by logged in user for the page containing the rating block
         /// </summary>
         public int? SubmittedRating { get; set; }
     }

@@ -2,7 +2,6 @@
 using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -88,7 +87,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 });
 
                 if (ratingPage.Results.Count() > 0)
+                {
                     result = ratingPage.Results.ToList().FirstOrDefault().Value.Value;
+                }
             }
             catch (SocialAuthenticationException ex)
             {

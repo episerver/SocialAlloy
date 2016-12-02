@@ -14,10 +14,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="block"></param>
-        /// <param name="form"></param>
-        public RatingBlockViewModel(RatingBlock block,
-                                    RatingFormViewModel form)
+        /// <param name="block">A block reference to use as a key under which to save the model state.</param>
+        /// <param name="form">A rating form view model to get current form values for the block view model</param>
+        public RatingBlockViewModel(RatingBlock block, RatingFormViewModel form)
             : base(form.CurrentPageLink, form.CurrentBlockLink)
         {
             Heading = block.Heading;
@@ -26,25 +25,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             LoadRatingSettings(block);
 
             if (form.SubmittedRating.HasValue)
+            {
                 SubmittedRating = form.SubmittedRating.Value;
-        }
-
-        private void LoadRatingSettings(RatingBlock block)
-        {
-            RatingSettings = new List<int>();
-
-            //if (block.EditableRatingSettings != null && block.EditableRatingSettings.Count > 0)
-            //{
-            //    foreach (var socialRating in block.EditableRatingSettings)
-            //    {
-            //        if (!RatingSettings.Contains(socialRating.Value))
-            //            RatingSettings.Add(socialRating.Value);
-            //    }
-            //    RatingSettings.Sort();
-            //}
-
-            RatingSettings.AddRange(block.RatingSettings.Cast<RatingSetting>().Select(r => r.Value).ToList());
-            RatingSettings.Sort();
+            }
         }
 
         /// <summary>
@@ -64,42 +47,43 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public List<int> RatingSettings { get; set; }
 
         /// <summary>
-        /// The total number of ratings found for CurrentPageLink
+        /// The total number of ratings found for the page containing the rating block.
         /// </summary>
         public long TotalCount { get; set; }
 
         /// <summary>
-        /// The average of all ratings submitted for CurrentPageLink
+        /// The average of all ratings submitted for the page containing the rating block.
         /// </summary>
         public double Average { get; set; }
 
         /// <summary>
-        /// User who submitted the rating
+        /// User who submitted the rating.
         /// </summary>
         public string Rater { get; set; }
 
         /// <summary>
-        /// The existing rating, if any submitted by Rater for CurrentPageLink
+        /// The existing rating, if any submitted by Rater for the page containing the rating block.
         /// </summary>
         public int? CurrentRating { get; set; }
 
         /// <summary>
-        /// The new rating submitted by Rater for CurrentPageLink
+        /// The new rating submitted by Rater for the page containing the rating block.
         /// </summary>
         public int SubmittedRating { get; set; }
 
         /// <summary>
-        /// Message displayed in rating block if submitted rating saved successfully
+        /// Message displayed in rating block if submitted rating was saved successfully.
         /// </summary>
         public string SubmitSuccessMessage { get; set; }
 
         /// <summary>
-        /// Message displayed in rating block if error encountered while saving submitted rating
+        /// Message displayed in rating block if an error was encountered while saving the submitted rating.
         /// </summary>
         public string SubmitErrorMessage { get; set; }
 
         /// <summary>
-        /// Message displayed in rating block if error encountered while retrieving rating statistics or ratings for logged in user. 
+        /// Message displayed in rating block if an error was encountered while retrieving rating statistics or 
+        /// ratings for logged in user. 
         /// </summary>
         public string ErrorMessage { get; set; }
 
@@ -108,7 +92,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// to prompt user to submit a rating for this page.
         /// </summary>
         public string NoStatisticsFoundMessage { get; set; }
-        
 
+        private void LoadRatingSettings(RatingBlock block)
+        {
+            RatingSettings = new List<int>();
+            RatingSettings.AddRange(block.RatingSettings.Cast<RatingSetting>().Select(r => r.Value).ToList());
+            RatingSettings.Sort();
+        }
     }
 }
