@@ -31,7 +31,7 @@
             {
                 if (Model.CurrentRating.HasValue)
                 {
-                    <div>You rated the page as @Model.CurrentRating out of @Model.RatingValues.Last().ToString()</div>
+                    <div>You rated the page as @Model.CurrentRating out of @Model.RatingSettings.Last().ToString()</div>
                 }
                 else
                 {
@@ -42,10 +42,10 @@
                         <div class="clearfix">
                             <div style="margin-bottom:0.15em;"><i>How do you rate this page?</i></div>
                             <div style="margin-bottom:0.5em;">
-                                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingValues.Count; numOfRatings++)
+                                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingSettings.Count; numOfRatings++)
                                     {
-                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingValues[numOfRatings], new { @style = "display:inline;" })
-                                        <label style="display:inline;margin-right:0.5em;">@Model.RatingValues[numOfRatings].ToString()</label>
+                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingSettings[numOfRatings], new { @style = "display:inline;" })
+                                        <label style="display:inline;margin-right:0.5em;">@Model.RatingSettings[numOfRatings].ToString().ToString()</label>
                                     }
                             </div>
                             <div>

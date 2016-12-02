@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
@@ -32,6 +31,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             Order = 2)]
         public virtual bool ShowHeading { get; set; }
 
+        //[Display(
+        //Name = "Ratings",
+        //Description = "Rating settings",
+        //GroupName = SystemTabNames.Content,
+        //Order = 3)]
+        //[EditorDescriptor(EditorDescriptorType = typeof(CollectionEditorDescriptor<EditableSocialRatingSetting>))]
+        //public virtual IList<EditableSocialRatingSetting> EditableRatingSettings { get; set; }
+
+        [Editable(false)]
+        [ScaffoldColumn(false)]
+        public virtual IList<RatingSetting> RatingSettings { get; set; }
 
         /// <summary>
         /// Sets the default property values on the content data.
@@ -41,7 +51,33 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         {
             base.SetDefaultValues(contentType);
             Heading = "Ratings and Statistics";
+
+            // By default do not display a heading on the RatingBlock
             ShowHeading = false;
+
+            // For the sake of this sample we allow items to be rated
+            // on a scale of 1 through 5.
+            RatingSettings = new List<RatingSetting>();
+            RatingSettings.Add(new RatingSetting { Value = 1 });
+            RatingSettings.Add(new RatingSetting { Value = 2 });
+            RatingSettings.Add(new RatingSetting { Value = 3 });
+            RatingSettings.Add(new RatingSetting { Value = 4 });
+            RatingSettings.Add(new RatingSetting { Value = 5 });
         }
     }
+
+    //[PropertyDefinitionTypePlugIn]
+    //public class SocialRatingSettingProperty : PropertyList<EditableSocialRatingSetting>
+    //{
+    //    protected override EditableSocialRatingSetting ParseItem(string value)
+    //    {
+    //        return JsonConvert.DeserializeObject<EditableSocialRatingSetting>(value);
+    //    }
+    //    public override PropertyData ParseToObject(string value)
+    //    {
+    //        ParseToSelf(value);
+    //        return this;
+    //    }
+    //}
+    //}
 }

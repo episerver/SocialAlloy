@@ -1,6 +1,7 @@
 ﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
@@ -21,12 +22,29 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
-            //For the sake of this sample we allow items to be rated
-            //on a scale of 1 through 5.
-            RatingValues = new List<int>() { 1, 2, 3, 4, 5 };
+
+            LoadRatingSettings(block);
 
             if (form.SubmittedRating.HasValue)
                 SubmittedRating = form.SubmittedRating.Value;
+        }
+
+        private void LoadRatingSettings(RatingBlock block)
+        {
+            RatingSettings = new List<int>();
+
+            //if (block.EditableRatingSettings != null && block.EditableRatingSettings.Count > 0)
+            //{
+            //    foreach (var socialRating in block.EditableRatingSettings)
+            //    {
+            //        if (!RatingSettings.Contains(socialRating.Value))
+            //            RatingSettings.Add(socialRating.Value);
+            //    }
+            //    RatingSettings.Sort();
+            //}
+
+            RatingSettings.AddRange(block.RatingSettings.Cast<RatingSetting>().Select(r => r.Value).ToList());
+            RatingSettings.Sort();
         }
 
         /// <summary>
@@ -43,7 +61,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The rating value settings for the frontend rating block display.
         /// </summary>
 
-        public List<int> RatingValues { get; set; }
+        public List<int> RatingSettings { get; set; }
 
         /// <summary>
         /// The total number of ratings found for CurrentPageLink

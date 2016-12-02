@@ -360,6 +360,8 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
+    <Compile Include="Social\Blocks\RatingSetting.cs" />
+    <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
