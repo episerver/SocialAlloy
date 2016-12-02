@@ -8,7 +8,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// The CommentsBlockViewModel class represents the model that will be used to
     /// feed data to the comments block frontend view.
     /// </summary>
-    public class CommentsBlockViewModel : SocialBlockViewModel<CommentsBlock>
+    public class CommentsBlockViewModel : SocialBlockViewModel
     {
         /// <summary>
         /// Constructor

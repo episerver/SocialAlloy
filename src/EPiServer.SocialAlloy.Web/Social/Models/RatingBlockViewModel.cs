@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// The RatingBlockViewModel class represents the model that will be used to
     /// feed data to the rating block frontend view.
     /// </summary>
-    public class RatingBlockViewModel : SocialBlockViewModel<RatingBlock>
+    public class RatingBlockViewModel : SocialBlockViewModel
     {
         /// <summary>
         /// Constructor

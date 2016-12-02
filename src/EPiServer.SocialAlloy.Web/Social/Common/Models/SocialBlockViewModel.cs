@@ -6,7 +6,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Models
     /// The SocialBlockViewModel class contains common social block view model configuration.
     /// </summary>
     /// <typeparam name="T">The social block type.</typeparam>
-    public abstract class SocialBlockViewModel<T> where T : BlockData
+    public abstract class SocialBlockViewModel
     {
         /// <summary>
         /// Constructor

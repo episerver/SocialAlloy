@@ -31,14 +31,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             Order = 2)]
         public virtual bool ShowHeading { get; set; }
 
-        //[Display(
-        //Name = "Ratings",
-        //Description = "Rating settings",
-        //GroupName = SystemTabNames.Content,
-        //Order = 3)]
-        //[EditorDescriptor(EditorDescriptorType = typeof(CollectionEditorDescriptor<EditableSocialRatingSetting>))]
-        //public virtual IList<EditableSocialRatingSetting> EditableRatingSettings { get; set; }
-
         [Editable(false)]
         [ScaffoldColumn(false)]
         public virtual IList<RatingSetting> RatingSettings { get; set; }
@@ -65,19 +57,4 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             RatingSettings.Add(new RatingSetting { Value = 5 });
         }
     }
-
-    //[PropertyDefinitionTypePlugIn]
-    //public class SocialRatingSettingProperty : PropertyList<EditableSocialRatingSetting>
-    //{
-    //    protected override EditableSocialRatingSetting ParseItem(string value)
-    //    {
-    //        return JsonConvert.DeserializeObject<EditableSocialRatingSetting>(value);
-    //    }
-    //    public override PropertyData ParseToObject(string value)
-    //    {
-    //        ParseToSelf(value);
-    //        return this;
-    //    }
-    //}
-    //}
 }
