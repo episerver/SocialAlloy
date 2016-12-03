@@ -380,6 +380,7 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
+    <Compile Include="Social\Blocks\FeedBlock.cs" />
     <Compile Include="Social\Blocks\RatingSetting.cs" />
     <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
@@ -461,12 +462,15 @@
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
+    <Compile Include="Social\Models\FeedBlockViewModel.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\SocialActivity.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />
+    <Compile Include="Social\Models\SocialFeed.cs" />
     <Compile Include="Social\Models\SocialRatingStatistics.cs" />
     <Compile Include="Social\Models\SocialRatingFilter.cs" />
     <Compile Include="Social\Models\SocialSubscription.cs" />
