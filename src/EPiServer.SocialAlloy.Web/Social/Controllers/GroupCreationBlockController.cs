@@ -47,21 +47,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
-            // Restore the saved model state
-            LoadModelState(currentBlockLink);
+            var successMessage = TempData["SubmitSuccessMessage"] == null ? null : TempData["SubmitSuccessMessage"].ToString();
+            var errorMessage = TempData["SubmitErrorMessage"] == null ? null : TempData["SubmitErrorMessage"].ToString();
 
             //populate model to pass to block view
             var groupCreationBlockModel = new GroupCreationBlockViewModel()
             {
                 Heading = currentBlock.Heading,
-                CurrentBlockLinkString = currentBlockLink.ToString(),
+                CurrentBlockLink = currentBlockLink,
                 PageId = pageRouteHelper.Page.ContentGuid.ToString(),
-                CurrentPageLinkString = pageRouteHelper.PageLink.ToString()
-            };
-
-            // Apply current model state to the group block view model
-            ApplyModelStateToGroupCreationBlockViewModel(groupCreationBlockModel);
+                CurrentPageLink = pageRouteHelper.PageLink,
+                SubmitSuccessMessage = successMessage,
+                SubmitErrorMessage = errorMessage
+        };
 
             //remove existing values from input fields
             ModelState.Clear();
@@ -79,12 +77,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(GroupCreationBlockViewModel model)
         {
-            model.CurrentBlockLink = ContentReference.Parse(model.CurrentBlockLinkString);
             var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
 
             var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
-            model.SubmitErrorMessage = validatedInputs ? null : "Group name and description cannot be null or whitespace";
-            model.CurrentPageLink = PageReference.Parse(model.CurrentPageLinkString);
+            TempData["SubmitErrorMessage"] = validatedInputs ? null : "Group name and description cannot be null or whitespace";
 
             if (validatedInputs)
             {
@@ -92,21 +88,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     var group = new Group(model.Name, model.Description);
                     this.groupRepository.Add(group);
-                    model.SubmitSuccessMessage = "Your group: " + model.Name + " was added successfully!";
+                    TempData["SubmitSuccessMessage"] = "Your group: " + model.Name + " was added successfully!";
                 }
                 catch (SocialRepositoryException ex)
                 {
-                    model.SubmitErrorMessage = ex.Message;
-                    ModelState.AddModelError("GroupCreation", ex.Message);
+                    TempData["SubmitErrorMessage"] = ex.Message;
                 }
             }
-            else
-            {
-                // Flag the CommentBody model state with validation error
-                ModelState.AddModelError("GroupCreation", model.SubmitErrorMessage);
-            }
-
-            SaveModelState(model.CurrentBlockLink, CollectViewModelStateToSave(model));
 
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
@@ -114,56 +102,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private bool ValidateGroupInputs(string groupName, string groupDescription)
         {
             return !string.IsNullOrWhiteSpace(groupName) && !string.IsNullOrWhiteSpace(groupDescription);
-        }
-
-        /// <summary>
-        /// Applies current model state to the group creation block view model.
-        /// </summary>
-        /// <param name="groupCreationBlockViewModel">The group block view model to apply model state to.</param>
-        private void ApplyModelStateToGroupCreationBlockViewModel(GroupCreationBlockViewModel groupCreationBlockViewModel)
-        {
-            // Get success/error model state
-            var successMessage = GetModelState(SubmitSuccessMessage);
-            var errorMessage = GetModelState(SubmitErrorMessage);
-
-            // Apply success/error model state to the view model
-            groupCreationBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
-            groupCreationBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
-
-        }
-
-        /// <summary>
-        /// Collects comment block view model state that needs to be saved.
-        /// </summary>
-        /// <param name="groupCreationViewModel">The comment block view model.</param>
-        /// <returns>A model state dictionary.</returns>
-        private ModelStateDictionary CollectViewModelStateToSave(GroupCreationBlockViewModel groupCreationViewModel)
-        {
-            var transientState = new ModelStateDictionary
-            {
-                new KeyValuePair<string, ModelState>
-                (
-                    SubmitSuccessMessage,
-                    new ModelState() {
-                        Value = new ValueProviderResult(groupCreationViewModel.SubmitSuccessMessage, groupCreationViewModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
-                    }
-                ),
-                new KeyValuePair<string, ModelState>
-                (
-                    SubmitErrorMessage,
-                    new ModelState() {
-                        Value = new ValueProviderResult(groupCreationViewModel.SubmitErrorMessage, groupCreationViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
-                    }
-                )
-            };
-
-            var modelState = ViewData.ModelState;
-            if (transientState != null)
-            {
-                modelState.Merge(transientState);
-            }
-
-            return modelState;
         }
     }
 }

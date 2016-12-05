@@ -36,16 +36,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference string of the page containing the group creation form.
-        /// </summary>
-        public string CurrentPageLinkString { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference string of the block containing the group creation form.
-        /// </summary>
-        public string CurrentBlockLinkString { get; set; }
-
-        /// <summary>
         /// Gets or sets the reference link of the page containing the group creation form.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }

@@ -4,6 +4,8 @@
 <div>
     <h2 @Html.EditAttributes(m => m.Heading)>@Model.Heading</h2>
     <hr />
+
+   
     @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
     {
         <div id="successMessage" style="color: green;">@Model.SubmitSuccessMessage</div>
@@ -15,8 +17,8 @@
    
     @using (Html.BeginForm("Submit", "GroupCreationBlock", FormMethod.Post))
     {
-        @Html.HiddenFor(m => m.CurrentBlockLinkString)
-        @Html.HiddenFor(m => m.CurrentPageLinkString)
+        @Html.HiddenFor(m => m.CurrentBlockLink)
+        @Html.HiddenFor(m => m.CurrentPageLink)
         @Html.HiddenFor(m => m.PageId)
         <div>
             @Html.TextBoxFor(m => m.Name,  new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
