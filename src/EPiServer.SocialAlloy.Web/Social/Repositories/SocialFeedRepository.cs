@@ -9,6 +9,10 @@ using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// The ISocialFeedRepository class defines the operations that can be issued
+    /// against a feed item repository.
+    /// </summary>
     public class SocialFeedRepository : ISocialFeedRepository
     {
         private readonly IUserRepository userRepository;
@@ -23,7 +27,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             this.feedService = feedService;
         }
 
-        public IEnumerable<SocialActivityFeedViewModel> Get(SocialFeedFilter filter)
+        /// <summary>
+        /// Gets feed items from the underlying feed repository based on a filter.
+        /// </summary>
+        /// <param name="filter">a feed item filter to filter the feed items by</param>
+        /// <returns>A list of feed items.</returns>
+        public IEnumerable<SocialFeedViewModel> Get(SocialFeedFilter filter)
         {
             var feedItems = new List<Composite<FeedItem, SocialActivity>>();
 
@@ -64,7 +73,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-
             return AdaptSocialActivityFeedItems(feedItems);
         }
 
@@ -85,9 +93,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return results;
         }
 
-        private IEnumerable<SocialActivityFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
+        private IEnumerable<SocialFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
         {
-            SocialActivityAdapter adapter = new SocialActivityAdapter();
+            SocialActivityAdapter adapter = new SocialActivityAdapter(userRepository);
             return feedItems.Select(c => adapter.Adapt(c));
         }
 

@@ -20,7 +20,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             FeedDisplayMax = block.FeedDisplayMax;
-            FeedItems = new List<SocialActivityFeedViewModel>();
+            FeedItems = new List<SocialFeedViewModel>();
         }
 
         /// <summary>
@@ -39,10 +39,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public int FeedDisplayMax { get; set; }
 
         /// <summary>
-        /// Gets or sets the feed items to show.
+        /// Gets or sets the feed items to display in the feed block.
         /// </summary>
-        //public IEnumerable<SocialActivityFeed<SocialActivity>> FeedItems { get; set; }
-        public IEnumerable<SocialActivityFeedViewModel> FeedItems { get; set; }
+        public IEnumerable<SocialFeedViewModel> FeedItems { get; set; }
 
         /// <summary>
         /// Gets or sets an error message that should be flashed in the message display view.

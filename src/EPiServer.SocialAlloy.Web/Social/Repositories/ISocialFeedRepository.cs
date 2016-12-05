@@ -5,15 +5,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// The ISocialFeedRepository interface defines the operations that can be issued
-    /// against a comment repository.
+    /// against a feed item repository.
     /// </summary>
     public interface ISocialFeedRepository
     {
         /// <summary>
-        /// Gets comments from the underlying comment repository based on a filter.
+        /// Gets feed items from the underlying feed repository based on a filter.
         /// </summary>
-        /// <param name="filter"></param>
-        /// <returns>A list of comments.</returns>
-        IEnumerable<SocialActivityFeedViewModel> Get(SocialFeedFilter filter);
+        /// <param name="filter">a feed item filter to filter the feed items by</param>
+        /// <returns>A list of feed items.</returns>
+        IEnumerable<SocialFeedViewModel> Get(SocialFeedFilter filter);
     }
 }

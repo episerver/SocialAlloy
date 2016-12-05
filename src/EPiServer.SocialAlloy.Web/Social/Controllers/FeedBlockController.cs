@@ -50,7 +50,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetSocialActivityFeed(currentBlock, feedBlockViewModel);
             }
 
-
             return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", feedBlockViewModel);
         }
 

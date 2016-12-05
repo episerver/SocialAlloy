@@ -2,7 +2,10 @@
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
-    public class SocialActivityFeedViewModel
+    /// <summary>
+    /// This class represents the view model of the feed items displayed by a Social feed block.
+    /// </summary>
+    public class SocialFeedViewModel
     {
         /// <summary>
         /// The activity actor.
@@ -22,7 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// A string representation describing the activity that was received by the Social Activity Streams system.
         /// </summary>
-        public string ActivityMessage { get; set; }
+        public string Description { get; set; }
 
     }
 }

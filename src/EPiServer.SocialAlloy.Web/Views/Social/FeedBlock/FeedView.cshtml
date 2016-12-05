@@ -17,7 +17,7 @@
         foreach (var feed in Model.FeedItems)
         {
             <div>
-                Page: <strong>@feed.Target</strong> Actor: <strong>@feed.Actor</strong> Activity: <strong>@feed.ActivityMessage</strong> Date: @feed.ActivityDate.ToLocalTime()
+                Page: <strong>@feed.Target</strong> Actor: <strong>@feed.Actor</strong> Description: <strong>@feed.Description</strong> Date: @feed.ActivityDate.ToLocalTime()
 </div>
             <br />
         }
