@@ -19,7 +19,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
+            ShowSubscriptionForm = false;
+            UserSubscribedToPage = false;
         }
+
+        /// <summary>
+        /// Gets or sets whether to show subscription form.
+        /// </summary>
+        public bool ShowSubscriptionForm { get; set; }
 
         /// <summary>
         /// Gets or sets the heading for the frontend subscriptions block display.
@@ -45,10 +52,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets an error message that should be flashed in the view.
         /// </summary>
         public string SubmitErrorMessage { get; set; }
-
-        /// <summary>
-        /// Gets or sets an error message that should be flashed in the message display view.
-        /// </summary>
-        public string DisplayErrorMessage { get; set; }
     }
 }

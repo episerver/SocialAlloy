@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
-    [ContentType(DisplayName = "ActivityStreamsSubscriptionsBlock", 
+    [ContentType(DisplayName = "ActivityStreams Subscriptions Block", 
                  GUID = "e6b96293-60dd-46a9-8289-603f4a5e19fd",
                  Description = "Configures the properties of a subscription block frontend view")]
     public class SubscriptionBlock : BlockData
@@ -35,7 +35,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         {
             base.SetDefaultValues(contentType);
             ShowHeading = false;
-            Heading = "Subscriptions";
+            Heading = "Page Subscription";
         }
     }
 }
