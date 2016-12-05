@@ -5,7 +5,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// <summary>
     /// The SocialFeed class describes a feed model used by the SocialAlloy site.
     /// </summary>
-    public class SocialFeed<T> where T : SocialActivity
+    public class SocialActivityFeed<T> where T : SocialActivity
     {
         /// <summary>
         /// The activity actor.
@@ -26,7 +26,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The type of activity that was sent to the Social Activity Streams system.
         /// </summary>
         public T Type { get; set; }
-
 
     }
 }

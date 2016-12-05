@@ -12,7 +12,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Models
         /// </summary>
         /// <param name="currentPageLink">The current page containing the social block.</param>
         /// <param name="currentBlockLink">The current block instance.</param>
-        public SocialBlockViewModel(PageReference currentPageLink, ContentReference currentBlockLink)
+        public SocialBlockViewModel(PageReference currentPageLink = null, ContentReference currentBlockLink = null)
         {
             CurrentPageLink = currentPageLink;
             CurrentBlockLink = currentBlockLink;

@@ -470,7 +470,7 @@
     <Compile Include="Social\Models\SocialActivity.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />
-    <Compile Include="Social\Models\SocialFeed.cs" />
+    <Compile Include="Social\Models\SocialActivityFeed.cs" />
     <Compile Include="Social\Models\SocialRatingStatistics.cs" />
     <Compile Include="Social\Models\SocialRatingFilter.cs" />
     <Compile Include="Social\Models\SocialSubscription.cs" />
