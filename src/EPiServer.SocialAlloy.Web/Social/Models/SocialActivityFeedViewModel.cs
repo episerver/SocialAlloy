@@ -2,10 +2,7 @@
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
-    /// <summary>
-    /// The SocialFeed class describes a feed model used by the SocialAlloy site.
-    /// </summary>
-    public class SocialActivityFeed<T> where T : SocialActivity
+    public class SocialActivityFeedViewModel
     {
         /// <summary>
         /// The activity actor.
@@ -13,7 +10,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string Actor { get; set; }
 
         /// <summary>
-        /// The target page on which the activity occured.
+        /// The page on which the activity occured.
         /// </summary>
         public string Target { get; set; }
 
@@ -23,9 +20,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public DateTime ActivityDate { get; set; }
 
         /// <summary>
-        /// The activity payload that was sent to the Social Activity Streams system.
+        /// A string representation describing the activity that was received by the Social Activity Streams system.
         /// </summary>
-        public T Activity { get; set; }
+        public string ActivityMessage { get; set; }
 
     }
 }

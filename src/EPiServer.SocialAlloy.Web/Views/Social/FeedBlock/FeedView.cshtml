@@ -1,0 +1,26 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models
+
+@model FeedBlockViewModel
+
+<div>
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+
+    <div style="margin-top:0.5em">
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <div>Your Activity feed</div>
+        foreach (var feed in Model.FeedItems)
+        {
+            <div>
+                Page: <strong>@feed.Target</strong> Actor: <strong>@feed.Actor</strong> Activity: <strong>@feed.ActivityMessage</strong> Date: @feed.ActivityDate.ToLocalTime()
+</div>
+            <br />
+        }
+    }
+    </div>
+</div>
