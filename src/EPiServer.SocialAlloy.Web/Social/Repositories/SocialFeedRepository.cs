@@ -65,11 +65,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
 
 
-            var socialActivityFeed = AdaptSocialActivityFeedItems(feedItems);
-
-            return socialActivityFeed.Select(c =>
-                    Adapt(c)
-            );
+            return AdaptSocialActivityFeedItems(feedItems);
         }
 
         private List<Composite<FeedItem, SocialActivity>> GetMockData()
@@ -89,31 +85,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return results;
         }
 
-        private static SocialActivityFeedViewModel Adapt(SocialActivityFeed<SocialActivity> socialActivityFeed)
+        private IEnumerable<SocialActivityFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
         {
-            SocialActivityVisitor visitor = new SocialActivityVisitor();
-            socialActivityFeed.Activity.Accept(visitor);
-
-            return new SocialActivityFeedViewModel
-            {
-                Actor = socialActivityFeed.Actor,
-                Target = socialActivityFeed.Target, //get Page Name here instead of PageId
-                ActivityDate = socialActivityFeed.ActivityDate,
-                ActivityMessage = visitor.ActivityDescription
-            };
+            SocialActivityAdapter adapter = new SocialActivityAdapter();
+            return feedItems.Select(c => adapter.Adapt(c));
         }
 
-        private IEnumerable<SocialActivityFeed<SocialActivity>> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
-        {
-            return feedItems.Select(c =>
-                new SocialActivityFeed<SocialActivity>
-                {
-                    Actor = this.userRepository.GetUser(c.Data.Actor.Id).Name,
-                    Target = c.Data.Target.ToString(), //get Page Name here instead of PageId
-                    ActivityDate = c.Data.ActivityDate,
-                    Activity = c.Extension
-                }
-            );
-        }
+        
     }
 }
