@@ -19,6 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
+            UserSubscribedToPage = false;
         }
 
         /// <summary>

@@ -21,12 +21,16 @@
     {
         <div style="color: red;">@Model.SubmitErrorMessage</div>
     }
-    @using (Html.BeginForm("Submit", null))
+    @{
+        var actionName = Model.UserSubscribedToPage ? "Unsubscribe" : "Subscribe";
+    }
+    @using (Html.BeginForm(actionName, null))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
+        @Html.Hidden("action", actionName)
         <div>
-            <input type="submit" name="submit" value="Subscribe/Unsubscribe">
+            <input type="submit" name="submit" value="@actionName">
         </div>
     }
 </div>
