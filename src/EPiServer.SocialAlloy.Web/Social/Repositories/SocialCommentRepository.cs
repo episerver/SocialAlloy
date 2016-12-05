@@ -121,7 +121,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Adapt a list of EPiServer Social Comment to application's SocialComment.
         /// </summary>
-        /// <param name="comment">The list of EPiServer Social Comment.</param>
+        /// <param name="comments">The list of EPiServer Social Comment.</param>
         /// <returns>The list of application SocialComment.</returns>
         private IEnumerable<SocialComment> AdaptSocialComment(List<Comment> comments)
         {
