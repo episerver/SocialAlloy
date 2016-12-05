@@ -60,29 +60,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Gets subscriptions from the EPiServer Social subscription repository based on a filter.
+        /// Gets whether subscriptions exist in the EpiServer Social subscription repository that match a filter.
         /// </summary>
-        /// <param name="filter">The subscription filter.</param>
-        /// <returns>A list of subscriptions.</returns>
+        /// <param name="filter"></param>
+        /// <returns>Whether subscriptions exist.</returns>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
-        /// EPiServer Social cloud subscription repository.</exception>
-        public IEnumerable<SocialSubscription> Get(SocialSubscriptionFilter filter)
+        /// EPiServer Social subscription repository.</exception>
+        public bool Exist(SocialSubscriptionFilter filter)
         {
-            var subscriptions = new List<Subscription>();
             var subscriptionFilter = AdaptSubscriptionFilter(filter);
             try
             {
-                subscriptions = this.subscriptionService.Get(
+                return this.subscriptionService.Get(
                     new Criteria<SubscriptionFilter>
                     {
                         PageInfo = new PageInfo
                         {
-                            PageSize = filter.PageSize
+                            PageSize = 0,
+                            CalculateTotalCount = true
                         },
-                        Filter = subscriptionFilter,
-                        OrderBy = { new SortInfo(SubscriptionSortFields.Created, false) }
+                        Filter = subscriptionFilter
                     }
-                ).Results.ToList();
+                ).TotalCount > 0;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -100,8 +99,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
-
-            return AdaptSocialSubscription(subscriptions);
         }
 
         /// <summary>

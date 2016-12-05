@@ -7,30 +7,33 @@
 
 @model SubscriptionBlockViewModel
 
-<div>
-    @if (Model.ShowHeading)
-    {
-        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
-        <hr />
-    }
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
-    {
-        <div style="color: green;">@Model.SubmitSuccessMessage</div>
-    }
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-    {
-        <div style="color: red;">@Model.SubmitErrorMessage</div>
-    }
-    @{
-        var actionName = Model.UserSubscribedToPage ? "Unsubscribe" : "Subscribe";
-    }
-    @using (Html.BeginForm(actionName, null))
-    {
-        @Html.HiddenFor(m => m.CurrentBlockLink)
-        @Html.HiddenFor(m => m.CurrentPageLink)
-        @Html.Hidden("action", actionName)
-        <div>
-            <input type="submit" name="submit" value="@actionName">
-        </div>
-    }
-</div>
+@if (Model.ShowSubscriptionForm)
+{
+    <div>
+        @if (Model.ShowHeading)
+        {
+            <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+            <hr />
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+        {
+            <div style="color: green;">@Model.SubmitSuccessMessage</div>
+        }
+        @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+        {
+            <div style="color: red;">@Model.SubmitErrorMessage</div>
+        }
+        @{
+            var actionName = Model.UserSubscribedToPage ? "Unsubscribe" : "Subscribe";
+        }
+        @using (Html.BeginForm(actionName, null))
+        {
+            @Html.HiddenFor(m => m.CurrentBlockLink)
+            @Html.HiddenFor(m => m.CurrentPageLink)
+            @Html.Hidden("action", actionName)
+            <div>
+                <input type="submit" name="submit" value="@actionName">
+            </div>
+        }
+    </div>
+}

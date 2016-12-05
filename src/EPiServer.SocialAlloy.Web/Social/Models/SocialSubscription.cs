@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// The SocialSubscription class describes a subscription model used by the SocialAlloy site.
@@ -11,7 +9,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The list of possible subscription types.
         /// </summary>
         public static readonly string PageSubscription = "Page";
-        public static readonly string UserSubscription = "User";
 
         /// <summary>
         /// Gets or sets the subscription Id.

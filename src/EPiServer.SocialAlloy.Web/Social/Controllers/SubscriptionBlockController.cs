@@ -199,7 +199,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="blockViewModel">The subscription block view model.</param>
         private void SetBlockViewModelProperties(SubscriptionBlockViewModel blockViewModel)
         {
-            SetUserSubscribedToPage(blockViewModel);
+            if (this.User.Identity.IsAuthenticated)
+            {
+                blockViewModel.ShowSubscriptionForm = true;
+                SetUserSubscribedToPage(blockViewModel);
+            }
         }
 
         /// <summary>
@@ -210,14 +214,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                var userPageSubscriptions = this.subscriptionRepository.Get(new SocialSubscriptionFilter
+                var filter = new SocialSubscriptionFilter
                 {
                     Subscriber = this.userRepository.GetUserId(this.User),
                     Target = this.GetPageId(blockViewModel.CurrentPageLink),
                     Type = SocialSubscription.PageSubscription
-                });
+                };
 
-                if (userPageSubscriptions.Count() > 0)
+                if (this.subscriptionRepository.Exist(filter))
                 {
                     blockViewModel.UserSubscribedToPage = true;
                 }

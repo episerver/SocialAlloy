@@ -20,13 +20,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         Subscription Add(SocialSubscription subscription);
 
         /// <summary>
-        /// Gets subscriptions from the social subscription repository based on a filter.
+        /// Gets whether subscriptions exist in the social subscription repository that match a filter.
         /// </summary>
         /// <param name="filter"></param>
-        /// <returns>A list of subscriptions.</returns>
+        /// <returns>Whether subscriptions exist.</returns>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// social subscription repository.</exception>
-        IEnumerable<SocialSubscription> Get(SocialSubscriptionFilter filter);
+        bool Exist(SocialSubscriptionFilter filter);
 
         /// <summary>
         /// Removes a subscription from the social subscription repository.
