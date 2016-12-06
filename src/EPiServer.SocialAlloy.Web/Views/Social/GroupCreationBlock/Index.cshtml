@@ -1,6 +1,6 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
-@model GroupCreationBlockViewModel
+@model GroupAdmissionBlockViewModel
 <div>
     <h2 @Html.EditAttributes(m => m.Heading)>@Model.Heading</h2>
     <hr />
@@ -23,7 +23,7 @@
         <div>
             @Html.TextBoxFor(m => m.Name,  new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
 
-            @Html.TextAreaFor(m => m.Description, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
+            @Html.TextAreaFor(m => m.Email, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
         </div>
         <div>
             <input type="submit" name="submit" value="Add new group">

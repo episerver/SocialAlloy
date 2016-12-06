@@ -1,0 +1,39 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models.Groups
+@model GroupAdmissionBlockViewModel
+<div>
+    <h2 @Html.EditAttributes(m => m.Heading)>@Model.Heading</h2>
+    <hr />
+
+
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+    {
+        <div id="successMessage" style="color: green;">@Model.SubmitSuccessMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+    {
+        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.GroupName))
+    {
+
+        @using (Html.BeginForm("Submit", "GroupAdmissionBlock", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.CurrentBlockLink)
+            @Html.HiddenFor(m => m.CurrentPageLink)
+            @Html.HiddenFor(m => m.PageId)
+            <div>
+                
+            </div>
+            <div>
+                <input type="submit" name="submit" value="Add new group">
+            </div>
+        }
+    }
+    else
+    {
+        <div style="color: red;">A GROUP NAME MUST BE PROVIDED</div>
+    }
+    <br />
+
+</div>

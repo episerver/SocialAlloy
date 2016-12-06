@@ -380,6 +380,7 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
+    <Compile Include="Social\Controllers\GroupAdmissionBlockController.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
@@ -463,8 +464,8 @@
     <Compile Include="Social\Controllers\GroupCreationBlockController.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
+    <Compile Include="Social\Models\Groups\GroupAdmissionBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockViewModel.cs" />
-    <Compile Include="Social\Models\Groups\GroupCreationFormViewModel.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
@@ -650,6 +651,7 @@
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <Content Include="Views\Social\GroupCreationBlock\Index.cshtml" />
+    <Content Include="Views\Social\GroupAdmissionBlock\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
