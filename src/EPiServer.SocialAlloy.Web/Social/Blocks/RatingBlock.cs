@@ -1,13 +1,17 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
-    [ContentType(DisplayName = "RatingBlock", GUID = "069e2c52-fd48-49c5-8993-7a0347ea1f78", Description = "Social Rating Statistics")]
+    /// <summary>
+    /// The RatingBlock class defines the configuration used for rendering rating views.
+    /// </summary>
+    [ContentType(DisplayName = "RatingBlock", 
+                 GUID = "069e2c52-fd48-49c5-8993-7a0347ea1f78", 
+                 Description = "Configures the frontend view properties of a rating block")]
     public class RatingBlock : BlockData
     {
         /// <summary>
@@ -28,10 +32,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public virtual bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Gets or sets a page of comments for this commentblock.
+        /// Configures the list of possible rating values that can be submitted using this rating block.
         /// </summary>
-        [Ignore]
-        public virtual List<int> RatingValues { get; set; }
+        [Editable(false)]
+        [ScaffoldColumn(false)]
+        public virtual IList<RatingSetting> RatingSettings { get; set; }
 
         /// <summary>
         /// Sets the default property values on the content data.
@@ -40,9 +45,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
-            Heading = "Ratings & Statistics";
-            RatingValues = new List<int> { 1, 2, 3, 4, 5 };
+            Heading = "Ratings and Statistics";
+
+            // By default do not display a heading on the rating block
             ShowHeading = false;
+
+            // For the sake of the simplicity of this sample we allow items 
+            // to be rated on a scale of 1 through 5 by initializing this
+            // non-editable property list.
+            RatingSettings = new List<RatingSetting>();
+            RatingSettings.Add(new RatingSetting { Value = 1 });
+            RatingSettings.Add(new RatingSetting { Value = 2 });
+            RatingSettings.Add(new RatingSetting { Value = 3 });
+            RatingSettings.Add(new RatingSetting { Value = 4 });
+            RatingSettings.Add(new RatingSetting { Value = 5 });
         }
     }
 }
