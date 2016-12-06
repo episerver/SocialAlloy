@@ -33,9 +33,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <returns></returns>
         public SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite)
         {
-            // For now assuming PageId but could be userId if user is following User
-            var pageName = GetPageName(composite.Data.Target.Id);
-
             // Get user name of Actor in the activity
             var userName = GetUserName(composite.Data.Actor.Id);
 
@@ -44,7 +41,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             {
                 ActivityDate = composite.Data.ActivityDate,
                 Actor = userName,
-                Target = pageName
+                Target = composite.Data.Target.Id
             };
 
             //Interpret the activity and create a description for the 
@@ -61,7 +58,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="activity">the SocialCommentActivity to interpret</param>
         public void Visit(SocialCommentActivity activity)
         {
+            // Interpret activity and set description.
             feedModel.Description = String.Format("Commented on the page: {0}", activity.Body);
+
+            // Replace page Id of target with Page Name
+            feedModel.Target = GetPageName(feedModel.Target);
         }
 
         /// <summary>
@@ -70,7 +71,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="activity">the SocialRatingActivity to interpret</param>
         public void Visit(SocialRatingActivity activity)
         {
+            // Interpret activity and set description.
             feedModel.Description = String.Format("Rated the page: {0}", activity.Value.ToString());
+
+            // Replace page Id of target with Page Name
+            feedModel.Target = GetPageName(feedModel.Target);
         }
 
         /// <summary>

@@ -83,12 +83,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             List<Composite<FeedItem, SocialActivity>> results = new List<Composite<FeedItem, SocialActivity>>();
 
             results.Add(new Composite<FeedItem, SocialActivity>(
-                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("2b392142-d275-4559-b25b-7e40747f368c"), Target = Reference.Create("18a8d890-055e-48c8-a1bb-7dcd156e7a28") },
+                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("4404127d-966b-4f37-ab9c-0ac9dc340b2c"), Target = Reference.Create("18a8d890-055e-48c8-a1bb-7dcd156e7a28") },
                 new SocialCommentActivity { Body = "comment body" }
                 ));
 
             results.Add(new Composite<FeedItem, SocialActivity>(
-                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("2b392142-d275-4559-b25b-7e40747f368c"), Target = Reference.Create("1ae8531b-e5ac-4b82-af2c-7bd83e83b4a2") },
+                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("a1003887-9c8a-41cc-93e3-b8dbca255204"), Target = Reference.Create("1ae8531b-e5ac-4b82-af2c-7bd83e83b4a2") },
                 new SocialRatingActivity { Value = 5 }
                 ));
 
