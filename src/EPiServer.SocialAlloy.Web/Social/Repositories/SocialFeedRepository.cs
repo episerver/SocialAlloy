@@ -98,7 +98,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 ));
 
             results.Add(new Composite<FeedItem, SocialActivity>(
-                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("a1003887-9c8a-41cc-93e3-b8dbca255204"), Target = Reference.Create("1ae8531b-e5ac-4b82-af2c-7bd83e83b4a2") },
+                new FeedItem { ActivityDate = DateTime.UtcNow.AddDays(1), Actor = Reference.Create("a1003887-9c8a-41cc-93e3-b8dbca255204"), Target = Reference.Create("1ae8531b-e5ac-4b82-af2c-7bd83e83b4a2") },
                 new SocialRatingActivity { Value = 5 }
                 ));
 
@@ -109,7 +109,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             return feedItems.Select(c => this.activityAdapter.Adapt(c));
         }
-
-        
     }
 }

@@ -11,15 +11,14 @@
     }
 
     <div style="margin-top:0.5em">
-    @if (this.User.Identity.IsAuthenticated)
+    @if (this.User.Identity.IsAuthenticated && Model.FeedItems.Count() > 0)
     {
         <h3>Your Activity feed</h3>
         <br />
+
         foreach (var feed in Model.FeedItems)
         {
-            <div>
-                Page: <strong>@feed.Target</strong> Actor: <strong>@feed.Actor</strong> Description: <strong>@feed.Description</strong> Date: @feed.ActivityDate.ToLocalTime()
-</div>
+            <div>@feed.Description</div>
             <br />
         }
     }

@@ -16,14 +16,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         private SocialFeedViewModel feedModel;
         private IUserRepository userRepository;
         private IContentRepository contentRepository;
+        private IPageRepository pageRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SocialActivityAdapter(IUserRepository userRepository, IContentRepository contentRepository)
+        public SocialActivityAdapter(IUserRepository userRepository, 
+                                     IContentRepository contentRepository,
+                                     IPageRepository pageRepository)
         {
             this.userRepository = userRepository;
-            this.contentRepository = contentRepository;
+            this.pageRepository = pageRepository;
         }
 
         /// <summary>
@@ -56,10 +59,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public void Visit(SocialCommentActivity activity)
         {
             // Interpret activity and set description.
-            feedModel.Description = String.Format("Commented on the page: {0}", activity.Body);
-
-            // Replace page Id of target with Page Name
-            feedModel.Target = GetPageName(feedModel.Target);
+            var pageName = this.pageRepository.GetPageName(feedModel.Target);
+            feedModel.Description = String.Format("{0} commented on {1} page [{2}] on {3}", 
+                                    feedModel.Actor, pageName, activity.Body, feedModel.ActivityDate.ToLocalTime());
         }
 
         /// <summary>
@@ -69,10 +71,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public void Visit(SocialRatingActivity activity)
         {
             // Interpret activity and set description.
-            feedModel.Description = String.Format("Rated the page: {0}", activity.Value.ToString());
-
-            // Replace page Id of target with Page Name
-            feedModel.Target = GetPageName(feedModel.Target);
+            var pageName = this.pageRepository.GetPageName(feedModel.Target);
+            feedModel.Description = String.Format("{0} rated {1} page with a [{2}] on {3}",
+                                    feedModel.Actor, pageName, activity.Value.ToString(), feedModel.ActivityDate.ToLocalTime());
         }
 
         /// <summary>
@@ -86,25 +87,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
 
         #endregion
 
-        private string GetPageName(string pageId)
-        {
-            var pageName = String.Empty;
-            try
-            {
-                Guid g = Guid.Parse(pageId);
-                var data = contentRepository.Get<PageData>(g);
-                pageName = data.Name;
-            }
-            catch (ContentNotFoundException)
-            {
-                pageName = "Could not determine the name of the page with Id: " + pageId;
-            }
-            catch (TypeMismatchException e)
-            {
-                //IF not PageData type of content Guid
-            }
-
-            return pageName;
-        }
+        
     }
 }

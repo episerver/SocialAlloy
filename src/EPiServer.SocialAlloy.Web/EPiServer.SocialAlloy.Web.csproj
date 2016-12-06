@@ -385,6 +385,7 @@
     <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
+    <Compile Include="Social\Repositories\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ISocialFeedRepository.cs" />
     <Compile Include="Social\Controllers\SubscriptionBlockController.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
@@ -487,6 +488,7 @@
     <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\ISocialRatingRepository.cs" />
     <Compile Include="Social\Repositories\ISocialSubscriptionRepository.cs" />
+    <Compile Include="Social\Repositories\PageRepository.cs" />
     <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\IUserRepository.cs" />
     <Compile Include="Social\Models\User.cs" />
