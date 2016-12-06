@@ -1,4 +1,5 @@
-﻿using EPiServer.Social.ActivityStreams.Core;
+﻿using EPiServer.Core;
+using EPiServer.Social.ActivityStreams.Core;
 using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System;
@@ -14,13 +15,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     {
         private SocialFeedViewModel feedModel;
         private IUserRepository userRepository;
+        private IContentRepository contentRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SocialActivityAdapter(IUserRepository userRepository)
+        public SocialActivityAdapter(IUserRepository userRepository, IContentRepository contentRepository)
         {
             this.userRepository = userRepository;
+            this.contentRepository = contentRepository;
         }
 
         /// <summary>
@@ -30,14 +33,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <returns></returns>
         public SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite)
         {
-            // Adapt any composite.Data stuff and populate view model accordingly…
+            // For now assuming PageId but could be userId if user is following User
+            var pageName = GetPageName(composite.Data.Target.Id);
+
+            // Get user name of Actor in the activity
+            var userName = GetUserName(composite.Data.Actor.Id);
+
+            // Create and populate the SocialFeedViewModel 
             feedModel = new SocialFeedViewModel
             {
                 ActivityDate = composite.Data.ActivityDate,
-                Actor = (!String.IsNullOrWhiteSpace(composite.Data.Actor.Id))
-                        ? userRepository.GetUser(composite.Data.Actor.Id).Name
-                        : User.Anonymous.Name,
-                Target = composite.Data.Target.Id //TODO get page name from Id
+                Actor = userName,
+                Target = pageName
             };
 
             //Interpret the activity and create a description for the 
@@ -45,6 +52,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
 
             return this.feedModel;
         }
+
+        #region ISocialActivityVisitor methods
 
         /// <summary>
         /// Interprets a SocialCommentActivity
@@ -71,6 +80,36 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public void Visit(SocialActivity activity)
         {
             activity.Accept(this);
+        }
+
+        #endregion
+
+        private string GetUserName(string userId)
+        {
+            return (!String.IsNullOrWhiteSpace(userId))
+                    ? userRepository.GetUser(userId).Name
+                    : User.Anonymous.Name;
+        }
+
+        private string GetPageName(string pageId)
+        {
+            var pageName = String.Empty;
+            try
+            {
+                Guid g = Guid.Parse(pageId);
+                var data = contentRepository.Get<PageData>(g);
+                pageName = data.Name;
+            }
+            catch (ContentNotFoundException e)
+            {
+                pageName = "Could not determine the name of the page with Id: " + pageId;
+            }
+            catch (TypeMismatchException e)
+            {
+                //IF not PageData type of content Guid
+            }
+
+            return pageName;
         }
     }
 }

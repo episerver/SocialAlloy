@@ -17,14 +17,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     {
         private readonly IUserRepository userRepository;
         private readonly IFeedService feedService;
+        private readonly IContentRepository contentRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SocialFeedRepository(IUserRepository userRepository, IFeedService feedService)
+        public SocialFeedRepository(IUserRepository userRepository, IFeedService feedService, IContentRepository contentRepository)
         {
             this.userRepository = userRepository;
             this.feedService = feedService;
+            this.contentRepository = contentRepository;
         }
 
         /// <summary>
@@ -81,12 +83,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             List<Composite<FeedItem, SocialActivity>> results = new List<Composite<FeedItem, SocialActivity>>();
 
             results.Add(new Composite<FeedItem, SocialActivity>(
-                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("a1"), Target = Reference.Create("1") },
+                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("2b392142-d275-4559-b25b-7e40747f368c"), Target = Reference.Create("18a8d890-055e-48c8-a1bb-7dcd156e7a28") },
                 new SocialCommentActivity { Body = "comment body" }
                 ));
 
             results.Add(new Composite<FeedItem, SocialActivity>(
-                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("a2"), Target = Reference.Create("2") },
+                new FeedItem { ActivityDate = DateTime.UtcNow, Actor = Reference.Create("2b392142-d275-4559-b25b-7e40747f368c"), Target = Reference.Create("1ae8531b-e5ac-4b82-af2c-7bd83e83b4a2") },
                 new SocialRatingActivity { Value = 5 }
                 ));
 
@@ -95,7 +97,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
         private IEnumerable<SocialFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
         {
-            SocialActivityAdapter adapter = new SocialActivityAdapter(userRepository);
+            SocialActivityAdapter adapter = new SocialActivityAdapter(userRepository, contentRepository);
             return feedItems.Select(c => adapter.Adapt(c));
         }
 

@@ -13,7 +13,8 @@
     <div style="margin-top:0.5em">
     @if (this.User.Identity.IsAuthenticated)
     {
-        <div>Your Activity feed</div>
+        <h3>Your Activity feed</h3>
+        <br />
         foreach (var feed in Model.FeedItems)
         {
             <div>
