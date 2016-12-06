@@ -6,9 +6,6 @@ using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -53,6 +50,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", feedBlockViewModel);
         }
 
+        /// <summary>
+        /// Gets the activity feed for the logged in user
+        /// </summary>
+        /// <param name="currentBlock">The current frontend block instance.</param>
+        /// <param name="feedBlockViewModel">a reference to the FeedBlockViewModel to 
+        ///populate with activity feed for the logged in user and errors, if any</param>
         private void GetSocialActivityFeed(FeedBlock currentBlock, FeedBlockViewModel feedBlockViewModel)
         {
             feedBlockViewModel.DisplayErrorMessage = String.Empty;
