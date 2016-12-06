@@ -10,7 +10,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public interface ISocialFeedRepository
     {
         /// <summary>
-        /// Gets feed items from the underlying feed repository based on a filter.
+        /// Gets feed items from the underlying feed repository based on the specified
+        /// filter.
         /// </summary>
         /// <param name="filter">a feed item filter to filter the feed items by</param>
         /// <returns>A list of feed items.</returns>

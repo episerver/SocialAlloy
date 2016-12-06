@@ -19,6 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialFeedRepository feedRepository;
+        private const string errorGettingUserIdMessage = "There was an error identifying the logged in user.Please make sure you are logged in and try again.";
 
         /// <summary>
         /// Constructor
@@ -39,33 +40,33 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
             // Create a feed block view model to fill the frontend block view
-            var feedBlockViewModel = new FeedBlockViewModel(currentBlock);
+            var blockViewModel = new FeedBlockViewModel(currentBlock);
 
-            // If user logged in, retreive activity feed for logged in user
+            // If user logged in, retrieve activity feed for logged in user
             if (this.User.Identity.IsAuthenticated)
             {
-                GetSocialActivityFeed(currentBlock, feedBlockViewModel);
+                GetSocialActivityFeed(currentBlock, blockViewModel);
             }
 
-            return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", feedBlockViewModel);
+            return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", blockViewModel);
         }
 
         /// <summary>
         /// Gets the activity feed for the logged in user
         /// </summary>
         /// <param name="currentBlock">The current frontend block instance.</param>
-        /// <param name="feedBlockViewModel">a reference to the FeedBlockViewModel to 
+        /// <param name="blockViewModel">a reference to the FeedBlockViewModel to 
         ///populate with activity feed for the logged in user and errors, if any</param>
-        private void GetSocialActivityFeed(FeedBlock currentBlock, FeedBlockViewModel feedBlockViewModel)
+        private void GetSocialActivityFeed(FeedBlock currentBlock, FeedBlockViewModel blockViewModel)
         {
-            feedBlockViewModel.DisplayErrorMessage = String.Empty;
+            blockViewModel.DisplayErrorMessage = String.Empty;
 
             try
             {
                 var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
-                    feedBlockViewModel.FeedItems =
+                    blockViewModel.FeedItems =
                         this.feedRepository.Get(new SocialFeedFilter
                         {
                             Subscriber = userId,
@@ -74,12 +75,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    feedBlockViewModel.DisplayErrorMessage = String.Format("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
+                    blockViewModel.DisplayErrorMessage = errorGettingUserIdMessage;
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                feedBlockViewModel.DisplayErrorMessage = ex.Message;
+                blockViewModel.DisplayErrorMessage = ex.Message;
             }
         }
     }

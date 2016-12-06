@@ -13,7 +13,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Adpats a Composite feed item with SocialActivity as payload to a SocialFeedViewModel
         /// </summary>
         /// <param name="composite">the composite feed item with SocialActivity as payload to be adapted</param>
-        /// <returns></returns>
+        /// <returns>the adapted SocialFeedViewModel</returns>
         SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite);
 
         /// <summary>

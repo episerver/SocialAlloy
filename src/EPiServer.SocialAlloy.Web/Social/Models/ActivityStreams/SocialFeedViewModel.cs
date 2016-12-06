@@ -3,7 +3,8 @@
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
-    /// This class represents the view model of the feed items displayed by a Social feed block.
+    /// This class represents the view model of the feed items displayed by a 
+    /// Social feed block.
     /// </summary>
     public class SocialFeedViewModel
     {

@@ -33,18 +33,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <returns></returns>
         public SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite)
         {
-            // Get user name of Actor in the activity
-            var userName = GetUserName(composite.Data.Actor.Id);
-
             // Create and populate the SocialFeedViewModel 
             feedModel = new SocialFeedViewModel
             {
                 ActivityDate = composite.Data.ActivityDate,
-                Actor = userName,
+                Actor = userRepository.GetUserName(composite.Data.Actor.Id),
                 Target = composite.Data.Target.Id
             };
 
-            //Interpret the activity and create a description for the 
+            //Interpret the activity
             composite.Extension.Accept(this);
 
             return this.feedModel;
@@ -89,13 +86,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
 
         #endregion
 
-        private string GetUserName(string userId)
-        {
-            return (!String.IsNullOrWhiteSpace(userId))
-                    ? userRepository.GetUser(userId).Name
-                    : User.Anonymous.Name;
-        }
-
         private string GetPageName(string pageId)
         {
             var pageName = String.Empty;
@@ -105,7 +95,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
                 var data = contentRepository.Get<PageData>(g);
                 pageName = data.Name;
             }
-            catch (ContentNotFoundException e)
+            catch (ContentNotFoundException)
             {
                 pageName = "Could not determine the name of the page with Id: " + pageId;
             }

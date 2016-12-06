@@ -11,7 +11,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// The ISocialFeedRepository class defines the operations that can be issued
-    /// against a feed item repository.
+    /// against the Episerver Social feed item repository.
     /// </summary>
     public class SocialFeedRepository : ISocialFeedRepository
     {
@@ -24,10 +24,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userRepository"></param>
-        /// <param name="feedService"></param>
-        /// <param name="contentRepository"></param>
-        /// <param name="adapter"></param>
+        /// <param name="userRepository">an instance of the user repository</param>
+        /// <param name="feedService">an instance of the Social Feed Service</param>
+        /// <param name="contentRepository">an instance of the Episerver's content repository</param>
+        /// <param name="adapter">an instance of the SocialActivityAdapter</param>
         public SocialFeedRepository(IUserRepository userRepository, 
                                     IFeedService feedService, 
                                     IContentRepository contentRepository,
@@ -42,7 +42,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Gets feed items from the underlying feed repository based on a filter.
         /// </summary>
-        /// <param name="filter">a feed item filter to filter the feed items by</param>
+        /// <param name="filter">a filter by which to retrieve feed items by</param>
         /// <returns>A list of feed items.</returns>
         public IEnumerable<SocialFeedViewModel> Get(SocialFeedFilter filter)
         {

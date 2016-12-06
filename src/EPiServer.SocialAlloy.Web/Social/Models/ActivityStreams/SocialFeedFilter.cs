@@ -1,8 +1,8 @@
 ﻿namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
-    /// The SocialFeedFilter class exposes a set of properties by which
-    /// social activity feed items.
+    /// The SocialFeedFilter class exposes a set of properties to filter
+    /// the retrieval of social activity feed items.
     public class SocialFeedFilter
     {
         /// <summary>
