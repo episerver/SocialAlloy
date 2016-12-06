@@ -11,7 +11,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// interpreting various types of Social activities in the Episerver Social sample and 
     /// converting them to a SocialFeedViewModel.
     /// </summary>
-    public class SocialActivityAdapter : ISocialActivityVisitor
+    public class SocialActivityAdapter : ISocialActivityAdapter
     {
         private SocialFeedViewModel feedModel;
         private IUserRepository userRepository;

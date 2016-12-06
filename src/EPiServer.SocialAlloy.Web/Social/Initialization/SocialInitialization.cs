@@ -3,6 +3,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.Social.Comments.Core;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -50,9 +51,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         private static void ConfigureContainer(ConfigurationExpression configuration)
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
+
             configuration.For<ISocialCommentRepository>().Use(() => CreateSocialCommentRepository());
             configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
+
             configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
+            configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
             configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
         }
 

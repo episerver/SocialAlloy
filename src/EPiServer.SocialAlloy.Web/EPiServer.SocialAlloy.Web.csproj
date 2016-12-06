@@ -466,7 +466,7 @@
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
     <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\ISocialActivity.cs" />
-    <Compile Include="Social\Models\ActivityStreams\ISocialActivityVisitor.cs" />
+    <Compile Include="Social\Models\ActivityStreams\ISocialActivityAdapter.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />

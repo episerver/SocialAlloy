@@ -10,6 +10,6 @@
         /// Accepts an ISocialActivityVisitor instance capable of interpreting an activity instance.
         /// </summary>
         /// <param name="visitor">an instance of ISocialActivityVisitor</param>
-        void Accept(ISocialActivityVisitor visitor);
+        void Accept(ISocialActivityAdapter visitor);
     }
 }

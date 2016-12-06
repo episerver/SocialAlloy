@@ -14,7 +14,7 @@
         /// Accepts an ISocialActivityVisitor instance capable of interpreting this activity instance.
         /// </summary>
         /// <param name="visitor">an instance of ISocialActivityVisitor</param>
-        public override void Accept(ISocialActivityVisitor visitor)
+        public override void Accept(ISocialActivityAdapter visitor)
         {
             visitor.Visit(this);
         }

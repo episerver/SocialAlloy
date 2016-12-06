@@ -18,15 +18,25 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         private readonly IUserRepository userRepository;
         private readonly IFeedService feedService;
         private readonly IContentRepository contentRepository;
+        private readonly ISocialActivityAdapter activityAdapter;
+
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SocialFeedRepository(IUserRepository userRepository, IFeedService feedService, IContentRepository contentRepository)
+        /// <param name="userRepository"></param>
+        /// <param name="feedService"></param>
+        /// <param name="contentRepository"></param>
+        /// <param name="adapter"></param>
+        public SocialFeedRepository(IUserRepository userRepository, 
+                                    IFeedService feedService, 
+                                    IContentRepository contentRepository,
+                                    ISocialActivityAdapter adapter)
         {
             this.userRepository = userRepository;
             this.feedService = feedService;
             this.contentRepository = contentRepository;
+            this.activityAdapter = adapter;
         }
 
         /// <summary>
@@ -97,8 +107,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
         private IEnumerable<SocialFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
         {
-            SocialActivityAdapter adapter = new SocialActivityAdapter(userRepository, contentRepository);
-            return feedItems.Select(c => adapter.Adapt(c));
+            return feedItems.Select(c => this.activityAdapter.Adapt(c));
         }
 
         
