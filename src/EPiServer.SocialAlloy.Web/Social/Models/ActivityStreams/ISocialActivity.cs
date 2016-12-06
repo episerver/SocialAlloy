@@ -7,9 +7,9 @@
     public interface ISocialActivity
     {
         /// <summary>
-        /// Accepts an ISocialActivityVisitor instance capable of interpreting an activity instance.
+        /// Accepts an ISocialActivityAdapter instance capable of interpreting an activity instance.
         /// </summary>
-        /// <param name="visitor">an instance of ISocialActivityVisitor</param>
-        void Accept(ISocialActivityAdapter visitor);
+        /// <param name="adapter">an instance of ISocialActivityAdapter</param>
+        void Accept(ISocialActivityAdapter adapter);
     }
 }

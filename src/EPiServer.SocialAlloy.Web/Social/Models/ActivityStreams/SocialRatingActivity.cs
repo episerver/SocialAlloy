@@ -11,12 +11,12 @@
         public int Value { get; set; }
 
         /// <summary>
-        /// Accepts an ISocialActivityVisitor instance capable of interpreting this activity instance.
+        /// Accepts an ISocialActivityAdapter instance capable of interpreting this activity instance.
         /// </summary>
-        /// <param name="visitor">an instance of ISocialActivityVisitor</param>
-        public override void Accept(ISocialActivityAdapter visitor)
+        /// <param name="adapter">an instance of ISocialActivityAdapter</param>
+        public override void Accept(ISocialActivityAdapter adapter)
         {
-            visitor.Visit(this);
+            adapter.Visit(this);
         }
     }
 }

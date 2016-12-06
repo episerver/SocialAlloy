@@ -8,10 +8,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     public abstract class SocialActivity : ISocialActivity
     {
         /// <summary>
-        /// Accepts an ISocialActivityVisitor instance capable of interpreting this activity instance.
+        /// Accepts an ISocialActivityAdapter instance capable of interpreting this activity instance.
         /// </summary>
-        /// <param name="visitor">an instance of ISocialActivityVisitor</param>
-        public abstract void Accept(ISocialActivityAdapter visitor);
+        /// <param name="adapter">an instance of ISocialActivityAdapter</param>
+        public abstract void Accept(ISocialActivityAdapter adapter);
     }
 
 }

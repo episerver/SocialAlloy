@@ -50,7 +50,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             return this.feedModel;
         }
 
-        #region ISocialActivityVisitor methods
+        #region ISocialActivityAdapter methods
 
         /// <summary>
         /// Interprets a SocialCommentActivity
