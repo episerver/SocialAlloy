@@ -15,7 +15,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The CommentsBlockController handles the rendering the comment block frontend view as well
+    /// The CommentsBlockController handles the rendering of the comment block frontend view as well
     /// as the posting of new comments.
     /// </summary>
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
@@ -137,13 +137,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var errors = new List<string>();
 
-            // Make sure that a logged in user is submitting the form.
-            var userId = this.userRepository.GetUserId(this.User);
-            if (string.IsNullOrWhiteSpace(userId))
-            {
-                errors.Add("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
-            }
-
             // Make sure the comment body has some text
             if (string.IsNullOrWhiteSpace(commentForm.Body))
             {
@@ -201,7 +194,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             commentBlockViewModel.SubmitSuccessMessage = successMessage != null ? successMessage.Value.AttemptedValue : "";
             commentBlockViewModel.SubmitErrorMessage = errorMessage != null ? errorMessage.Value.AttemptedValue : "";
 
-            // if there was an error submitting the message then leave the current body in the comment box
+            // If there was an error submitting the message then leave the current body in the comment box
             // so the user does not have to retype it.
             if (errorMessage != null && !String.IsNullOrWhiteSpace(errorMessage.Value.AttemptedValue))
             {
