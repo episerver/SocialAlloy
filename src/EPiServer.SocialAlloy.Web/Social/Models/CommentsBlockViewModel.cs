@@ -21,7 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             CommentBoxRows = block.CommentBoxRows;
-            CommentMaxLength = block.CommentMaxLength;
+            CommentMaxLength = block.CommentMaxLength; 
             CommentsDisplayMax = block.CommentsDisplayMax;
             CommentAuthor = form.Author;
             CommentBody = form.Body;
