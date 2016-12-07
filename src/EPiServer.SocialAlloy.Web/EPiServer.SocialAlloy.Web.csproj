@@ -385,6 +385,7 @@
     <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
+    <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialFeedRepository.cs" />

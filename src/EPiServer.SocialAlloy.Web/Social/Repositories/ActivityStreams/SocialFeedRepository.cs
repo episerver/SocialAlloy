@@ -53,6 +53,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 feedItems = GetMockData();
 
+                //IncludeSubclass = true
                 //feedItems = this.feedService.Get(
                 //    new CompositeCriteria<FeedItemFilter, SocialActivity>
                 //    {
