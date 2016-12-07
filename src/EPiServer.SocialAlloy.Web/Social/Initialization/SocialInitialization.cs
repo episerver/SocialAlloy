@@ -3,6 +3,8 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.Social.Comments.Core;
+using EPiServer.SocialAlloy.Web.Social.Adapters;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
@@ -51,8 +53,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         private static void ConfigureContainer(ConfigurationExpression configuration)
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
-            configuration.For<ISocialCommentRepository>().Use(() => CreateSocialCommentRepository());
+            configuration.For<IPageRepository>().Use<PageRepository>();
+
+            configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
             configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
+
+            configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
+            configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
+            configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
+            configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
             configuration.For<ISocialGroupRepository>().Use(() => CreateSocialGroupRepository());
         }
 
@@ -66,16 +75,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                     new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()))
             );
         }
-
-        /// <summary>
-        /// Create an instance of ISocialCommentRepository.
-        /// </summary>
-        /// <returns>The created SocialCommentRepository instance.</returns>
-        private static ISocialCommentRepository CreateSocialCommentRepository()
-        {
-            return new SocialCommentRepository(CreateUserRepository(), ServiceLocator.Current.GetInstance<ICommentService>());
-        }
-
         /// <summary>
         /// Create an instance of ISocialGroupRepository.
         /// </summary>

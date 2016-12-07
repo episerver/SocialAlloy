@@ -1,6 +1,7 @@
 ﻿using EPiServer.SocialAlloy.Web.Social.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
@@ -35,22 +36,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Queries the underlying datastore and returns the user whose identifier 
-        /// matches the specified reference identifier.
+        /// Queries the underlying datastore and returns the name of the user whose 
+        /// identifier matches the specified reference identifier.
         /// </summary>
         /// <param name="id">User Id to search by</param>
-        /// <returns>The User object.</returns>
-        public User GetUser(string id)
+        /// <returns>The user name.</returns>
+        public string GetUserName(string id)
         {
-            var user = manager.FindById(id);
+            var userName = User.Anonymous.Name;
 
-            return user != null ?
-                new User
+            if (!String.IsNullOrWhiteSpace(id))
+            {
+                var user = manager.FindById(id);
+                if (user != null)
                 {
-                    Name = user.UserName,
-                    Id = id
-                } :
-                User.Anonymous;
+                    userName = user.UserName;
+                }
+            }
+            return userName;
         }
     }
 }
