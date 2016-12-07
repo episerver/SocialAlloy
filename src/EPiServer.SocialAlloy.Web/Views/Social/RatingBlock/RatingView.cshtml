@@ -26,11 +26,6 @@
             <div style="color: red;">@Model.SubmitErrorMessage</div>
         }
 
-        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitActivityErrorMessage))
-        {
-            <div style="color: red;">@Model.SubmitActivityErrorMessage</div>
-        }
-
         @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
         {
             <div style="color: red;">@Model.ErrorMessage</div>

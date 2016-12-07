@@ -98,13 +98,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     var pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (!string.IsNullOrWhiteSpace(pageId))
                     {
-                        // Save the rating
-                        AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
-
-                        if (blockData.SendActivity)
+                        var userId = userRepository.GetUserId(this.User);
+                        if (String.IsNullOrWhiteSpace(userId))
                         {
-                            //Add a rating activity
-                            AddActivity(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                            ratingViewBlockModel.SubmitErrorMessage = "There was an error identifying the logged in user.  Please make sure you are logged in and try again.";
+                        }
+                        else
+                        {
+                            // Save the rating
+                            AddRating(userId, pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+
+                            if (blockData.SendActivity)
+                            {
+                                //Add a rating activity
+                                AddActivity(userId, pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                            }
                         }
                     }
                     else
@@ -152,13 +160,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     "SubmitErrorMessage",
                     new ModelState() {
                         Value = new ValueProviderResult(ratingBlockViewModel.SubmitErrorMessage, ratingBlockViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
-                    }
-                ),
-                new KeyValuePair<string, ModelState>
-                (
-                    "SubmitActivityErrorMessage",
-                    new ModelState() {
-                        Value = new ValueProviderResult(ratingBlockViewModel.SubmitActivityErrorMessage, ratingBlockViewModel.SubmitActivityErrorMessage, CultureInfo.CurrentCulture)
                     }
                 )
             };
@@ -239,28 +240,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Adds the rating submitted by the logged in user
         /// </summary>
+        /// <param name="userId">The user who submitted the rating</param>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="value">The value of the submitted rating</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
         /// populate with errors, if any</param>
-        private void AddRating(string target, int value, RatingBlockViewModel ratingViewBlockModel)
+        private void AddRating(string userId, string target, int value, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.SubmitErrorMessage = String.Empty;
             ratingViewBlockModel.SubmitSuccessMessage = String.Empty;
 
             try
             {
-                var userId = userRepository.GetUserId(this.User);
-                if (!String.IsNullOrWhiteSpace(userId))
-                {
-                    ratingRepository.AddRating(userId, target, value);
-
-                    ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
-                }
-                else
-                {
-                    ratingViewBlockModel.SubmitErrorMessage = "There was an error identifying the logged in user.  Please make sure you are logged in and try again.";
-                }
+                ratingRepository.AddRating(userId, target, value);
+                ratingViewBlockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
             }
             catch (SocialRepositoryException ex)
             {
@@ -271,31 +264,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Adds an activity corresponding to the rating submitted action by the logged in user
         /// </summary>
+        /// <param name="actor">The user who initated the activity</param>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="value">The value of the submitted rating</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
         /// populate with errors, if any</param>
-        private void AddActivity(string target, int value, RatingBlockViewModel ratingViewBlockModel)
+        private void AddActivity(string actor, string target, int value, RatingBlockViewModel ratingViewBlockModel)
         {
-            ratingViewBlockModel.SubmitActivityErrorMessage = String.Empty;
+            ratingViewBlockModel.SubmitErrorMessage = String.Empty;
 
             try
             {
-                var userId = userRepository.GetUserId(this.User);
-                if (!String.IsNullOrWhiteSpace(userId))
-                {
-                    var activity = new SocialRatingActivity { Value = value };
-                    activityRepository.Add(userId, target, activity);
-                }
-                else
-                {
-                    ratingViewBlockModel.SubmitActivityErrorMessage = 
-                        "There was an error identifying the logged in user while sending social activity. Please make sure you are logged in.";
-                }
+                var activity = new SocialRatingActivity { Value = value };
+                activityRepository.Add(actor, target, activity);
             }
             catch (SocialRepositoryException ex)
             {
-                ratingViewBlockModel.SubmitActivityErrorMessage = ex.Message;
+                ratingViewBlockModel.SubmitErrorMessage = ex.Message;
             }
         }
 
@@ -319,10 +304,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             ratingBlockViewModel.SubmitSuccessMessage = (submitSuccessMessage != null && submitSuccessMessage.Value != null)
                                             ? (string)submitErrorMessage.Value.RawValue
                                             : string.Empty;
-
-            ratingBlockViewModel.SubmitActivityErrorMessage = (submitActivityErrorMessage != null && submitActivityErrorMessage.Value != null)
-                                           ? (string)submitActivityErrorMessage.Value.RawValue
-                                           : string.Empty;
         }
     }
 }
