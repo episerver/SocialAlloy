@@ -380,9 +380,13 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
+    <Compile Include="Social\Blocks\FeedBlock.cs" />
     <Compile Include="Social\Blocks\RatingSetting.cs" />
     <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
+    <Compile Include="Social\Controllers\FeedBlockController.cs" />
+    <Compile Include="Social\Repositories\IPageRepository.cs" />
+    <Compile Include="Social\Repositories\ISocialFeedRepository.cs" />
     <Compile Include="Social\Controllers\SubscriptionBlockController.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
@@ -461,12 +465,20 @@
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
+    <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
+    <Compile Include="Social\Models\ActivityStreams\ISocialActivity.cs" />
+    <Compile Include="Social\Adapters\ActivityStreams\ISocialActivityAdapter.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SocialActivity.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SocialFeedViewModel.cs" />
+    <Compile Include="Social\Adapters\ActivityStreams\SocialActivityAdapter.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SocialCommentActivity.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SocialRatingActivity.cs" />
     <Compile Include="Social\Models\SocialRatingStatistics.cs" />
     <Compile Include="Social\Models\SocialRatingFilter.cs" />
     <Compile Include="Social\Models\SocialSubscription.cs" />
@@ -476,9 +488,12 @@
     <Compile Include="Social\Repositories\ISocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\ISocialRatingRepository.cs" />
     <Compile Include="Social\Repositories\ISocialSubscriptionRepository.cs" />
+    <Compile Include="Social\Repositories\PageRepository.cs" />
     <Compile Include="Social\Repositories\SocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\IUserRepository.cs" />
     <Compile Include="Social\Models\User.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SocialFeedFilter.cs" />
+    <Compile Include="Social\Repositories\SocialFeedRepository.cs" />
     <Compile Include="Social\Repositories\SocialRatingRepository.cs" />
     <Compile Include="Social\Repositories\SocialSubscriptionRepository.cs" />
     <Compile Include="Social\Repositories\UserRepository.cs" />
@@ -654,6 +669,7 @@
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <Content Include="Views\Social\SubscriptionBlock\SubscriptionView.cshtml" />
+    <Content Include="Views\Social\FeedBlock\FeedView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

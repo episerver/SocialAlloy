@@ -23,6 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialRatingRepository ratingRepository;
+        private readonly IPageRepository pageRepository;
 
         /// <summary>
         /// Constructor
@@ -31,6 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
+            this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 if (IsValid(ratingForm.SubmittedRating))
                 {
                     // Retrieve the page identifier of the page that was rated 
-                    var pageId = GetPageId(ratingForm.CurrentPageLink);
+                    var pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (!string.IsNullOrWhiteSpace(pageId))
                     {
                         // Save the rating
@@ -159,7 +161,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
-        /// populate with errors, if any</param>
+        /// populate with rating for the logged in user and errors, if any</param>
         private void GetRating(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.CurrentRating = null;
@@ -193,7 +195,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="target">The current page on which the RatingBlock resides</param>
         /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
-        /// populate with errors, if any</param>
+        /// populate with rating statistics for the current page and errors, if any</param>
         private void GetRatingStatistics(string target, RatingBlockViewModel ratingViewBlockModel)
         {
             ratingViewBlockModel.ErrorMessage = String.Empty;
