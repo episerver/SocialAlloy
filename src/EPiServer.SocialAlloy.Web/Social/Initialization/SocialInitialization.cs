@@ -54,12 +54,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<IPageRepository>().Use<PageRepository>();
 
-            configuration.For<ISocialCommentRepository>().Use(() => CreateSocialCommentRepository());
+            configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
             configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
 
             configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
             configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
             configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
+            configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
         }
 
         /// <summary>
@@ -71,15 +72,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             return new UserRepository(new UserManager<IdentityUser>(
                     new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()))
             );
-        }
-
-        /// <summary>
-        /// Create an instance of ISocialCommentRepository.
-        /// </summary>
-        /// <returns>The created SocialCommentRepository instance.</returns>
-        private static ISocialCommentRepository CreateSocialCommentRepository()
-        {
-            return new SocialCommentRepository(CreateUserRepository(), ServiceLocator.Current.GetInstance<ICommentService>());
         }
     }
 }
