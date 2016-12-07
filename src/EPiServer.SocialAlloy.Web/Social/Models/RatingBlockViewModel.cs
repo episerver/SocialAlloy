@@ -77,6 +77,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public string SubmitSuccessMessage { get; set; }
 
         /// <summary>
+        /// Message displayed in rating block if an error was encountered while sending 
+        /// a rating activity to the EPiServer Social ActivityStreams system.
+        /// </summary>
+        public string SubmitActivityErrorMessage { get; set; }
+
+        /// <summary>
         /// Message displayed in rating block if an error was encountered while saving the submitted rating.
         /// </summary>
         public string SubmitErrorMessage { get; set; }

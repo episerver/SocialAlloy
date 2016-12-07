@@ -23,6 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialRatingRepository ratingRepository;
+        private readonly ISocialActivityRepository activityRepository;
         private readonly IPageRepository pageRepository;
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
             this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
+            this.activityRepository = ServiceLocator.Current.GetInstance<ISocialActivityRepository>();
         }
 
         /// <summary>
@@ -97,6 +99,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     {
                         // Save the rating
                         AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+
+                        //Add a rating activity
+                        AddActivity(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
                     }
                     else
                     {
@@ -143,6 +148,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     "SubmitErrorMessage",
                     new ModelState() {
                         Value = new ValueProviderResult(ratingBlockViewModel.SubmitErrorMessage, ratingBlockViewModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
+                    }
+                ),
+                new KeyValuePair<string, ModelState>
+                (
+                    "SubmitActivityErrorMessage",
+                    new ModelState() {
+                        Value = new ValueProviderResult(ratingBlockViewModel.SubmitActivityErrorMessage, ratingBlockViewModel.SubmitActivityErrorMessage, CultureInfo.CurrentCulture)
                     }
                 )
             };
@@ -248,7 +260,38 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                ratingViewBlockModel.SubmitErrorMessage = ex.Message; ;
+                ratingViewBlockModel.SubmitErrorMessage = ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// Adds an activity corresponding to the rating submitted action by the logged in user
+        /// </summary>
+        /// <param name="target">The current page on which the RatingBlock resides</param>
+        /// <param name="value">The value of the submitted rating</param>
+        /// <param name="ratingViewBlockModel">a reference to the RatingBlockViewModel to 
+        /// populate with errors, if any</param>
+        private void AddActivity(string target, int value, RatingBlockViewModel ratingViewBlockModel)
+        {
+            ratingViewBlockModel.SubmitActivityErrorMessage = String.Empty;
+
+            try
+            {
+                var userId = userRepository.GetUserId(this.User);
+                if (!String.IsNullOrWhiteSpace(userId))
+                {
+                    var activity = new SocialRatingActivity { Value = value };
+                    activityRepository.Add(userId, target, activity);
+                }
+                else
+                {
+                    ratingViewBlockModel.SubmitActivityErrorMessage = 
+                        "There was an error identifying the logged in user while sending social activity. Please make sure you are logged in.";
+                }
+            }
+            catch (SocialRepositoryException ex)
+            {
+                ratingViewBlockModel.SubmitActivityErrorMessage = ex.Message;
             }
         }
 
@@ -261,14 +304,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Get success/error model state
             var submitErrorMessage = GetModelState("SubmitErrorMessage");
             var submitSuccessMessage = GetModelState("SubmitSuccessMessage");
+            var submitActivityErrorMessage = GetModelState("SubmitActivityErrorMessage");
 
             // Apply success/error model state to the view model
             ratingBlockViewModel.SubmitErrorMessage = (submitErrorMessage != null && submitErrorMessage.Value != null)
-                                            ? submitErrorMessage.Value.AttemptedValue
+                                            ? (string)submitErrorMessage.Value.RawValue
                                             : string.Empty;
+
+            
             ratingBlockViewModel.SubmitSuccessMessage = (submitSuccessMessage != null && submitSuccessMessage.Value != null)
-                                            ? submitSuccessMessage.Value.AttemptedValue
+                                            ? (string)submitErrorMessage.Value.RawValue
                                             : string.Empty;
+
+            ratingBlockViewModel.SubmitActivityErrorMessage = (submitActivityErrorMessage != null && submitActivityErrorMessage.Value != null)
+                                           ? (string)submitActivityErrorMessage.Value.RawValue
+                                           : string.Empty;
         }
     }
 }
