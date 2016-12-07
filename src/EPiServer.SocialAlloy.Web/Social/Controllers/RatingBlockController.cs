@@ -83,6 +83,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public ActionResult Submit(RatingFormViewModel ratingForm)
         {
             var data = this.contentRepository.Get<IContentData>(ratingForm.CurrentBlockLink);
+            var blockData = data as RatingBlock;
             var ratingViewBlockModel = new RatingBlockViewModel(data as RatingBlock, ratingForm);
 
             if (!this.User.Identity.IsAuthenticated)
@@ -100,8 +101,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         // Save the rating
                         AddRating(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
 
-                        //Add a rating activity
-                        AddActivity(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                        if (blockData.SendActivity)
+                        {
+                            //Add a rating activity
+                            AddActivity(pageId, ratingForm.SubmittedRating.Value, ratingViewBlockModel);
+                        }
                     }
                     else
                     {
