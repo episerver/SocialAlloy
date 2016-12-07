@@ -493,7 +493,7 @@
     <Compile Include="Social\Repositories\Common\PageRepository.cs" />
     <Compile Include="Social\Repositories\Comments\SocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\Common\IUserRepository.cs" />
-    <Compile Include="Social\Models\Common\User.cs" />
+    <Compile Include="Social\Common\Models\User.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialFeedFilter.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialFeedRepository.cs" />
     <Compile Include="Social\Repositories\Ratings\SocialRatingRepository.cs" />
