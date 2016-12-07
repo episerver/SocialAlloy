@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPiServer.SocialAlloy.Web.Social.Adapters;
+using System;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {

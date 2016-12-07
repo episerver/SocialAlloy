@@ -1,10 +1,11 @@
 ﻿using EPiServer.Core;
 using EPiServer.Social.ActivityStreams.Core;
 using EPiServer.Social.Common;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System;
 
-namespace EPiServer.SocialAlloy.Web.Social.Models
+namespace EPiServer.SocialAlloy.Web.Social.Adapters
 {
     /// <summary>
     /// The SocialActivityAdapter class encapsulates a set of operations used for adapting and 

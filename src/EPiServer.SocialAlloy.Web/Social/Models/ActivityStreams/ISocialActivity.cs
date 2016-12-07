@@ -1,4 +1,6 @@
-﻿namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿using EPiServer.SocialAlloy.Web.Social.Adapters;
+
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// This interface represents a set of operations supported by all types of social activities 

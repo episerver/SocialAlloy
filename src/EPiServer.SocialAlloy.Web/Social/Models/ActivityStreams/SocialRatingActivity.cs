@@ -1,4 +1,6 @@
-﻿namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿using EPiServer.SocialAlloy.Web.Social.Adapters;
+
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// Represents the activity of a user rating bring submitted for an item in the Episerver Social sample.

@@ -467,14 +467,14 @@
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
     <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\ISocialActivity.cs" />
-    <Compile Include="Social\Models\ActivityStreams\ISocialActivityAdapter.cs" />
+    <Compile Include="Social\Adapters\ActivityStreams\ISocialActivityAdapter.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />
     <Compile Include="Social\Models\CommentsBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialActivity.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialFeedViewModel.cs" />
-    <Compile Include="Social\Models\ActivityStreams\SocialActivityAdapter.cs" />
+    <Compile Include="Social\Adapters\ActivityStreams\SocialActivityAdapter.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialCommentActivity.cs" />
     <Compile Include="Social\Models\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\SocialComment.cs" />

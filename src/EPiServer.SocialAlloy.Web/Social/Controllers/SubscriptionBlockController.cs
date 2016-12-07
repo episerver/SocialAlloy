@@ -21,6 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialSubscriptionRepository subscriptionRepository;
+        private readonly IPageRepository pageRepository;
 
         private const string ModelState_SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string ModelState_SubmitErrorMessage = "SubmitErrorMessage";
@@ -36,6 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.subscriptionRepository = ServiceLocator.Current.GetInstance<ISocialSubscriptionRepository>();
+            this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
         /// <summary>
@@ -137,7 +139,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return new SocialSubscription
             {
                 Subscriber = this.userRepository.GetUserId(this.User),
-                Target = this.GetPageId(formViewModel.CurrentPageLink),
+                Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
                 Type = SocialSubscription.PageSubscription
             };
         }
@@ -217,7 +219,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var filter = new SocialSubscriptionFilter
                 {
                     Subscriber = this.userRepository.GetUserId(this.User),
-                    Target = this.GetPageId(blockViewModel.CurrentPageLink),
+                    Target = this.pageRepository.GetPageId(blockViewModel.CurrentPageLink),
                     Type = SocialSubscription.PageSubscription
                 };
 

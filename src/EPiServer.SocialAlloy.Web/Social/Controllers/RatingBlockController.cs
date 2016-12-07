@@ -23,6 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialRatingRepository ratingRepository;
+        private readonly IPageRepository pageRepository;
 
         /// <summary>
         /// Constructor
@@ -31,6 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
+            this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 if (IsValid(ratingForm.SubmittedRating))
                 {
                     // Retrieve the page identifier of the page that was rated 
-                    var pageId = GetPageId(ratingForm.CurrentPageLink);
+                    var pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (!string.IsNullOrWhiteSpace(pageId))
                     {
                         // Save the rating

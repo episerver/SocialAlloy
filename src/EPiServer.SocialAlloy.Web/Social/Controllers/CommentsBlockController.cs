@@ -22,6 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialCommentRepository commentRepository;
+        private readonly IPageRepository pageRepository;
 
         private const string SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string SubmitErrorMessage = "SubmitErrorMessage";
@@ -33,6 +34,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
+            this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             return new SocialComment
             {
-                Target = GetPageId(commentForm.CurrentPageLink),
+                Target = this.pageRepository.GetPageId(commentForm.CurrentPageLink),
                 Body = commentForm.Body,
                 Author = this.userRepository.GetUserId(this.User)
             };

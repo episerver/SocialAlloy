@@ -1,7 +1,8 @@
 ﻿using EPiServer.Social.ActivityStreams.Core;
 using EPiServer.Social.Common;
+using EPiServer.SocialAlloy.Web.Social.Models;
 
-namespace EPiServer.SocialAlloy.Web.Social.Models
+namespace EPiServer.SocialAlloy.Web.Social.Adapters
 {
     /// <summary>
     /// The ISocialActivityAdapter interface represents a set of operations used for adapting and 

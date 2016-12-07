@@ -2,6 +2,9 @@
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// This interface represents common page related operations used by the Episerver Social sample.
+    /// </summary>
     public interface IPageRepository
     {
         /// <summary>

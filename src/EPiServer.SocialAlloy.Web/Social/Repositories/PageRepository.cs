@@ -3,6 +3,9 @@ using System;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// This class encapsulates common page related operations used by the Episerver Social sample.
+    /// </summary>
     public class PageRepository : IPageRepository
     {
         private readonly IContentRepository contentRepository;

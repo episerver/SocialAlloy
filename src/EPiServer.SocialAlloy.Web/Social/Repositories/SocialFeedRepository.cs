@@ -6,6 +6,7 @@ using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.Social.Common;
 using EPiServer.Social.ActivityStreams.Core;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Adapters;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {

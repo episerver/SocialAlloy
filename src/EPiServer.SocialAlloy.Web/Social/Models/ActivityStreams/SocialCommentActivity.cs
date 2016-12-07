@@ -1,4 +1,6 @@
-﻿namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿using EPiServer.SocialAlloy.Web.Social.Adapters;
+
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// Represents the activity of posting a comment in the Episerver Social sample.
