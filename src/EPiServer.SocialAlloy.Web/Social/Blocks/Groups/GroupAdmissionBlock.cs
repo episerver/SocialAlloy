@@ -28,7 +28,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
              GroupName = SystemTabNames.Content,
              Order = 1)]
         [CultureSpecific]
-        public virtual List<string> GroupName { get; set; }
+        public virtual string GroupName { get; set; }
         /// <summary>
         /// Sets the default property values on the content data.
         /// </summary>
@@ -37,7 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         {
             base.SetDefaultValues(contentType);
             Heading = "Social Group Admission";
-            GroupName = GetGroupInfo();
+            GroupName = "";//GetGroupInfo();
         }
 
         private List<string> GetGroupInfo()

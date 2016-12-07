@@ -466,6 +466,7 @@
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
     <Compile Include="Social\Models\Groups\GroupAdmissionBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockViewModel.cs" />
+    <Compile Include="Social\Models\Groups\GroupExtensionData.cs" />
     <Compile Include="Social\Models\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\CommentFormViewModel.cs" />

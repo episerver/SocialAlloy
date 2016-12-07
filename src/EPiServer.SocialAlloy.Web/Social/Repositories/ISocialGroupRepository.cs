@@ -1,4 +1,5 @@
-﻿using EPiServer.Social.Groups.Core;
+﻿using EPiServer.Social.Common;
+using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="group">The group to add.</param>
         /// <returns>The added group.</returns>
         Group Add(Group group);
+
+        Group Get(string groupName);
 
     }
 }

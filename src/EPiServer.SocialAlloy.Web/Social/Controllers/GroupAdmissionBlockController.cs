@@ -1,5 +1,6 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
+using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
@@ -61,7 +62,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GroupName = currentBlock.GroupName
             };
 
-
             //remove existing values from input fields
             ModelState.Clear();
 
@@ -79,7 +79,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public ActionResult Submit(GroupAdmissionBlockViewModel model)
         {
             var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
+            var groupId = groupRepository.Get(model.GroupName).Id;
 
+            var member = new Member(Reference.Create(""), groupId);
+            
             //var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
             //TempData["SubmitErrorMessage"] = validatedInputs ? null : "Group name and description cannot be null or whitespace";
 

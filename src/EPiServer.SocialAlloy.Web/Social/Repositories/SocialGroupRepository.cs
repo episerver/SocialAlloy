@@ -54,5 +54,43 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             return addedGroup;
         }
+
+        /// <summary>
+        /// Adds a group to the EPiServer Social group repository.
+        /// </summary>
+        /// <param name="group">The group to add.</param>
+        /// <returns>The added group.</returns>
+        public Group Get(string groupName)
+        {
+            Group group = null;
+
+            try
+            {
+                var criteria = new Criteria<GroupFilter>
+                {
+                    Filter = new GroupFilter { Name = groupName },
+                    PageInfo = new PageInfo {  PageSize = 1, CalculateTotalCount = true, PageOffset = 0}
+                };
+                group = this.groupService.Get(criteria).Results.FirstOrDefault();
+            }
+            catch (SocialAuthenticationException ex)
+            {
+                throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
+            }
+            catch (MaximumDataSizeExceededException ex)
+            {
+                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+            }
+            catch (SocialCommunicationException ex)
+            {
+                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+            }
+            catch (SocialException ex)
+            {
+                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+            }
+
+            return group;
+        }
     }
 }
