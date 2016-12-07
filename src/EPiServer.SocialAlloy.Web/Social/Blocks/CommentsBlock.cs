@@ -55,6 +55,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public virtual int CommentsDisplayMax { get; set; }
 
         /// <summary>
+        /// Configures whether an activity should be sent to the Episerver Social ActivityStreams system.
+        /// </summary>
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual bool SendActivity { get; set; }
+
+        /// <summary>
         /// Sets the default configuration values.
         /// </summary>
         /// <param name="contentType">Type of the content.</param>
@@ -66,6 +74,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             CommentBoxRows = 5;
             CommentMaxLength = 500;
             CommentsDisplayMax = 10;
+            SendActivity = true;
         }
     }
 }

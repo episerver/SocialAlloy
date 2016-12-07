@@ -8,9 +8,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     public class SocialComment
     {
         /// <summary>
-        /// The comment author.
+        /// The comment author identifier.
         /// </summary>
-        public string Author { get; set; }
+        public string AuthorId { get; set; }
+
+        /// <summary>
+        /// The comment author username.
+        /// </summary>
+        public string AuthorUsername { get; set; }
 
         /// <summary>
         /// The comment body.
