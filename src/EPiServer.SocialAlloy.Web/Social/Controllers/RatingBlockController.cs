@@ -220,7 +220,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // Validate user is logged in
             if (!this.User.Identity.IsAuthenticated)
             {
-                blockModel.SubmitErrorMessage = "Session timed out, you have to be logged in to submit your rating, please re-login and try again.";
+                blockModel.SubmitErrorMessage = "Session timed out, you have to be logged in to submit your rating. Please login and try again.";
             }
             else
             {
@@ -235,7 +235,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     this.pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (String.IsNullOrWhiteSpace(this.pageId))
                     {
-                        blockModel.SubmitErrorMessage = "The page id of this page could not be determined, please try rating this page again.";
+                        blockModel.SubmitErrorMessage = "The page id of this page could not be determined. Please try rating this page again.";
                     }
                     else
                     {
