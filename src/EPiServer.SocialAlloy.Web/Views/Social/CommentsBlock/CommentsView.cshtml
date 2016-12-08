@@ -45,9 +45,9 @@
         foreach (var comment in Model.Comments)
         {
             var author = "anonymous";
-            if (!comment.Author.IsEmpty())
+            if (!comment.AuthorUsername.IsEmpty())
             {
-                author = comment.Author.ToString();
+                author = comment.AuthorUsername.ToString();
             }
             <div style="font-weight: bold;">
                 @comment.Created.ToLocalTime() @author said:

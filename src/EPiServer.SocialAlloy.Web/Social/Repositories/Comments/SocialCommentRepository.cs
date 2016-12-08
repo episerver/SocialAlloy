@@ -31,7 +31,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="comment">The comment to add.</param>
         /// <returns>The added comment.</returns>
-        public Comment Add(SocialComment comment)
+        public SocialComment Add(SocialComment comment)
         {
             var newComment = AdaptComment(comment);
             Comment addedComment = null;
@@ -39,6 +39,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 addedComment = this.commentService.Add(newComment);
+
+                if (addedComment == null)
+                    throw new SocialRepositoryException("The newly posted comment could not be added. Please try again");
+
             }
             catch (SocialAuthenticationException ex)
             {
@@ -57,7 +61,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-            return addedComment;
+            return AdaptSocialComment(addedComment);
         }
 
         /// <summary>
@@ -115,20 +119,38 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The EPiServer Social Comment.</returns>
         private Comment AdaptComment(SocialComment comment)
         {
-            return new Comment(Reference.Create(comment.Target), Reference.Create(comment.Author), comment.Body, true);
+            return new Comment(Reference.Create(comment.Target), Reference.Create(comment.AuthorId), comment.Body, true);
+        }
+
+        /// <summary>
+        /// Adapt a Comment to SocialComment.
+        /// </summary>
+        /// <param name="comment">The Episerver Social Comment.</param>
+        /// <returns>The SocialComment.</returns>
+        private SocialComment AdaptSocialComment(Comment comment)
+        {
+            return new SocialComment
+            {
+                AuthorId = comment.Author.ToString(),
+                AuthorUsername = this.userRepository.GetUserName(comment.Author.Id),
+                Body = comment.Body,
+                Target = comment.Parent.ToString(),
+                Created = comment.Created
+            };
         }
 
         /// <summary>
         /// Adapt a list of EPiServer Social Comment to application's SocialComment.
         /// </summary>
-        /// <param name="comment">The list of EPiServer Social Comment.</param>
+        /// <param name="comments">The list of EPiServer Social Comment.</param>
         /// <returns>The list of application SocialComment.</returns>
         private IEnumerable<SocialComment> AdaptSocialComment(List<Comment> comments)
         {
             return comments.Select(c =>
                 new SocialComment
                 {
-                    Author = this.userRepository.GetUser(c.Author.Id).Name,
+                    AuthorId = c.Author.ToString(),
+                    AuthorUsername = this.userRepository.GetUserName(c.Author.Id),
                     Body = c.Body,
                     Target = c.Parent.ToString(),
                     Created = c.Created

@@ -36,11 +36,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             try
             {
-                ratingService.Add(new Rating(
+                var rating = ratingService.Add(new Rating(
                                 Reference.Create(user),
                                 Reference.Create(target),
-                                new RatingValue(value))
-            );
+                                new RatingValue(value)));
+
+                if (rating == null)
+                    throw new SocialRepositoryException("The newly submitted rating could not be added. Please try again");
+
             }
             catch (SocialAuthenticationException ex)
             {
