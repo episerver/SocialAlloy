@@ -20,6 +20,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             FeedDisplayMax = block.FeedDisplayMax;
+            FeedTitle = block.FeedTitle;
             Feed = new List<SocialFeedItemViewModel>();
         }
 
@@ -37,6 +38,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the max number of feed items that should be displayed in the frontend view.
         /// </summary>
         public int FeedDisplayMax { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title associated with any activity feed displayed for the logged in user 
+        /// in the frontend feed block display.
+        /// </summary>
+        public string FeedTitle { get; set; }
 
         /// <summary>
         /// Gets or sets the feed items to display in the feed block.

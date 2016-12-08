@@ -39,6 +39,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 addedComment = this.commentService.Add(newComment);
+
+                if (addedComment == null)
+                    throw new SocialRepositoryException("The newly posted comment could not be added. Please try again");
+
             }
             catch (SocialAuthenticationException ex)
             {

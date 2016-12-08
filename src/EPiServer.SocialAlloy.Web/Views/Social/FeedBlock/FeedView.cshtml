@@ -19,7 +19,7 @@
         }
         else if (Model.Feed.Count() > 0)
         {
-            <h3>Your Activity feed</h3>
+            <h3>@Model.FeedTitle</h3>
             <br />
             foreach (var feedItem in Model.Feed)
             {

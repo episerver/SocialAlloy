@@ -99,7 +99,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             if (errors.Count() == 0)
             {
                 var addedComment = AddComment(formViewModel, blockViewModel);
-                if (addedComment != null && currentBlock.SendActivity)
+                if (BlockModelHasNoErrors(blockViewModel) && currentBlock.SendActivity)
                 {
                     AddCommentActivity(addedComment, blockViewModel);
                 }
@@ -251,6 +251,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     blockViewModel.CommentBody = commentBody.Value.AttemptedValue;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if the block model contains no errors that were encountered while 
+        /// processing the comment that was posted.
+        /// </summary>
+        /// <param name="blockModel">a reference to the CommentsBlockViewModel</param>
+        /// <returns>Returns true if no errors were encountered while processing the comment that was posted, 
+        /// false otherwise.</returns>
+        private static bool BlockModelHasNoErrors(CommentsBlockViewModel blockModel)
+        {
+            return String.IsNullOrEmpty(blockModel.SubmitErrorMessage);
         }
     }
 }
