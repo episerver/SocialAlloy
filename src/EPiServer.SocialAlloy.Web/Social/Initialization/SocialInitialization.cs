@@ -62,7 +62,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
             configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
             configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
-            configuration.For<ISocialGroupRepository>().Use(() => CreateSocialGroupRepository());
+            configuration.For<ISocialGroupRepository>().Use<SocialGroupRepository>();
+            configuration.For<ISocialMemberRepository>().Use<SocialMemberRepository>();
         }
 
         /// <summary>
@@ -74,15 +75,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             return new UserRepository(new UserManager<IdentityUser>(
                     new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()))
             );
-        }
-        /// <summary>
-        /// Create an instance of ISocialGroupRepository.
-        /// </summary>
-        /// <returns>The created SocialGroupRepository instance.</returns>
-        private static ISocialGroupRepository CreateSocialGroupRepository()
-        {
-            var groupService = ServiceLocator.Current.GetInstance<IGroupService>();
-            return new SocialGroupRepository(groupService);
         }
     }
 }

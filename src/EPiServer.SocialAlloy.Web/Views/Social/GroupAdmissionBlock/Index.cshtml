@@ -16,23 +16,25 @@
     }
     @if (!String.IsNullOrWhiteSpace(Model.GroupName))
     {
-
-        @using (Html.BeginForm("Submit", "GroupAdmissionBlock", FormMethod.Post))
+        <h2>Membership submission request for @Model.GroupName group</h2>
+        using (Html.BeginForm("Submit", "GroupAdmissionBlock", FormMethod.Post))
         {
             @Html.HiddenFor(m => m.CurrentBlockLink)
             @Html.HiddenFor(m => m.CurrentPageLink)
             @Html.HiddenFor(m => m.PageId)
             <div>
+                @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
+                @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
                 
             </div>
             <div>
-                <input type="submit" name="submit" value="Add new group">
+                <input type="submit" name="submit" value="Join the @Model.GroupName group">
             </div>
         }
     }
     else
     {
-        <div style="color: red;">A GROUP NAME MUST BE PROVIDED</div>
+        <div style="color: red;">A GROUP NAME MUST BE CONFIGURED TO USE THIS BLOCK</div>
     }
     <br />
 

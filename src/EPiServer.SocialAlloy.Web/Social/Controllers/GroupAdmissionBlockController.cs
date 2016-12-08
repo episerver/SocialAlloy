@@ -21,12 +21,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class GroupAdmissionBlockController : SocialBlockController<GroupAdmissionBlock>
     {
         private readonly ISocialGroupRepository groupRepository;
+        private readonly ISocialMemberRepository memberRepository;
         private const string SubmitSuccessMessage = "SubmitSuccessMessage";
         private const string SubmitErrorMessage = "SubmitErrorMessage";
 
         public GroupAdmissionBlockController()
         {
-            this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
+            groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
+            memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var errorMessage = TempData["SubmitErrorMessage"] == null ? null : TempData["SubmitErrorMessage"].ToString();
 
             //populate model to pass to block view
-            var groupCreationBlockModel = new GroupAdmissionBlockViewModel()
+            var groupAdmissionBlockModel = new GroupAdmissionBlockViewModel()
             {
                 Heading = currentBlock.Heading,
                 CurrentBlockLink = currentBlockLink,
@@ -66,7 +68,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             ModelState.Clear();
 
             //return block view
-            return PartialView("~/Views/Social/GroupAdmissionBlock/Index.cshtml", groupCreationBlockModel);
+            return PartialView("~/Views/Social/GroupAdmissionBlock/Index.cshtml", groupAdmissionBlockModel);
         }
 
         /// <summary>
@@ -78,33 +80,46 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(GroupAdmissionBlockViewModel model)
         {
-            var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
             var groupId = groupRepository.Get(model.GroupName).Id;
 
-            var member = new Member(Reference.Create(""), groupId);
-            
-            //var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
-            //TempData["SubmitErrorMessage"] = validatedInputs ? null : "Group name and description cannot be null or whitespace";
-
-            //if (validatedInputs)
-            //{
-            //    try
-            //    {
-                  
-            //        TempData["SubmitSuccessMessage"] = "Your group: " + model.Name + " was added successfully!";
-            //    }
-            //    catch (SocialRepositoryException ex)
-            //    {
-            //        TempData["SubmitErrorMessage"] = ex.Message;
-            //    }
-            //}
-
+            if (GroupId.IsNullOrEmpty(groupId))
+            {
+                TempData["SubmitErrorMessage"] = "The group name provided does does not exist. An existing group is required for members to join.";
+            }
+            else
+            {
+                var validatedInputs = ValidateMemberInputs(model.MemberName, model.MemberEmail);
+                if (validatedInputs)
+                {
+                    AddMember(model, groupId);
+                }
+                else
+                {
+                    TempData["SubmitErrorMessage"] = "The member name, email and company cannot be empty.";
+                }
+            }
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
 
-        private bool ValidateMemberInputs(string groupName, string groupDescription)
+        private void AddMember(GroupAdmissionBlockViewModel model, GroupId groupId)
         {
-            return !string.IsNullOrWhiteSpace(groupName) && !string.IsNullOrWhiteSpace(groupDescription);
+            try
+            {
+                var member = new Member(Reference.Create(model.MemberName), groupId);
+                var extensionData = new MemberExtensionData(model.MemberEmail, model.MemberCompany);
+
+                memberRepository.Add(member, extensionData);
+                TempData["SubmitSuccessMessage"] = model.MemberName + " was added successfully to the" + model.GroupName + "group!";
+            }
+            catch (SocialRepositoryException ex)
+            {
+                TempData["SubmitErrorMessage"] = ex.Message;
+            }
+        }
+
+        private bool ValidateMemberInputs(string userName, string userEmail)
+        {
+            return !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(userEmail);
         }
     }
 }

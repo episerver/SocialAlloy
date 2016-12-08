@@ -30,16 +30,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="groupService"></param>
-        /// <param name="contentRepository"></param>
-        public GroupCreationBlockController(ISocialGroupRepository groupRepository)
-        {
-            this.groupRepository = groupRepository;
-        }
-
-        /// <summary>
         /// Render the comment block frontend view.
         /// </summary>
         /// <param name="currentBlock">The current frontend block instance.</param>

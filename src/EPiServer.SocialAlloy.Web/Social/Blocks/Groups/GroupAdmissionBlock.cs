@@ -37,7 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         {
             base.SetDefaultValues(contentType);
             Heading = "Social Group Admission";
-            GroupName = "";//GetGroupInfo();
+            GroupName = "defaultGroup";//GetGroupInfo();
         }
 
         private List<string> GetGroupInfo()
