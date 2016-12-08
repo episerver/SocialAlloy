@@ -12,6 +12,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Exceptions
         /// Constructor
         /// </summary>
         /// <param name="message">A custom message for the exception.</param>
+        public SocialRepositoryException(string message)
+            : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="message">A custom message for the exception.</param>
         /// <param name="ex">The inner social exception.</param>
         public SocialRepositoryException(string message, Exception ex) 
             : base(message, ex)

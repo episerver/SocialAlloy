@@ -6,7 +6,7 @@ using EPiServer.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
-    [ContentType(DisplayName = "ActivityStreamsFeedBlock",
+    [ContentType(DisplayName = "Feed Block",
                  GUID = "2bb4ac6d-6f09-4d38-adb0-5dc2bcf310ac",
                  Description = "Configures the properties of a feed block frontend view")]
     public class FeedBlock : BlockData
