@@ -79,7 +79,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Submit handles the submission of a new rating.  It accepts a rating form model,
         /// stores the submitted rating, and redirects back to the current page.
         /// </summary>
-        /// <param name="ratingForm">The rating form being submitted.</param>
+        /// <param name="ratingForm">The rating form that was submitted.</param>
         /// <returns>The submit action result.</returns>
         [HttpPost]
         public ActionResult Submit(RatingFormViewModel ratingForm)
@@ -87,16 +87,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var currentBlock = this.contentRepository.Get<IContentData>(ratingForm.CurrentBlockLink) as RatingBlock;
             var blockModel = new RatingBlockViewModel(currentBlock, ratingForm);
 
-            ValidateRatingForm(ratingForm, blockModel);
+            ValidateSubmitRatingForm(ratingForm, blockModel);
 
             if (String.IsNullOrEmpty(blockModel.SubmitErrorMessage))
             {
-                // Save the rating
+                // Add the rating
                 AddRating(ratingForm.SubmittedRating.Value, blockModel);
 
                 if (currentBlock.SendActivity)
                 {
-                    //Add a rating activity
+                    // Add a rating activity
                     AddActivity(ratingForm.SubmittedRating.Value, blockModel);
                 }
             }
@@ -213,7 +213,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
         }
 
-        private void ValidateRatingForm(RatingFormViewModel ratingForm, RatingBlockViewModel blockModel)
+        /// <summary>
+        /// Validates the rating that was submitted.
+        /// </summary>
+        /// <param name="ratingForm">The rating form that was submitted.</param>
+        /// <param name="blockModel">a reference to the RatingBlockViewModel to 
+        /// populate with validation errors, if any</param>
+        private void ValidateSubmitRatingForm(RatingFormViewModel ratingForm, RatingBlockViewModel blockModel)
         {
             blockModel.SubmitErrorMessage = String.Empty;
 
