@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.Social.ActivityStreams.Core;
+﻿using EPiServer.Social.ActivityStreams.Core;
 using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
@@ -17,6 +16,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         private SocialFeedItemViewModel feedModel;
         private IUserRepository userRepository;
         private IPageRepository pageRepository;
+        private string actor;
+        private string pageName;
 
         /// <summary>
         /// Constructor
@@ -40,11 +41,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
             feedModel = new SocialFeedItemViewModel
             {
                 ActivityDate = composite.Data.ActivityDate,
-                Actor = userRepository.GetUserName(composite.Data.Actor.Id),
-                Target = composite.Data.Target.Id
             };
 
-            //Interpret the activity
+            this.actor = userRepository.GetUserName(composite.Data.Actor.Id);
+            this.pageName = this.pageRepository.GetPageName(composite.Data.Target.Id);
+
+            // Interpret the activity
             composite.Extension.Accept(this);
 
             return this.feedModel;
@@ -59,9 +61,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         public void Visit(SocialCommentActivity activity)
         {
             // Interpret activity and set description.
-            var pageName = this.pageRepository.GetPageName(feedModel.Target);
-            feedModel.Description = String.Format("{0} commented on {1} page [{2}] on {3}", 
-                                    feedModel.Actor, pageName, activity.Body, feedModel.ActivityDate.ToLocalTime());
+            feedModel.Heading = String.Format("{0} commented on \"{1}\".", this.actor, pageName);
+            feedModel.Description = activity.Body;
         }
 
         /// <summary>
@@ -71,9 +72,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         public void Visit(SocialRatingActivity activity)
         {
             // Interpret activity and set description.
-            var pageName = this.pageRepository.GetPageName(feedModel.Target);
-            feedModel.Description = String.Format("{0} rated {1} page with a [{2}] on {3}",
-                                    feedModel.Actor, pageName, activity.Value.ToString(), feedModel.ActivityDate.ToLocalTime());
+            feedModel.Heading = String.Format("{0} rated \"{1}\" with a {2}.", this.actor, pageName, activity.Value);
         }
 
         /// <summary>

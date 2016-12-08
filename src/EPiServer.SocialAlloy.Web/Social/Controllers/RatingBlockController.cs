@@ -89,12 +89,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             ValidateSubmitRatingForm(ratingForm, blockModel);
 
-            if (String.IsNullOrEmpty(blockModel.SubmitErrorMessage))
+            if (BlockModelHasNoErrors(blockModel))
             {
                 // Add the rating
                 AddRating(ratingForm.SubmittedRating.Value, blockModel);
 
-                if (currentBlock.SendActivity)
+                if (BlockModelHasNoErrors(blockModel) && currentBlock.SendActivity)
                 {
                     // Add a rating activity
                     AddActivity(ratingForm.SubmittedRating.Value, blockModel);
@@ -104,6 +104,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SaveModelState(ratingForm.CurrentBlockLink, CollectViewModelStateToSave(blockModel));
 
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
+        }
+
+        /// <summary>
+        /// Returns true if the block model contains no errors that were encountered while 
+        /// processing the rating that was submitted.
+        /// </summary>
+        /// <param name="blockModel">a reference to the RatingBlockViewModel</param>
+        /// <returns>Returns true if no errors were encountered while processing the rating that was submitted, 
+        /// false otherwise.</returns>
+        private static bool BlockModelHasNoErrors(RatingBlockViewModel blockModel)
+        {
+            return String.IsNullOrEmpty(blockModel.SubmitErrorMessage);
         }
 
         /// <summary>
