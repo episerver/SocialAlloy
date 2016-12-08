@@ -76,12 +76,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     {
                         PageInfo = new PageInfo
                         {
-                            PageSize = 0,
-                            CalculateTotalCount = true
+                            PageSize = 1,
+                            CalculateTotalCount = false
                         },
                         Filter = subscriptionFilter
                     }
-                ).TotalCount > 0;
+                ).Results.Count() > 0;
             }
             catch (SocialAuthenticationException ex)
             {

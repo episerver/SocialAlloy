@@ -8,7 +8,6 @@ using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -27,7 +26,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private const string ModelState_SubmitErrorMessage = "SubmitErrorMessage";
         private const string ModelState_UserSubscribedToPage = "UserSubscribedToPage";
         private const string Action_Subscribe = "Subscribe";
-        private const string Action_Unsubscribe = "Unssubscribe";
+        private const string Action_Unsubscribe = "Unsubscribe";
         private const string SubmitSuccessMessage = "Your request was processed successfully!";
 
         /// <summary>

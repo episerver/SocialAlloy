@@ -55,7 +55,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public virtual int CommentsDisplayMax { get; set; }
 
         /// <summary>
-        /// Configures whether an activity should be sent to the Episerver Social ActivityStreams system.
+        /// Configures whether an activity should be sent to the Episerver Social Activity Streams system.
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,

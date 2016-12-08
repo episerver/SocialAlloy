@@ -42,7 +42,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                                 new RatingValue(value)));
 
                 if (rating == null)
-                    throw new SocialRepositoryException("The newly submitted rating could not be added, please try again");
+                    throw new SocialRepositoryException("The newly submitted rating could not be added. Please try again");
 
             }
             catch (SocialAuthenticationException ex)

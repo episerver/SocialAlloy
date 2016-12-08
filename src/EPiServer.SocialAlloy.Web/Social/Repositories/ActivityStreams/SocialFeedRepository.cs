@@ -45,7 +45,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="filter">a filter by which to retrieve feed items by</param>
         /// <returns>A list of feed items.</returns>
-        public IEnumerable<SocialFeedViewModel> Get(SocialFeedFilter filter)
+        public IEnumerable<SocialFeedItemViewModel> Get(SocialFeedFilter filter)
         {
             var feedItems = new List<Composite<FeedItem, SocialActivity>>();
 
@@ -88,7 +88,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return AdaptSocialActivityFeedItems(feedItems);
         }
 
-        private IEnumerable<SocialFeedViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
+        private IEnumerable<SocialFeedItemViewModel> AdaptSocialActivityFeedItems(List<Composite<FeedItem, SocialActivity>> feedItems)
         {
             return feedItems.Select(c => this.activityAdapter.Adapt(c));
         }

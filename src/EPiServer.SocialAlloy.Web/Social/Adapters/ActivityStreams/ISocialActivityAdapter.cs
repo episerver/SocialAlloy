@@ -11,11 +11,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
     public interface ISocialActivityAdapter
     {
         /// <summary>
-        /// Adpats a Composite feed item with SocialActivity as payload to a SocialFeedViewModel
+        /// Adapts a Composite feed item with SocialActivity as payload to a SocialFeedItemViewModel
         /// </summary>
         /// <param name="composite">the composite feed item with SocialActivity as payload to be adapted</param>
-        /// <returns>the adapted SocialFeedViewModel</returns>
-        SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite);
+        /// <returns>the adapted SocialFeedItemViewModel</returns>
+        SocialFeedItemViewModel Adapt(Composite<FeedItem, SocialActivity> composite);
 
         /// <summary>
         /// Interprets a SocialActivity

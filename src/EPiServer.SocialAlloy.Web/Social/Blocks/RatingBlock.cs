@@ -33,7 +33,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
 
         /// <summary>
         /// Configures whether an activity should be sent to the Episerver Social 
-        /// ActivityStreams system when a rating a submitted using the rating block.
+        /// Activity Streams system when a rating a submitted using the rating block.
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
@@ -60,7 +60,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             ShowHeading = false;
 
             // By default send a rating activity to the Episerver Social 
-            // ActivityStreams system when a rating a submitted.
+            // Activity Streams system when a rating a submitted.
             SendActivity = true;
 
             // For the sake of the simplicity of this sample we allow items 

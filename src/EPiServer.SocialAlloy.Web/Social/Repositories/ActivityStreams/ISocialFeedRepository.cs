@@ -15,6 +15,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="filter">a feed item filter to filter the feed items by</param>
         /// <returns>A list of feed items.</returns>
-        IEnumerable<SocialFeedViewModel> Get(SocialFeedFilter filter);
+        IEnumerable<SocialFeedItemViewModel> Get(SocialFeedFilter filter);
     }
 }

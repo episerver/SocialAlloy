@@ -99,12 +99,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             if (errors.Count() == 0)
             {
                 var addedComment = AddComment(formViewModel, blockViewModel);
-                if (addedComment != null)
+                if (addedComment != null && currentBlock.SendActivity)
                 {
-                    if (currentBlock.SendActivity)
-                    {
-                        AddCommentActivity(addedComment, blockViewModel);
-                    }
+                    AddCommentActivity(addedComment, blockViewModel);
                 }
             }
             else
@@ -155,7 +152,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     Body = comment.Body
                 };
 
-                this.activityRepository.Add<SocialCommentActivity>(comment.AuthorId, comment.Target, commentActivity);
+                this.activityRepository.Add(comment.AuthorId, comment.Target, commentActivity);
             }
             catch (SocialRepositoryException ex)
             {

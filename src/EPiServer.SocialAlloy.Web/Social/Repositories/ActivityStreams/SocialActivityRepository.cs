@@ -24,15 +24,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adds an activity to the EPiServer Social ActivityStreams system.
+        /// Adds an activity to the EPiServer Social Activity Streams system.
         /// </summary>
-        /// <typeparam name="T">Type of the activity</typeparam>
         /// <param name="actor">the actor who initiated the activity</param>
         /// <param name="target">the target of the activity</param>
         /// <param name="activity">an instance of SocialActivity</param>
         /// <exception cref="SocialRepositoryException">Thrown when errors occur 
         /// interacting with the Social cloud services.</exception>
-        public void Add<T>(string actor, string target, T activity) where T : SocialActivity
+        public void Add(string actor, string target, SocialActivity activity)
         {
             try
             {

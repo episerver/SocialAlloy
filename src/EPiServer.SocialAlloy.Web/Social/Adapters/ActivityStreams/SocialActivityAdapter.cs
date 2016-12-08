@@ -10,13 +10,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
     /// <summary>
     /// The SocialActivityAdapter class encapsulates a set of operations used for adapting and 
     /// interpreting various types of Social activities in the Episerver Social sample and 
-    /// converting them to a SocialFeedViewModel.
+    /// converting them to a SocialFeedItemViewModel.
     /// </summary>
     public class SocialActivityAdapter : ISocialActivityAdapter
     {
-        private SocialFeedViewModel feedModel;
+        private SocialFeedItemViewModel feedModel;
         private IUserRepository userRepository;
-        private IContentRepository contentRepository;
         private IPageRepository pageRepository;
 
         /// <summary>
@@ -31,14 +30,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         }
 
         /// <summary>
-        /// Adpats a Composite feed item with SocialActivity as payload to a SocialFeedViewModel
+        /// Adpats a Composite feed item with SocialActivity as payload to a SocialFeedItemViewModel
         /// </summary>
         /// <param name="composite"></param>
         /// <returns></returns>
-        public SocialFeedViewModel Adapt(Composite<FeedItem, SocialActivity> composite)
+        public SocialFeedItemViewModel Adapt(Composite<FeedItem, SocialActivity> composite)
         {
-            // Create and populate the SocialFeedViewModel 
-            feedModel = new SocialFeedViewModel
+            // Create and populate the SocialFeedItemViewModel 
+            feedModel = new SocialFeedItemViewModel
             {
                 ActivityDate = composite.Data.ActivityDate,
                 Actor = userRepository.GetUserName(composite.Data.Actor.Id),

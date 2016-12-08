@@ -19,7 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialFeedRepository feedRepository;
-        private const string errorGettingUserIdMessage = "There was an error identifying the logged in user.Please make sure you are logged in and try again.";
+        private const string ErrorGettingUserIdMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
 
         /// <summary>
         /// Constructor
@@ -66,7 +66,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
-                    blockViewModel.FeedItems =
+                    blockViewModel.Feed =
                         this.feedRepository.Get(new SocialFeedFilter
                         {
                             Subscriber = userId,
@@ -75,7 +75,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockViewModel.DisplayErrorMessage = errorGettingUserIdMessage;
+                    blockViewModel.DisplayErrorMessage = ErrorGettingUserIdMessage;
                 }
             }
             catch (SocialRepositoryException ex)
