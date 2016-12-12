@@ -64,17 +64,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         }
 
         /// <summary>
-        /// Gets the page Id given its page reference.
-        /// </summary>
-        /// <param name="pageLink">The page reference.</param>
-        /// <returns>The page Id.</returns>
-        protected string GetPageId(PageReference pageLink)
-        {
-            var pageData = contentRepository.Get<PageData>(pageLink as ContentReference);
-            return pageData != null ? pageData.ContentGuid.ToString() : String.Empty;
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="block">A block reference used to composed a qualified model state key.</param>

@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
     /// <summary>
     /// The RatingBlock class defines the configuration used for rendering rating views.
     /// </summary>
-    [ContentType(DisplayName = "RatingBlock", 
+    [ContentType(DisplayName = "Rating Block", 
                  GUID = "069e2c52-fd48-49c5-8993-7a0347ea1f78", 
                  Description = "Configures the frontend view properties of a rating block")]
     public class RatingBlock : BlockData
@@ -32,6 +32,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         public virtual bool ShowHeading { get; set; }
 
         /// <summary>
+        /// Configures whether an activity should be sent to the Episerver Social 
+        /// Activity Streams system when a rating a submitted using the rating block.
+        /// </summary>
+        [Display(
+            GroupName = SystemTabNames.Content,
+            Order = 1)]
+        public virtual bool SendActivity { get; set; }
+
+        /// <summary>
         /// Configures the list of possible rating values that can be submitted using this rating block.
         /// </summary>
         [Editable(false)]
@@ -49,6 +58,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
 
             // By default do not display a heading on the rating block
             ShowHeading = false;
+
+            // By default send a rating activity to the Episerver Social 
+            // Activity Streams system when a rating a submitted.
+            SendActivity = true;
 
             // For the sake of the simplicity of this sample we allow items 
             // to be rated on a scale of 1 through 5 by initializing this

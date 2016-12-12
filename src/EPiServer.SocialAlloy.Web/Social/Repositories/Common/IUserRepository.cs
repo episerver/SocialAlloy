@@ -18,11 +18,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         string GetUserId(IPrincipal Identity);
 
         /// <summary>
-        /// Queries the underlying datastore and returns the user whose identifier 
-        /// matches the specified reference identifier.
+        /// Queries the underlying datastore and returns the name of the user whose 
+        /// identifier matches the specified reference identifier.
         /// </summary>
         /// <param name="id">User Id to search by</param>
-        /// <returns>The User object.</returns>
-        User GetUser(string id);
+        /// <returns>The user name.</returns>
+        string GetUserName(string id);
     }
 }
