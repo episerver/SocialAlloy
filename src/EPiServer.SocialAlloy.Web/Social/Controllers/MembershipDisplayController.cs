@@ -1,15 +1,14 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
+using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
-using EPiServer.Web.Routing;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -21,8 +20,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialMemberRepository memberRepository;
-        private const string SubmitSuccessMessage = "SubmitSuccessMessage";
-        private const string SubmitErrorMessage = "SubmitErrorMessage";
 
         public MembershipDisplayController()
         {
@@ -38,42 +35,51 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(MembershipDisplayBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var successMessage = TempData["SubmitSuccessMessage"] == null ? null : TempData["SubmitSuccessMessage"].ToString();
-            var errorMessage = TempData["SubmitErrorMessage"] == null ? null : TempData["SubmitErrorMessage"].ToString();
 
-            //populate model to pass to block view
+            //populate model to pass to view
             var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel()
             {
                 Heading = currentBlock.Heading,
+                ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
-                PageId = pageRouteHelper.Page.ContentGuid.ToString(),
                 CurrentPageLink = pageRouteHelper.PageLink,
-                SubmitSuccessMessage = successMessage,
-                SubmitErrorMessage = errorMessage,
                 GroupName = currentBlock.GroupName
             };
 
             //retieve the group id assigned to the block
             var groupId = groupRepository.Get(currentBlock.GroupName).Id;
-
-            //validate the groupId
             if (GroupId.IsNullOrEmpty(groupId))
             {
-                TempData["SubmitErrorMessage"] = "The group name provided does does not exist. An existing group is required for members to join.";
+                membershipDisplayBlockModel.SubmitErrorMessage = "The group name provided does does not exist. An existing group is required for members to join.";
+                membershipDisplayBlockModel.MemberList = new List<Composite<Member, MemberExtensionData>>();
             }
             else
             {
-                var memberList = memberRepository.Get(groupId).ToList();
-                if (memberList != null && memberList.Any())
-                {
-                    membershipDisplayBlockModel.MemberList = memberList;
-                }
+                RetrieveMemberList(currentBlock, membershipDisplayBlockModel, groupId);
             }
 
             //return block view
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
         }
 
+        private void RetrieveMemberList(MembershipDisplayBlock currentBlock, MembershipDisplayBlockViewModel membershipDisplayBlockModel, GroupId groupId)
+        {
+            var memberFilter = new SocialMemberFilter
+            {
+                GroupId = groupId,
+                PageOffset = currentBlock.MemberDisplayPageOffset,
+                PageSize = currentBlock.MemberDisplayPageSize
+            };
+
+            var memberList = memberRepository.Get(memberFilter);
+
+            ValidateMemberList(membershipDisplayBlockModel, memberList);
+        }
+
+        private static void ValidateMemberList(MembershipDisplayBlockViewModel membershipDisplayBlockModel, IEnumerable<Composite<Member, MemberExtensionData>> memberList)
+        {
+            membershipDisplayBlockModel.MemberList = memberList != null && memberList.Any() ? memberList.ToList() : new List<Composite<Member, MemberExtensionData>>();
+        }
 
         private bool ValidateMemberInputs(string userName, string userEmail)
         {

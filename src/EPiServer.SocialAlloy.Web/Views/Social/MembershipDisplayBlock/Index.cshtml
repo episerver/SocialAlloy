@@ -1,0 +1,35 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using EPiServer.SocialAlloy.Web.Social.Models.Groups
+@model MembershipDisplayBlockViewModel
+<div>
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
+
+    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
+    {
+        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
+    }
+
+    @if (Model.MemberList != null || Model.MemberList.Any())
+    {
+        <div class="row">
+            <div class="span6">
+                <div>
+                    <table class="table table-striped">
+                        <tr><th><u>Member</u></th><th><u>Company</u></th></tr>
+                        @foreach (var member in Model.MemberList)
+                        {
+                            <tr>
+                                <td><strong>@member.Data.User.Id</strong></td>
+                                <td> @member.Extension.Company </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

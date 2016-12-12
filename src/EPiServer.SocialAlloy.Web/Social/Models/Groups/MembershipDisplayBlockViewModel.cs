@@ -16,18 +16,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
     /// </summary>
     public class MembershipDisplayBlockViewModel 
     {
-        public string Heading { get; set; }
         /// <summary>
-        /// A success message that should be flashed in the view.
+        /// Gets or sets the heading for the membership display block.
         /// </summary>
-        public string SubmitSuccessMessage { get; set; }
+        public string Heading { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to show the block heading .
+        /// </summary>
+        public bool ShowHeading { get; set; }
 
         /// <summary>
         /// A error message that should be flashed in the view.
         /// </summary>
         public string SubmitErrorMessage { get; set; }
 
-        //Gets and sets the name of the group that a user will be added to. 
+        /// <summary>
+        /// Members displayed in the view will be associated with the group name provided in the admin view.
+        /// </summary>
         public string  GroupName { get; set; }
 
         /// <summary>
@@ -36,17 +42,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public List<Composite<Member, MemberExtensionData>> MemberList { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference link of the page containing the group admission block.
+        /// Gets or sets the reference link of the page containing the membership display block.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique identifier of the page containing the group admission block.
+        /// Gets or sets the unique identifier of the page containing the membership display  block.
         /// </summary>
         public string PageId { get; set; }
 
         /// <summary>
-        /// Gets or sets the reference link of the block containing the group admission form.
+        /// Gets or sets the reference link of the block containing the membership display  form.
         /// </summary>
         public ContentReference CurrentBlockLink { get; set; } 
     }

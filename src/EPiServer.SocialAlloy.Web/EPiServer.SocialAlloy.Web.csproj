@@ -407,6 +407,8 @@
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
+    <Compile Include="Social\Models\Groups\SocialMember.cs" />
+    <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />
@@ -701,14 +703,16 @@
     <None Include="Setup\Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <Content Include="Views\Social\SubscriptionBlock\SubscriptionView.cshtml" />
     <Content Include="Views\Social\FeedBlock\FeedView.cshtml" />
     <Content Include="Views\Social\GroupCreationBlock\Index.cshtml" />
     <Content Include="Views\Social\GroupAdmissionBlock\Index.cshtml" />
-    <Content Include="Views\Social\MemberDisplayBlock\Index.cshtml" />
+    <Content Include="Views\Social\MembershipDisplayBlock\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

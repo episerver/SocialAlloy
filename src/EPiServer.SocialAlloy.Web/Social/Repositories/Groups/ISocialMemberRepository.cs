@@ -16,13 +16,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="member">The member to add.</param>
         /// <returns>The added member.</returns>
-        Composite<Member, MemberExtensionData> Add(Member member, MemberExtensionData memberExtension);
+        Composite<Member, MemberExtensionData> Add(SocialMember member, MemberExtensionData memberExtension);
 
         /// <summary>
         /// Retrieves a list of members to the underlying member repository.
         /// </summary>
         /// <param name="groupId">The groupId of the group the members are a part of.</param>
         /// <returns>The list of members that are part of the specified group.</returns>
-        IEnumerable<Composite<Member, MemberExtensionData>> Get(GroupId groupId);
+        IEnumerable<Composite<Member, MemberExtensionData>> Get(SocialMemberFilter memberFilter);
     }
 }

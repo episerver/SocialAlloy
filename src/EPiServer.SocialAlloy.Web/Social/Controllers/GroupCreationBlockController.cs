@@ -4,25 +4,19 @@ using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
-using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The CommentsBlockController handles the rendering the comment block frontend view as well
-    /// as the posting of new comments.
+    /// The GroupCreationBlockController handles rendering the Group Creation block view 
     /// </summary>
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
         private readonly ISocialGroupRepository groupRepository;
-        private const string SubmitSuccessMessage = "SubmitSuccessMessage";
-        private const string SubmitErrorMessage = "SubmitErrorMessage";
 
         public GroupCreationBlockController()
         {
@@ -30,22 +24,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Render the comment block frontend view.
+        /// Render the GroupCreationBlock view.
         /// </summary>
-        /// <param name="currentBlock">The current frontend block instance.</param>
+        /// <param name="currentBlock">The current block instance.</param>
         /// <returns></returns>
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var successMessage = TempData["SubmitSuccessMessage"] == null ? null : TempData["SubmitSuccessMessage"].ToString();
-            var errorMessage = TempData["SubmitErrorMessage"] == null ? null : TempData["SubmitErrorMessage"].ToString();
+            var successMessage = TempData["GroupCreationSuccessMessage"] == null ? null : TempData["GroupCreationSuccessMessage"].ToString();
+            var errorMessage = TempData["GroupCreationErrorMessage"] == null ? null : TempData["GroupCreationErrorMessage"].ToString();
 
             //populate model to pass to block view
             var groupCreationBlockModel = new GroupCreationBlockViewModel()
             {
                 Heading = currentBlock.Heading,
+                ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
-                PageId = pageRouteHelper.Page.ContentGuid.ToString(),
                 CurrentPageLink = pageRouteHelper.PageLink,
                 SubmitSuccessMessage = successMessage,
                 SubmitErrorMessage = errorMessage
@@ -70,23 +64,31 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
 
             var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
-            TempData["SubmitErrorMessage"] = validatedInputs ? null : "Group name and description cannot be null or whitespace";
+            
+            AddGroup(model, validatedInputs);
 
+            return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
+        }
+
+        private void AddGroup(GroupCreationBlockViewModel model, bool validatedInputs)
+        {
             if (validatedInputs)
             {
                 try
                 {
                     var group = new Group(model.Name, model.Description);
                     this.groupRepository.Add(group);
-                    TempData["SubmitSuccessMessage"] = "Your group: " + model.Name + " was added successfully!";
+                    TempData["GroupCreationSuccessMessage"] = "Your group: " + model.Name + " was added successfully!";
                 }
                 catch (SocialRepositoryException ex)
                 {
-                    TempData["SubmitErrorMessage"] = ex.Message;
+                    TempData["GroupCreationErrorMessage"] = ex.Message;
                 }
             }
-
-            return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
+            else
+            {
+                TempData["GroupCreationErrorMessage"] = "Group name and description cannot be null or whitespace";
+            }
         }
 
         private bool ValidateGroupInputs(string groupName, string groupDescription)

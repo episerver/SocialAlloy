@@ -2,9 +2,11 @@
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
 @model GroupCreationBlockViewModel
 <div>
-    <h2 @Html.EditAttributes(m => m.Heading)>@Model.Heading</h2>
-    <hr />
-
+    @if (Model.ShowHeading)
+    {
+        <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+        <hr />
+    }
    
     @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
     {

@@ -9,12 +9,21 @@ using System.Web;
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
     /// <summary>
-    /// The CommentsBlockViewModel class represents the model that will be used to
-    /// feed data to the comments block frontend view.
+    /// The GroupCreationsBlockViewModel class represents the model that will be used to
+    /// feed data to the GroupCreation block frontend view.
     /// </summary>
-    public class GroupCreationBlockViewModel 
+    public class GroupCreationBlockViewModel
     {
+        /// <summary>
+        /// Gets or sets the heading for the Group Creation block.
+        /// </summary>
         public string Heading { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether to show the block heading .
+        /// </summary>
+        public bool ShowHeading { get; set; }
+
         /// <summary>
         /// A success message that should be flashed in the view.
         /// </summary>
