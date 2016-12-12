@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The MembershipDisplayController handles the rendering the list of members of a pre-designated group in the MembershipDisplayBlockView
+    /// The MembershipDisplayController handles the rendering of the list of members  from the designated group set in the admin view
     /// </summary>
     public class MembershipDisplayController : SocialBlockController<MembershipDisplayBlock>
     {
@@ -28,9 +28,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Render the comment block frontend view.
+        /// Render the Membership Display block view.
         /// </summary>
-        /// <param name="currentBlock">The current frontend block instance.</param>
+        /// <param name="currentBlock">The current block instance.</param>
         /// <returns></returns>
         public override ActionResult Index(MembershipDisplayBlock currentBlock)
         {
@@ -41,13 +41,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Heading = currentBlock.Heading,
                 ShowHeading = currentBlock.ShowHeading,
-                CurrentBlockLink = currentBlockLink,
-                CurrentPageLink = pageRouteHelper.PageLink,
                 GroupName = currentBlock.GroupName
             };
 
             //retieve the group id assigned to the block
             var groupId = groupRepository.Get(currentBlock.GroupName).Id;
+
             if (GroupId.IsNullOrEmpty(groupId))
             {
                 membershipDisplayBlockModel.SubmitErrorMessage = "The group name provided does does not exist. An existing group is required for members to join.";
@@ -62,6 +61,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
         }
 
+        //Retrieves a list of members to populates the view model with. 
         private void RetrieveMemberList(MembershipDisplayBlock currentBlock, MembershipDisplayBlockViewModel membershipDisplayBlockModel, GroupId groupId)
         {
             var memberFilter = new SocialMemberFilter

@@ -17,12 +17,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public GroupId GroupId { get; set; }
 
         /// <summary>
-        /// The number of comments to retrieve.
+        /// The number of members to retrieve.
         /// </summary>
         public int PageSize { get; set; }
 
         /// <summary>
-        /// The offset to start retrieving the next page of comments from.
+        /// The offset to start retrieving the next page of members from.
         /// </summary>
         public int PageOffset { get; set; }
     }

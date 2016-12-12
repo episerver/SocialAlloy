@@ -18,6 +18,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The added group.</returns>
         Group Add(Group group);
 
+        /// <summary>
+        /// Retrieves a group based on the name of the group provided.
+        /// </summary>
+        /// <param name="groupName">The name of the group that is to be retrieved from the underlying data store.</param>
+        /// <returns>The desired group.</returns>
         Group Get(string groupName);
 
     }

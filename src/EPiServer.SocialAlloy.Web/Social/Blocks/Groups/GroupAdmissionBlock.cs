@@ -40,6 +40,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
              Order = 1)]
         [CultureSpecific]
         public virtual string GroupName { get; set; }
+       
         /// <summary>
         /// Sets the default property values on the content data.
         /// </summary>

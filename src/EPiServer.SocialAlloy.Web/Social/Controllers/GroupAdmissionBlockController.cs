@@ -14,7 +14,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The GroupAdmissionBlockController handles the rendering the group admission  block frontend view.
+    /// The GroupAdmissionBlockController handles rendering the Group Admission block view for adding new members to a group
     /// </summary>
     public class GroupAdmissionBlockController : SocialBlockController<GroupAdmissionBlock>
     {
@@ -58,10 +58,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Submit handles the submission of new groups.  It accepts a GroupAdmissionBlockViewModel,
+        /// Submit handles the admission of new members to existing groups.  It accepts a GroupAdmissionBlockViewModel,
         /// stores the submitted group, and redirects back to the current page.
         /// </summary>
-        /// <param name="groupCreationForm">The group being submitted.</param>
+        /// <param name="model">The group admission model being submitted.</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult Submit(GroupAdmissionBlockViewModel model)

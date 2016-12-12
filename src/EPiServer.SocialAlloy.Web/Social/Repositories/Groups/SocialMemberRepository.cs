@@ -21,7 +21,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Adds a member to the EPiServer Social member repository.
         /// </summary>
-        /// <param name="member">The member to add.</param>
+        /// <param name="socialMember">The member to add.</param>
+        /// <param name="memberExtension">The member extension data to add.</param>
         /// <returns>The added member.</returns>
         public Composite<Member, MemberExtensionData> Add(SocialMember socialMember, MemberExtensionData memberExtension)
         {
@@ -56,7 +57,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// Retrieves a page members from the EPiServer Social member repository.
         /// </summary>
         /// <param name="socialMemberFilter">The social filter used to properly construct the composite filter used to return members.</param>
-        /// <returns>The list of members of that group member.</returns>
+        /// <returns>The list of members that are part of the specified group.</returns>
         public IEnumerable<Composite<Member, MemberExtensionData>> Get(SocialMemberFilter socialMemberFilter)
         {
             IEnumerable<Composite<Member, MemberExtensionData>> returnedMembers = null;

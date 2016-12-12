@@ -56,10 +56,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adds a group to the EPiServer Social group repository.
+        /// Retrieves a group based on the name of the group provided.
         /// </summary>
-        /// <param name="group">The group to add.</param>
-        /// <returns>The added group.</returns>
+        /// <param name="groupName">The name of the group that is to be retrieved from the underlying data store.</param>
+        /// <returns>The desired group.</returns>
         public Group Get(string groupName)
         {
             Group group = null;

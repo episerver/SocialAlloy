@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The GroupCreationBlockController handles rendering the Group Creation block view 
+    /// The GroupCreationBlockController handles rendering the Group Creation block view for adding new groups
     /// </summary>
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
@@ -53,10 +53,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Submit handles the submitting of new groups.  It accepts a group creation form model,
+        /// Submit handles the creation of new groups.  It accepts a GroupCreationBlockViewModel,
         /// stores the submitted group, and redirects back to the current page.
         /// </summary>
-        /// <param name="groupCreationForm">The group form being submitted.</param>
+        /// <param name="model">The model submitted.</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult Submit(GroupCreationBlockViewModel model)
