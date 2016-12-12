@@ -67,8 +67,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var memberFilter = new SocialMemberFilter
             {
                 GroupId = groupId,
-                PageOffset = currentBlock.MemberDisplayPageOffset,
-                PageSize = currentBlock.MemberDisplayPageSize
+                PageOffset = currentBlock.DisplayPageOffset,
+                PageSize = currentBlock.DisplayPageSize
             };
 
             var memberList = memberRepository.Get(memberFilter);
