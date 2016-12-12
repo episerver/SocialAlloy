@@ -1,4 +1,5 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Common.Models;
+using EPiServer.SocialAlloy.Web.Social.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;

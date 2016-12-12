@@ -15,7 +15,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="comment">The comment to add.</param>
         /// <returns>The added comment.</returns>
-        Comment Add(SocialComment comment);
+        SocialComment Add(SocialComment comment);
 
         /// <summary>
         /// Gets comments from the underlying comment repository based on a filter.

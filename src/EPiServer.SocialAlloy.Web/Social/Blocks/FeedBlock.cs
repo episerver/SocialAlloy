@@ -6,7 +6,7 @@ using EPiServer.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks
 {
-    [ContentType(DisplayName = "ActivityStreamsFeedBlock",
+    [ContentType(DisplayName = "Feed Block",
                  GUID = "2bb4ac6d-6f09-4d38-adb0-5dc2bcf310ac",
                  Description = "Configures the properties of a feed block frontend view")]
     public class FeedBlock : BlockData
@@ -25,7 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 2)]
         public virtual bool ShowHeading { get; set; }
 
         /// <summary>
@@ -33,8 +33,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 3)]
         public virtual int FeedDisplayMax { get; set; }
+
+        /// <summary>
+        /// Configures the title associated with any activity feed displayed for the logged in user 
+        /// in the frontend feed block display.
+        /// </summary>
+        [Display(
+        GroupName = SystemTabNames.Content,
+            Order = 4)]
+        public virtual string FeedTitle { get; set; }
 
         /// <summary>
         /// Sets the default configuration values.
@@ -45,6 +54,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             base.SetDefaultValues(contentType);
             ShowHeading = false;
             Heading = "Activity Feed";
+            FeedTitle = "Your activity feed";
             FeedDisplayMax = 20;
         }
     }

@@ -57,11 +57,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public double Average { get; set; }
 
         /// <summary>
-        /// User who submitted the rating.
-        /// </summary>
-        public string Rater { get; set; }
-
-        /// <summary>
         /// The existing rating, if any submitted by Rater for the page containing the rating block.
         /// </summary>
         public int? CurrentRating { get; set; }
