@@ -4,6 +4,7 @@ using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
@@ -14,7 +15,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The MembershipDisplayController handles the rendering of the list of members  from the designated group set in the admin view
+    /// The MembershipDisplayController handles the rendering of the list of members from the designated group configured in the admin view
     /// </summary>
     public class MembershipDisplayController : SocialBlockController<MembershipDisplayBlock>
     {
@@ -28,15 +29,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Render the Membership Display block view.
+        /// Render the membership display block view.
         /// </summary>
         /// <param name="currentBlock">The current block instance.</param>
-        /// <returns></returns>
         public override ActionResult Index(MembershipDisplayBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
-            //populate model to pass to view
+            //Populate model to pass to the membership display view
             var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel()
             {
                 Heading = currentBlock.Heading,
@@ -44,46 +44,55 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GroupName = currentBlock.GroupName
             };
 
-            //retieve the group id assigned to the block
+            //Retrieve the group id assigned to the block
             var groupId = groupRepository.Get(currentBlock.GroupName).Id;
 
             if (GroupId.IsNullOrEmpty(groupId))
             {
-                membershipDisplayBlockModel.SubmitErrorMessage = "The group name provided does does not exist. An existing group is required for members to join.";
-                membershipDisplayBlockModel.MemberList = new List<Composite<Member, MemberExtensionData>>();
+                membershipDisplayBlockModel.Messages = PopulateErrorMessage();
+                membershipDisplayBlockModel.MemberList = new List<SocialCompositeMember>();
             }
             else
             {
-                RetrieveMemberList(currentBlock, membershipDisplayBlockModel, groupId);
+                membershipDisplayBlockModel.Messages = new List<MessageViewModel>();
+                membershipDisplayBlockModel.MemberList = RetrieveMemberList(currentBlock, groupId);
             }
 
-            //return block view
+            //Return block view with populated model
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
         }
 
-        //Retrieves a list of members to populates the view model with. 
-        private void RetrieveMemberList(MembershipDisplayBlock currentBlock, MembershipDisplayBlockViewModel membershipDisplayBlockModel, GroupId groupId)
+        /// <summary>
+        /// Populates the messages that will be displayed to the user in the membership display view.
+        /// </summary>
+        /// <returns>A list of messages used to convey statuses to the user</returns>
+        private List<MessageViewModel> PopulateErrorMessage()
         {
+            var errorMessageBody = "The group name provided does does not exist. An existing group is required for members to join.";
+            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
+
+            return new List<MessageViewModel> { errorMessage };
+        }
+
+        //Retrieves a list of members to populate the view model with. 
+        private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlock currentBlock, GroupId groupId)
+        {
+            //Constructs a social member filter with groupId from the model and paging information that was configured in admin view
             var memberFilter = new SocialMemberFilter
             {
                 GroupId = groupId,
-                PageOffset = currentBlock.DisplayPageOffset,
                 PageSize = currentBlock.DisplayPageSize
             };
 
+            //Retrieves the list of members
             var memberList = memberRepository.Get(memberFilter);
-
-            ValidateMemberList(membershipDisplayBlockModel, memberList);
+            return ValidateMemberList(memberList);
         }
 
-        private static void ValidateMemberList(MembershipDisplayBlockViewModel membershipDisplayBlockModel, IEnumerable<Composite<Member, MemberExtensionData>> memberList)
+        //Validates the list of members
+        private static List<SocialCompositeMember> ValidateMemberList(IEnumerable<SocialCompositeMember> memberList)
         {
-            membershipDisplayBlockModel.MemberList = memberList != null && memberList.Any() ? memberList.ToList() : new List<Composite<Member, MemberExtensionData>>();
-        }
-
-        private bool ValidateMemberInputs(string userName, string userEmail)
-        {
-            return !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(userEmail);
+            return memberList != null && memberList.Any() ? memberList.ToList() : new List<SocialCompositeMember>();
         }
     }
 }

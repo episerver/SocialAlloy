@@ -8,27 +8,23 @@
         <hr />
     }
    
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
-    {
-        <div id="successMessage" style="color: green;">@Model.SubmitSuccessMessage</div>
-    }
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-    {
-        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
-    }
+   @foreach (var message in Model.Messages)
+   {
+       var messageStyle = message.ResolveStyle(message.Type);
+       <div style="color:@messageStyle">@message.Body</div>
+   }
    
     @using (Html.BeginForm("Submit", "GroupCreationBlock", FormMethod.Post))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
-        @Html.HiddenFor(m => m.PageId)
         <div>
             @Html.TextBoxFor(m => m.Name,  new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
 
             @Html.TextAreaFor(m => m.Description, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
         </div>
         <div>
-            <input type="submit" name="submit" value="Add new group">
+            <input type="submit" name="submit" value="Add">
         </div>
     }
     <br />

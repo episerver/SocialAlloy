@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
     /// <summary>
     /// The GroupCreationBlock class defines the configuration used for rendering group creation views.
     /// </summary>
-    [ContentType(DisplayName = "Group Creation Block", GUID = "efed721d-05bf-4d69-8e27-b907699a13c3", Description = "Social Group Creation")]
+    [ContentType(DisplayName = "Group Creation Block", GUID = "efed721d-05bf-4d69-8e27-b907699a13c3", Description = "Configures the properties of a group creation block view")]
     public class GroupCreationBlock : BlockData
     {
         /// <summary>
@@ -37,7 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         {
             base.SetDefaultValues(contentType);
             ShowHeading = false;
-            Heading = "Social Group Creation";
+            Heading = "Group Creation";
         }
     }
 }

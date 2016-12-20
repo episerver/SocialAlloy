@@ -1,4 +1,6 @@
 ﻿using EPiServer.Core;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
+using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
@@ -19,14 +21,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// A success message that should be flashed in the view.
+        /// Contains the infromation for displaying messaging to the user in the view
         /// </summary>
-        public string SubmitSuccessMessage { get; set; }
-
-        /// <summary>
-        /// A error message that should be flashed in the view.
-        /// </summary>
-        public string SubmitErrorMessage { get; set; }
+        public List<MessageViewModel> Messages { get; set; }
 
         //Gets and sets the name of the group that a user will be added to. 
         public string  GroupName { get; set; }
@@ -47,11 +44,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets or sets the reference link of the page containing the group admission block.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the page containing the group admission block.
-        /// </summary>
-        public string PageId { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the block containing the group admission form.

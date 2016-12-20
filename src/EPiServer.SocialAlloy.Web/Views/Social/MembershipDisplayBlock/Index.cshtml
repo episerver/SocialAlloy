@@ -8,10 +8,11 @@
         <hr />
     }
 
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-    {
-        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
-    }
+   @foreach (var message in Model.Messages)
+   {
+       var messageStyle = message.ResolveStyle(message.Type);
+    <div style="color:@messageStyle">@message.Body</div>
+   }
 
     @if (Model.MemberList != null || Model.MemberList.Any())
     {
@@ -23,8 +24,8 @@
                         @foreach (var member in Model.MemberList)
                         {
                             <tr>
-                                <td><strong>@member.Data.User.Id</strong></td>
-                                <td> @member.Extension.Company </td>
+                                <td><strong>@member.Member.UserReference.Id</strong></td>
+                                <td> @member.MemberExtension.Company </td>
                             </tr>
                         }
                     </table>

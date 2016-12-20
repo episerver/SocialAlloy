@@ -2,13 +2,18 @@
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
+using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
+using System;
+using System.Linq;
+using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     public class SocialMemberRepository : ISocialMemberRepository
     {
         private readonly IMemberService memberService;
+        private SocialMemberAdapter socialMemberAdapter;
 
         /// <summary>
         /// Constructor
@@ -16,6 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         public SocialMemberRepository(IMemberService memberService)
         {
             this.memberService = memberService;
+            this.socialMemberAdapter = new SocialMemberAdapter();
         }
 
         /// <summary>
@@ -24,14 +30,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="socialMember">The member to add.</param>
         /// <param name="memberExtension">The member extension data to add.</param>
         /// <returns>The added member.</returns>
-        public Composite<Member, MemberExtensionData> Add(SocialMember socialMember, MemberExtensionData memberExtension)
+        public SocialCompositeMember Add(SocialMember socialMember, MemberExtensionData memberExtension)
         {
-            Composite<Member, MemberExtensionData> addedMember = null;
+            SocialCompositeMember addedSocialCompositeMember = null;
 
             try
             {
                 var member = new Member(socialMember.UserReference, socialMember.GroupId);
-                addedMember = this.memberService.Add<MemberExtensionData>(member, memberExtension);
+                var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, memberExtension);
+                var addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data);
+                addedSocialCompositeMember = socialMemberAdapter.Adapt(addedSocialMember, addedCompositeMember.Extension);
+
+                if (addedSocialCompositeMember == null)
+                    throw new SocialRepositoryException("The new member could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
             {
@@ -50,7 +61,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-            return addedMember;
+            return addedSocialCompositeMember;
         }
 
         /// <summary>
@@ -58,16 +69,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="socialMemberFilter">The social filter used to properly construct the composite filter used to return members.</param>
         /// <returns>The list of members that are part of the specified group.</returns>
-        public IEnumerable<Composite<Member, MemberExtensionData>> Get(SocialMemberFilter socialMemberFilter)
+        public IEnumerable<SocialCompositeMember> Get(SocialMemberFilter socialMemberFilter)
         {
-            IEnumerable<Composite<Member, MemberExtensionData>> returnedMembers = null;
+            IEnumerable<SocialCompositeMember> returnedMembers = null;
 
             try
             {
-                var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize, PageOffset = socialMemberFilter.PageOffset};
+                var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
                 var memberFilter = new MemberFilter { Group = socialMemberFilter.GroupId };
-                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>() { Filter = memberFilter, PageInfo = pageInfo }; 
-                returnedMembers = this.memberService.Get(compositeFilter).Results;
+                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>() { Filter = memberFilter, PageInfo = pageInfo };
+                var compositeMember = this.memberService.Get(compositeFilter).Results;
+                returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(socialMemberAdapter.Adapt(x.Data), x.Extension));
             }
             catch (SocialAuthenticationException ex)
             {

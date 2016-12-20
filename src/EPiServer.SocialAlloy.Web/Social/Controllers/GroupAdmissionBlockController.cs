@@ -5,10 +5,12 @@ using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -35,8 +37,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupAdmissionBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var successMessage = TempData["GroupAdmissionSuccessMessage"] == null ? null : TempData["GroupAdmissionSuccessMessage"].ToString();
-            var errorMessage = TempData["GroupAdmissionErrorMessage"] == null ? null : TempData["GroupAdmissionErrorMessage"].ToString();
+            List<MessageViewModel> listOfMessages = PopulateMessages();
+
 
             //populate model to pass to block view
             var groupAdmissionBlockModel = new GroupAdmissionBlockViewModel()
@@ -45,8 +47,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
                 CurrentPageLink = pageRouteHelper.PageLink,
-                SubmitSuccessMessage = successMessage,
-                SubmitErrorMessage = errorMessage,
+                Messages = listOfMessages,
                 GroupName = currentBlock.GroupName
             };
 
@@ -62,47 +63,70 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// stores the submitted group, and redirects back to the current page.
         /// </summary>
         /// <param name="model">The group admission model being submitted.</param>
-        /// <returns></returns>
         [HttpPost]
         public ActionResult Submit(GroupAdmissionBlockViewModel model)
         {
             var groupId = groupRepository.Get(model.GroupName).Id;
 
+            //Validate the group id passed from the model
             if (GroupId.IsNullOrEmpty(groupId))
             {
-                TempData["GroupAdmissionErrorMessage"] = "The group name provided does does not exist. An existing group is required for members to join.";
+                //Persist the message in temp data to be used in the error message
+                var errorMessage = "The group name provided does does not exist. An existing group is required for members to join.";
+                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
             }
             else
             {
-                var validatedInputs = ValidateMemberInputs(model.MemberName, model.MemberEmail);
-                AddMember(model, groupId, validatedInputs);
+                AddMember(model, groupId);
             }
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
 
-        private void AddMember(GroupAdmissionBlockViewModel model, GroupId groupId, bool validatedInputs)
+        private void AddMember(GroupAdmissionBlockViewModel model, GroupId groupId)
         {
+            var validatedInputs = ValidateMemberInputs(model.MemberName, model.MemberEmail);
             if (validatedInputs)
             {
                 try
                 {
+                    //Add the new member with extension data and persist the group name in temp data to be used in the success message
                     var member = new SocialMember(Reference.Create(model.MemberName), groupId);
                     var extensionData = new MemberExtensionData(model.MemberEmail, model.MemberCompany);
 
                     memberRepository.Add(member, extensionData);
-                    TempData["GroupAdmissionSuccessMessage"] = model.MemberName + " was added successfully to the group.";
+                    var successMessage = model.MemberName + " was added successfully to the group.";
+                    AddToTempData("GroupAdmissionSuccessMessage", successMessage);
                 }
                 catch (SocialRepositoryException ex)
                 {
-                    TempData["GroupAdmissionErrorMessage"] = ex.Message;
+                    //Persist the exception message in temp data to be used in the error message
+                    AddToTempData("GroupAdmissionErrorMessage", ex.Message);
                 }
             }
             else
             {
-                TempData["GroupAdmissionErrorMessage"] = "The member name, email and company cannot be empty.";
+                //Persist the message in temp data to be used in the error message
+                var errorMessage = "The member name, email and company cannot be empty.";
+                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
             }
         }
 
+        /// <summary>
+        /// Populates the messages that will be displayed to the user in the group admission view.
+        /// </summary>
+        /// <returns>A list of messages used to convey statuses to the user</returns>
+        private List<MessageViewModel> PopulateMessages()
+        {
+            var successMessageBody = GetFromTempData<string>("GroupAdmissionSuccessMessage");
+            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
+
+            var errorMessageBody = GetFromTempData<string>("GroupAdmissionErrorMessage");
+            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
+
+            return new List<MessageViewModel> { successMessage, errorMessage };
+        }
+
+        //Validates the user name and user email
         private bool ValidateMemberInputs(string userName, string userEmail)
         {
             return !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(userEmail);

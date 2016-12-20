@@ -1,5 +1,6 @@
 ﻿using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
@@ -21,11 +22,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// A error message that should be flashed in the view.
-        /// </summary>
-        public string SubmitErrorMessage { get; set; }
-
-        /// <summary>
         /// Members displayed in the view will be associated with the group name provided in the admin view.
         /// </summary>
         public string  GroupName { get; set; }
@@ -33,7 +29,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// <summary>
         /// List of the users associated with the group
         /// </summary>
-        public List<Composite<Member, MemberExtensionData>> MemberList { get; set; }
+        public List<SocialCompositeMember> MemberList { get; set; }
+
+        /// <summary>
+        /// Contains the infromation for displaying messaging to the user in the view
+        /// </summary>
+        public List<MessageViewModel> Messages { get; set; }
     }
 }
 

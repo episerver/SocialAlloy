@@ -1,10 +1,6 @@
 ﻿using EPiServer.Core;
-using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
@@ -25,14 +21,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// A success message that should be flashed in the view.
+        /// Contains the infromation for displaying messaging to the user in the view
         /// </summary>
-        public string SubmitSuccessMessage { get; set; }
-
-        /// <summary>
-        /// A error message that should be flashed in the view.
-        /// </summary>
-        public string SubmitErrorMessage { get; set; }
+        public List<MessageViewModel> Messages { get; set; }
 
         /// <summary>
         /// Gets the name of the group.
@@ -48,11 +39,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets or sets the reference link of the page containing the group creation form.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier of the page containing the group creation block.
-        /// </summary>
-        public string PageId { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the block containing the group creation form.

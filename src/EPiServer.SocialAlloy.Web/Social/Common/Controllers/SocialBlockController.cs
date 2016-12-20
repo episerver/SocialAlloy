@@ -72,5 +72,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         {
             return "SocialBlock_" + block.ID;
         }
+
+        public Temp GetFromTempData<Temp>(string key)
+        {
+            return (Temp)TempData[key];
+        }
+
+        public void AddToTempData<Temp>(string key, Temp value)
+        {
+            TempData[key] = value;
+        }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using EPiServer.Social.Groups.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
@@ -20,10 +16,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// The number of members to retrieve.
         /// </summary>
         public int PageSize { get; set; }
-
-        /// <summary>
-        /// The offset to start retrieving the next page of members from.
-        /// </summary>
-        public int PageOffset { get; set; }
     }
 }

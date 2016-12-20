@@ -8,7 +8,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
     /// <summary>
     /// The MembershipDisplayBlock class defines the configuration used for rendering group creation views.
     /// </summary>
-    [ContentType(DisplayName = "Social Membership Display", GUID = "0d5075ad-31ea-40cb-ae8f-a88b519db35f", Description = "Social Membership Display")]
+    [ContentType(DisplayName = "Social Membership Display", GUID = "0d5075ad-31ea-40cb-ae8f-a88b519db35f", Description = "Configures the properties of a membership display block view")]
     public class MembershipDisplayBlock : BlockData
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 2)]
         public virtual bool ShowHeading { get; set; }
 
         /// <summary>
@@ -33,16 +33,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         /// </summary>
         [Display(
              GroupName = SystemTabNames.Content,
-             Order = 1)]
+             Order = 3)]
         [CultureSpecific]
         public virtual string GroupName { get; set; }
 
         /// <summary>
-        /// Configures the max number of members that should be displayed in the view.
+        /// Configures the maximum number of members that should be displayed in the view.
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 4)]
         public virtual int DisplayPageSize { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 5)]
         public virtual int DisplayPageOffset { get; set; }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
             base.SetDefaultValues(contentType);
             Heading = "Group Membership Display";
             ShowHeading = false;
-            GroupName = "defaultGroup";
+            GroupName = "Default Group";
             DisplayPageSize = 10;
             DisplayPageOffset = 0;
         }

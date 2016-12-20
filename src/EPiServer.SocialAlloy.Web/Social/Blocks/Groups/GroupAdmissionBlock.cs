@@ -14,7 +14,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
     /// <summary>
     /// The GroupAdmissionBlock class defines the configuration used for rendering group admission views.
     /// </summary>
-    [ContentType(DisplayName = "Group Admission Block", GUID = "611697e3-3638-445c-a45c-6454eaa5b7b1", Description = "Social Group Admission")]
+    [ContentType(DisplayName = "Group Admission Block", GUID = "611697e3-3638-445c-a45c-6454eaa5b7b1", Description = "Configures the properties of a group admission block view")]
     public class GroupAdmissionBlock : BlockData
     {
         /// <summary>
@@ -34,10 +34,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
             Order = 2)]
         public virtual bool ShowHeading { get; set; }
 
-        // public virtual Dictionary<string, int> GroupInfo { get; set; }
+        /// <summary>
+        /// Configures what group members will be gaining admission to.
+        /// </summary>
         [Display(
              GroupName = SystemTabNames.Content,
-             Order = 1)]
+             Order = 3)]
         [CultureSpecific]
         public virtual string GroupName { get; set; }
        
@@ -48,9 +50,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
-            Heading = "Social Group Admission";
+            Heading = "Group Admission";
             ShowHeading = false;
-            GroupName = "defaultGroup";
+            GroupName = "Default Group";
         }
     }
 }

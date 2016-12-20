@@ -34,6 +34,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 addedGroup = this.groupService.Add(group);
+                if (addedGroup == null)
+                    throw new SocialRepositoryException("The new group could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
             {
@@ -59,7 +61,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// Retrieves a group based on the name of the group provided.
         /// </summary>
         /// <param name="groupName">The name of the group that is to be retrieved from the underlying data store.</param>
-        /// <returns>The desired group.</returns>
+        /// <returns>The requested group.</returns>
         public Group Get(string groupName)
         {
             Group group = null;
@@ -69,7 +71,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var criteria = new Criteria<GroupFilter>
                 {
                     Filter = new GroupFilter { Name = groupName },
-                    PageInfo = new PageInfo {  PageSize = 1, CalculateTotalCount = true, PageOffset = 0}
+                    PageInfo = new PageInfo {  PageSize = 1, PageOffset = 0}
                 };
                 group = this.groupService.Get(criteria).Results.FirstOrDefault();
             }

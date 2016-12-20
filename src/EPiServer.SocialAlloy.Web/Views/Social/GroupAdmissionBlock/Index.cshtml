@@ -8,21 +8,18 @@
         <hr />
     }
 
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+    @foreach (var message in Model.Messages)
     {
-        <div id="successMessage" style="color: green;">@Model.SubmitSuccessMessage</div>
+        var messageStyle = message.ResolveStyle(message.Type);
+        <div style="color:@messageStyle">@message.Body</div>
     }
-    @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-    {
-        <div id="errorMessage" style="color: red;">@Model.SubmitErrorMessage</div>
-    }
+
     @if (!String.IsNullOrWhiteSpace(Model.GroupName))
     {
         using (Html.BeginForm("Submit", "GroupAdmissionBlock", FormMethod.Post))
         {
             @Html.HiddenFor(m => m.CurrentBlockLink)
             @Html.HiddenFor(m => m.CurrentPageLink)
-            @Html.HiddenFor(m => m.PageId)
             <div>
                 @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
                 @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
@@ -35,7 +32,7 @@
     }
     else
     {
-        <div style="color: red;">A GROUP NAME MUST BE CONFIGURED TO USE THIS BLOCK</div>
+        <div style="color: red">A group name must be configured to use this block</div>
     }
     <br />
 
