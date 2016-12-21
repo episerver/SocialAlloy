@@ -3,12 +3,12 @@ using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -49,15 +49,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
             var target = pageRouteHelper.Page.ContentGuid.ToString();
 
-            // Restore the saved model state
-            LoadModelState(currentBlockLink);
-
             // Create a rating block view model to fill the frontend block view
             var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
             var blockModel = new RatingBlockViewModel(currentBlock, formModel);
 
-            // Apply current model state to the rating block view model
-            ApplyModelStateToRatingBlockViewModel(blockModel);
+            //get messages for view
+            blockModel.Messages = PopulateMessages();
 
             // If user logged in, check if logged in user has already rated the page
             if (this.User.Identity.IsAuthenticated)
@@ -65,12 +62,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetRating(target, blockModel);
             }
 
-            // If there are no errors so far communicating with Social services, 
-            // retrieve rating statistics for this page
-            if (String.IsNullOrWhiteSpace(blockModel.ErrorMessage))
-            {
-                GetRatingStatistics(target, blockModel);
-            }
+            GetRatingStatistics(target, blockModel);
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }
@@ -89,33 +81,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             ValidateSubmitRatingForm(ratingForm, blockModel);
 
-            if (BlockModelHasNoErrors(blockModel))
+            // Add the rating
+            AddRating(ratingForm.SubmittedRating.Value, blockModel);
+
+            if (currentBlock.SendActivity)
             {
-                // Add the rating
-                AddRating(ratingForm.SubmittedRating.Value, blockModel);
-
-                if (BlockModelHasNoErrors(blockModel) && currentBlock.SendActivity)
-                {
-                    // Add a rating activity
-                    AddActivity(ratingForm.SubmittedRating.Value, blockModel);
-                }
+                // Add a rating activity
+                AddActivity(ratingForm.SubmittedRating.Value, blockModel);
             }
-
-            SaveModelState(ratingForm.CurrentBlockLink, CollectViewModelStateToSave(blockModel));
-
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
-        }
-
-        /// <summary>
-        /// Returns true if the block model contains no errors that were encountered while 
-        /// processing the rating that was submitted.
-        /// </summary>
-        /// <param name="blockModel">a reference to the RatingBlockViewModel</param>
-        /// <returns>Returns true if no errors were encountered while processing the rating that was submitted, 
-        /// false otherwise.</returns>
-        private static bool BlockModelHasNoErrors(RatingBlockViewModel blockModel)
-        {
-            return String.IsNullOrEmpty(blockModel.SubmitErrorMessage);
         }
 
         /// <summary>
@@ -127,7 +101,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private void GetRating(string target, RatingBlockViewModel blockModel)
         {
             blockModel.CurrentRating = null;
-            blockModel.ErrorMessage = String.Empty;
 
             try
             {
@@ -143,12 +116,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockModel.ErrorMessage = String.Format("There was an error identifying the logged in user. Please make sure you are logged in and try again.");
+                    var errorMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
+                    blockModel.Messages.Add(new MessageViewModel { Body = errorMessage, Type = "error" });
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.ErrorMessage = ex.Message;
+                blockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
         }
 
@@ -160,14 +134,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// populate with rating statistics for the current page and errors, if any</param>
         private void GetRatingStatistics(string target, RatingBlockViewModel blockModel)
         {
-            blockModel.ErrorMessage = String.Empty;
             blockModel.NoStatisticsFoundMessage = String.Empty;
 
             try
             {
                 var result = ratingRepository.GetRatingStatistics(target);
                 if (result != null)
-                { 
+                {
                     blockModel.Average = result.Average;
                     blockModel.TotalCount = result.TotalCount;
                 }
@@ -178,7 +151,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.ErrorMessage = ex.Message;
+                blockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
         }
 
@@ -190,17 +163,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// populate with errors, if any</param>
         private void AddRating(int value, RatingBlockViewModel blockModel)
         {
-            blockModel.SubmitErrorMessage = String.Empty;
-            blockModel.SubmitSuccessMessage = String.Empty;
-
             try
             {
                 ratingRepository.AddRating(this.userId, this.pageId, value);
-                blockModel.SubmitSuccessMessage = "Thank you for submitting your rating!";
+                var successMessage = "Thank you for submitting your rating!";
+                AddToTempData("RatingAddSuccessMessage", successMessage);
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.SubmitErrorMessage = ex.Message;
+                AddToTempData("RatingAddErrorMessage", ex.Message);
             }
         }
 
@@ -212,8 +183,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// populate with errors, if any</param>
         private void AddActivity(int value, RatingBlockViewModel blockModel)
         {
-            blockModel.SubmitErrorMessage = String.Empty;
-
             try
             {
                 var activity = new SocialRatingActivity { Value = value };
@@ -221,7 +190,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.SubmitErrorMessage = ex.Message;
+                AddToTempData("RatingAddActivityErrorMessage", ex.Message);
             }
         }
 
@@ -233,19 +202,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// populate with validation errors, if any</param>
         private void ValidateSubmitRatingForm(RatingFormViewModel ratingForm, RatingBlockViewModel blockModel)
         {
-            blockModel.SubmitErrorMessage = String.Empty;
-
+            string errorMessage = string.Empty;
             // Validate user is logged in
             if (!this.User.Identity.IsAuthenticated)
             {
-                blockModel.SubmitErrorMessage = "Session timed out, you have to be logged in to submit your rating. Please login and try again.";
+                errorMessage = "Session timed out, you have to be logged in to submit your rating. Please login and try again.";
+                AddToTempData("RatingAddErrorMessage", errorMessage);
             }
             else
             {
                 // Validate a rating was submitted
                 if (!ratingForm.SubmittedRating.HasValue)
                 {
-                    blockModel.SubmitErrorMessage = "Please select a valid rating";
+                    errorMessage = "Please select a valid rating";
+                    AddToTempData("RatingAddErrorMessage", errorMessage);
                 }
                 else
                 {
@@ -253,7 +223,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     this.pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (String.IsNullOrWhiteSpace(this.pageId))
                     {
-                        blockModel.SubmitErrorMessage = "The page id of this page could not be determined. Please try rating this page again.";
+                        errorMessage = "The page id of this page could not be determined. Please try rating this page again.";
+                        AddToTempData("RatingAddErrorMessage", errorMessage);
                     }
                     else
                     {
@@ -261,7 +232,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         this.userId = userRepository.GetUserId(this.User);
                         if (String.IsNullOrWhiteSpace(this.userId))
                         {
-                            blockModel.SubmitErrorMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
+                            errorMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
+                            AddToTempData("RatingAddErrorMessage", errorMessage);
                         }
                     }
                 }
@@ -269,58 +241,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Collects view model state that needs to be saved.
+        /// Populates the messages that will be displayed to the user in the group admission view.
         /// </summary>
-        /// <param name="blockModel">the RatingBlockViewModel containing the state to save</param>
-        /// <returns>The dictionary containing the posted form state</returns>
-        private ModelStateDictionary CollectViewModelStateToSave(RatingBlockViewModel blockModel)
+        /// <returns>A list of messages used to convey statuses to the user</returns>
+        private List<MessageViewModel> PopulateMessages()
         {
-            var transientState = new ModelStateDictionary
-            {
-                new KeyValuePair<string, ModelState>
-                (
-                    "SubmitSuccessMessage",
-                    new ModelState() {
-                        Value = new ValueProviderResult(blockModel.SubmitSuccessMessage, blockModel.SubmitSuccessMessage, CultureInfo.CurrentCulture)
-                    }
-                ),
-                new KeyValuePair<string, ModelState>
-                (
-                    "SubmitErrorMessage",
-                    new ModelState() {
-                        Value = new ValueProviderResult(blockModel.SubmitErrorMessage, blockModel.SubmitErrorMessage, CultureInfo.CurrentCulture)
-                    }
-                )
-            };
+            var ratingAddSuccessMessageBody = GetFromTempData<string>("RatingAddSuccessMessage");
+            var ratingAddSuccessMessage = new MessageViewModel { Body = ratingAddSuccessMessageBody, Type = "success" };
 
-            var modelState = ViewData.ModelState;
-            if (transientState != null)
-            {
-                modelState.Merge(transientState);
-            }
+            var ratingAddErrorMessageBody = GetFromTempData<string>("RatingAddErrorMessage");
+            var ratingAddErrorMessage = new MessageViewModel { Body = ratingAddErrorMessageBody, Type = "error" };
 
-            return modelState;
-        }
+            var ratingAddActivityErrorMessageBody = GetFromTempData<string>("RatingAddActivityErrorMessage");
+            var ratingAddActivityErrorMessage = new MessageViewModel { Body = ratingAddActivityErrorMessageBody, Type = "error" };
 
-        /// <summary>
-        /// Applies current model state to the rating block view model.
-        /// </summary>
-        /// <param name="blockModel">The rating block view model to apply model state to.</param>
-        private void ApplyModelStateToRatingBlockViewModel(RatingBlockViewModel blockModel)
-        {
-            // Get success/error model state
-            var submitErrorMessage = GetModelState("SubmitErrorMessage");
-            var submitSuccessMessage = GetModelState("SubmitSuccessMessage");
-
-            // Apply success/error model state to the view model
-            blockModel.SubmitErrorMessage = (submitErrorMessage != null && submitErrorMessage.Value != null)
-                                            ? (string)submitErrorMessage.Value.RawValue
-                                            : string.Empty;
-
-            
-            blockModel.SubmitSuccessMessage = (submitSuccessMessage != null && submitSuccessMessage.Value != null)
-                                            ? (string)submitErrorMessage.Value.RawValue
-                                            : string.Empty;
+            return new List<MessageViewModel> { ratingAddSuccessMessage, ratingAddErrorMessage, ratingAddActivityErrorMessage };
         }
     }
 }

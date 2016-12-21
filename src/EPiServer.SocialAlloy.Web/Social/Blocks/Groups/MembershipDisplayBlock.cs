@@ -46,14 +46,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         public virtual int DisplayPageSize { get; set; }
 
         /// <summary>
-        /// Configures the offset number of members that should be displayed in the view.
-        /// </summary>
-        [Display(
-            GroupName = SystemTabNames.Content,
-            Order = 5)]
-        public virtual int DisplayPageOffset { get; set; }
-
-        /// <summary>
         /// Sets the default property values on the content data.
         /// </summary>
         /// <param name="contentType">Type of the content.</param>
@@ -64,7 +56,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
             ShowHeading = false;
             GroupName = "Default Group";
             DisplayPageSize = 10;
-            DisplayPageOffset = 0;
         }
     }
 }

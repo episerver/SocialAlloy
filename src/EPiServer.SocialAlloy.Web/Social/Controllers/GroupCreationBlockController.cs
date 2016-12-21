@@ -32,7 +32,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            List<MessageViewModel> listOfMessages = PopulateMessages();
 
             //Populate the model to pass to the block view
             var groupCreationBlockModel = new GroupCreationBlockViewModel()
@@ -41,7 +40,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
                 CurrentPageLink = pageRouteHelper.PageLink,
-                Messages = listOfMessages,
+                Messages = PopulateMessages(),
             };
 
             //Remove the existing values from the input fields
@@ -62,21 +61,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
             AddGroup(model);
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
-        }
-
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the group creation view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateMessages()
-        {
-            var successMessageBody = GetFromTempData<string>("GroupCreationSuccessMessage");
-            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
-
-            var errorMessageBody = GetFromTempData<string>("GroupCreationErrorMessage");
-            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
         private void AddGroup(GroupCreationBlockViewModel model)
@@ -103,6 +87,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var errorMessage = "Group name and description cannot be null or whitespace";
                 AddToTempData("GroupCreationErrorMessage", errorMessage);
             }
+        }
+
+        /// <summary>
+        /// Populates the messages that will be displayed to the user in the group creation view.
+        /// </summary>
+        /// <returns>A list of messages used to convey statuses to the user</returns>
+        private List<MessageViewModel> PopulateMessages()
+        {
+            var successMessageBody = GetFromTempData<string>("GroupCreationSuccessMessage");
+            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
+
+            var errorMessageBody = GetFromTempData<string>("GroupCreationErrorMessage");
+            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
+
+            return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
         //Validates the group name and group description properties

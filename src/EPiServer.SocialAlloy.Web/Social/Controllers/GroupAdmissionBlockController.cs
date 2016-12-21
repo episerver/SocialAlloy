@@ -10,6 +10,7 @@ using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -37,8 +38,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupAdmissionBlock currentBlock)
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            List<MessageViewModel> listOfMessages = PopulateMessages();
-
 
             //populate model to pass to block view
             var groupAdmissionBlockModel = new GroupAdmissionBlockViewModel()
@@ -47,7 +46,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
                 CurrentPageLink = pageRouteHelper.PageLink,
-                Messages = listOfMessages,
+                Messages = PopulateMessages(),
                 GroupName = currentBlock.GroupName
             };
 
@@ -66,19 +65,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(GroupAdmissionBlockViewModel model)
         {
-            var groupId = groupRepository.Get(model.GroupName).Id;
-
-            //Validate the group id passed from the model
-            if (GroupId.IsNullOrEmpty(groupId))
+            try
             {
-                //Persist the message in temp data to be used in the error message
-                var errorMessage = "The group name provided does does not exist. An existing group is required for members to join.";
-                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
-            }
-            else
-            {
+                var groupId = groupRepository.Get(model.GroupName).Id;
                 AddMember(model, groupId);
             }
+            catch (SocialRepositoryException ex)
+            {
+                AddToTempData("GroupAdmissionErrorMessage", ex.Message);
+            }
+            catch (NullReferenceException)
+            {
+                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
+                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
+            }
+
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
 

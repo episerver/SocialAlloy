@@ -402,12 +402,12 @@
     <Compile Include="Business\Initialization\FilterConfig.cs" />
     <Compile Include="Social\Adapters\Groups\ISocialMemberAdapter.cs" />
     <Compile Include="Social\Adapters\Groups\SocialMemberAdapter.cs" />
-    <Compile Include="Social\Blocks\CommentsBlock.cs" />
-    <Compile Include="Social\Blocks\FeedBlock.cs" />
-    <Compile Include="Social\Blocks\RatingBlock.cs" />
-    <Compile Include="Social\Blocks\RatingSetting.cs" />
-    <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
-    <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
+    <Compile Include="Social\Blocks\Comments\CommentsBlock.cs" />
+    <Compile Include="Social\Blocks\ActivityStreams\FeedBlock.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingBlock.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingSetting.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingSettingProperty.cs" />
+    <Compile Include="Social\Blocks\ActivityStreams\SubscriptionBlock.cs" />
     <Compile Include="Social\Common\Models\BlockViewModel.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
@@ -542,11 +542,7 @@
     <Compile Include="Social\Repositories\Groups\SocialGroupRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Social\Blocks\ActivityStreams\" />
-    <Folder Include="Social\Blocks\Comments\" />
-    <Folder Include="Social\Blocks\Ratings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="ClientResources\Images\icons\layoutIcons24x24.png" />
     <Content Include="ClientResources\Scripts\Editors\StringList.js" />

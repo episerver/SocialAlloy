@@ -7,19 +7,19 @@
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
         <hr />
     }
-   
-   @foreach (var message in Model.Messages)
-   {
-       var messageStyle = message.ResolveStyle(message.Type);
-       <div style="color:@messageStyle">@message.Body</div>
-   }
-   
+
+    @foreach (var message in Model.Messages)
+    {
+        var messageStyle = message.ResolveStyle(message.Type);
+        <div style="color:@messageStyle">@message.Body</div>
+    }
+
     @using (Html.BeginForm("Submit", "GroupCreationBlock", FormMethod.Post))
     {
         @Html.HiddenFor(m => m.CurrentBlockLink)
         @Html.HiddenFor(m => m.CurrentPageLink)
         <div>
-            @Html.TextBoxFor(m => m.Name,  new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
+            @Html.TextBoxFor(m => m.Name, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
 
             @Html.TextAreaFor(m => m.Description, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
         </div>
@@ -28,7 +28,7 @@
         </div>
     }
     <br />
-    
+
 </div>
 
 

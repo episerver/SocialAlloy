@@ -51,8 +51,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public IEnumerable<SocialFeedItemViewModel> Feed { get; set; }
 
         /// <summary>
-        /// Gets or sets an error message that should be flashed in the message display view.
+        /// Contains the messages to be conveyed to the user in the view
         /// </summary>
-        public string DisplayErrorMessage { get; set; }
+        public List<MessageViewModel> Messages { get; set; }
     }
 }

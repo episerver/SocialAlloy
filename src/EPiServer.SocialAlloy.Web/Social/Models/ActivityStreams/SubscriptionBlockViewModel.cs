@@ -1,5 +1,6 @@
 ﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
+using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
@@ -43,14 +44,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
         public bool UserSubscribedToPage { get; set; }
 
-        /// <summary>
-        /// Gets or sets a success message that should be flashed in the view.
-        /// </summary>
-        public string SubmitSuccessMessage { get; set; }
+        ///// <summary>
+        ///// Gets or sets a success message that should be flashed in the view.
+        ///// </summary>
+        //public string SubmitSuccessMessage { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets an error message that should be flashed in the view.
+        ///// </summary>
+        //public string SubmitErrorMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets an error message that should be flashed in the view.
+        /// Contains the infromation for displaying messaging to the user in the view
         /// </summary>
-        public string SubmitErrorMessage { get; set; }
+        public List<MessageViewModel> Messages { get; set; }
     }
 }

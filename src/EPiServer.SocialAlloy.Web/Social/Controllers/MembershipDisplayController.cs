@@ -4,10 +4,12 @@ using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
+using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -41,56 +43,52 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 Heading = currentBlock.Heading,
                 ShowHeading = currentBlock.ShowHeading,
-                GroupName = currentBlock.GroupName
+                GroupName = currentBlock.GroupName,
+                Messages = new List<MessageViewModel>(),
+                MemberList = new List<SocialCompositeMember>()
             };
 
-            //Retrieve the group id assigned to the block
-            var groupId = groupRepository.Get(currentBlock.GroupName).Id;
-
-            if (GroupId.IsNullOrEmpty(groupId))
+            GroupId groupId = GroupId.Empty;
+            
+            //Retrieve the group id assigned to the block and populate the memberlist 
+            try
             {
-                membershipDisplayBlockModel.Messages = PopulateErrorMessage();
-                membershipDisplayBlockModel.MemberList = new List<SocialCompositeMember>();
+                var group = groupRepository.Get(currentBlock.GroupName);
+                groupId = group.Id;
+                membershipDisplayBlockModel.MemberList = RetrieveMemberList(membershipDisplayBlockModel, groupId, currentBlock.DisplayPageSize);
             }
-            else
+            catch(SocialRepositoryException ex)
             {
-                membershipDisplayBlockModel.Messages = new List<MessageViewModel>();
-                membershipDisplayBlockModel.MemberList = RetrieveMemberList(currentBlock, groupId);
+                membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
+            }
+            catch(NullReferenceException)
+            {
+                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
+                membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = errorMessage, Type = "error" });
             }
 
             //Return block view with populated model
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
         }
 
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the membership display view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateErrorMessage()
-        {
-            var errorMessageBody = "The group name provided does does not exist. An existing group is required for members to join.";
-            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { errorMessage };
-        }
-
         //Retrieves a list of members to populate the view model with. 
-        private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlock currentBlock, GroupId groupId)
+        private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlockViewModel viewModel, GroupId groupId, int pageSize)
         {
             //Constructs a social member filter with groupId from the model and paging information that was configured in admin view
             var memberFilter = new SocialMemberFilter
             {
                 GroupId = groupId,
-                PageSize = currentBlock.DisplayPageSize
+                PageSize = pageSize
             };
 
             //Retrieves the list of members
-            var memberList = memberRepository.Get(memberFilter);
+            IEnumerable<SocialCompositeMember> memberList = memberRepository.Get(memberFilter);
+           
             return ValidateMemberList(memberList);
         }
 
         //Validates the list of members
-        private static List<SocialCompositeMember> ValidateMemberList(IEnumerable<SocialCompositeMember> memberList)
+        private List<SocialCompositeMember> ValidateMemberList(IEnumerable<SocialCompositeMember> memberList)
         {
             return memberList != null && memberList.Any() ? memberList.ToList() : new List<SocialCompositeMember>();
         }

@@ -4,7 +4,6 @@
 *@
 @using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models
-
 @model SubscriptionBlockViewModel
 
 @if (Model.ShowSubscriptionForm)
@@ -15,25 +14,24 @@
             <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
             <hr />
         }
-        @if (!String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
+
+        @foreach (var message in Model.Messages)
         {
-            <div style="color: green;">@Model.SubmitSuccessMessage</div>
+            var messageStyle = message.ResolveStyle(message.Type);
+            <div style="color:@messageStyle">@message.Body</div>
         }
-        @if (!String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-        {
-            <div style="color: red;">@Model.SubmitErrorMessage</div>
-        }
+
         @{
             var actionName = Model.UserSubscribedToPage ? "Unsubscribe" : "Subscribe";
-        }
-        @using (Html.BeginForm(actionName, null))
-        {
-            @Html.HiddenFor(m => m.CurrentBlockLink)
-            @Html.HiddenFor(m => m.CurrentPageLink)
-            @Html.Hidden("action", actionName)
-            <div>
-                <input type="submit" name="submit" value="@actionName">
-            </div>
+            using (Html.BeginForm(actionName, null))
+            {
+                @Html.HiddenFor(m => m.CurrentBlockLink)
+                @Html.HiddenFor(m => m.CurrentPageLink)
+                @Html.Hidden("action", actionName)
+                <div>
+                    <input type="submit" name="submit" value="@actionName">
+                </div>
+            }
         }
     </div>
 }

@@ -8,13 +8,13 @@
         <hr />
     }
 
-   @foreach (var message in Model.Messages)
-   {
-       var messageStyle = message.ResolveStyle(message.Type);
-    <div style="color:@messageStyle">@message.Body</div>
-   }
+    @foreach (var message in Model.Messages)
+    {
+        var messageStyle = message.ResolveStyle(message.Type);
+        <div style="color:@messageStyle">@message.Body</div>
+    }
 
-    @if (Model.MemberList != null || Model.MemberList.Any())
+    @if(Model.MemberList != null && Model.MemberList.Any())
     {
         <div class="row">
             <div class="span6">
