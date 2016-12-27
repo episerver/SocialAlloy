@@ -22,10 +22,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <summary>
         /// Adapts a Member into a SocialMember
         /// </summary>
-        /// <param name="member">The member to be adated </param>
+        /// <param name="member">The member to be adapted </param>
         /// <returns>The adapted SocialMember</returns>
         SocialMember Adapt(Member member);
-
-
     }
 }

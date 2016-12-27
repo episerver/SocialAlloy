@@ -25,11 +25,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
             this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
         }
 
+        /// <summary>
+        /// Used to retrieve the TempData stored for a specific controller action
+        /// </summary>
+        /// <typeparam name="Temp">The type of the TempData</typeparam>
+        /// <param name="key">Sring value of the TempData key</param>
+        /// <returns>The TempData that was requested</returns>
         public Temp GetFromTempData<Temp>(string key)
         {
             return (Temp)TempData[key];
         }
 
+        /// <summary>
+        /// Stores a desired key / value in the TempData dictionary 
+        /// </summary>
+        /// <typeparam name="Temp">The type of the value being stored</typeparam>
+        /// <param name="key">The key used to reference the stored value upon retrieval</param>
+        /// <param name="value">The value that is being stored in TempData</param>
         public void AddToTempData<Temp>(string key, Temp value)
         {
             TempData[key] = value;

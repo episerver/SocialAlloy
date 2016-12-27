@@ -21,7 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Contains the infromation for displaying messaging to the user in the view
+        /// Gets and sets message details to be displayed to the user
         /// </summary>
         public List<MessageViewModel> Messages { get; set; }
 
@@ -38,6 +38,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// </summary>
         public string MemberEmail { get; set; }
 
+        /// <summary>
+        /// Gets and sets the value of the user's company to be added as member extension data.
+        /// </summary>
         public string MemberCompany { get; set; }
 
         /// <summary>
