@@ -10,6 +10,9 @@ using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// Defines the operations that can be issued against the EPiServer.Social.Groups.GroupService.
+    /// </summary>
     public class SocialGroupRepository : ISocialGroupRepository
     {
         private readonly IGroupService groupService;

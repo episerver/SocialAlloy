@@ -408,7 +408,6 @@
     <Compile Include="Social\Blocks\Ratings\RatingSetting.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\ActivityStreams\SubscriptionBlock.cs" />
-    <Compile Include="Social\Common\Models\BlockViewModel.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
     <Compile Include="Social\Common\Models\MessageViewModel.cs" />

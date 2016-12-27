@@ -63,6 +63,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }
 
+        /// <summary>
+        /// Adss the group information to the underlying group repository
+        /// </summary>
+        /// <param name="model"></param>
         private void AddGroup(GroupCreationBlockViewModel model)
         {
             var validatedInputs = ValidateGroupInputs(model.Name, model.Description);
@@ -84,7 +88,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             else
             {   //Persist the exception message in temp data to be used in the error message
-                var errorMessage = "Group name and description cannot be null or whitespace";
+                var errorMessage = "Group name and description cannot be empty";
                 AddToTempData("GroupCreationErrorMessage", errorMessage);
             }
         }

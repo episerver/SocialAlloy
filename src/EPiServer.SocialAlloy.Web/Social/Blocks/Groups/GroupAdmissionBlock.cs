@@ -35,7 +35,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         public virtual bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Configures what group members will be gaining admission to.
+        /// Sets the group for members to gain admission
         /// </summary>
         [Display(
              GroupName = SystemTabNames.Content,

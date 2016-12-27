@@ -10,6 +10,9 @@ using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// Defines the operations that can be issued against the EPiServer.Social.Groups.MemberService.
+    /// </summary>
     public class SocialMemberRepository : ISocialMemberRepository
     {
         private readonly IMemberService memberService;
@@ -65,7 +68,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Retrieves a page members from the EPiServer Social member repository.
+        /// Retrieves a page of members from the EPiServer Social member repository.
         /// </summary>
         /// <param name="socialMemberFilter">The social filter used to properly construct the composite filter used to return members.</param>
         /// <returns>The list of members that are part of the specified group.</returns>

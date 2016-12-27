@@ -21,7 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Contains the infromation for displaying messaging to the user in the view
+        /// Gets and sets message details to be displayed to the user
         /// </summary>
         public List<MessageViewModel> Messages { get; set; }
 
