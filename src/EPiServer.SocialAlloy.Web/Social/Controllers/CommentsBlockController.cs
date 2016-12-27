@@ -122,7 +122,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SocialComment addedComment = null;
 
             try
-            {
+            { 
                 addedComment = this.commentRepository.Add(newComment);
                 AddToTempData("CommentAddSuccessMessage", SubmitSuccessMessage);
             }
