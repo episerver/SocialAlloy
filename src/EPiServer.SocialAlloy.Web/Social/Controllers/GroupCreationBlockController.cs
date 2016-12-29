@@ -6,6 +6,7 @@ using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
+using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System.Collections.Generic;
@@ -19,10 +20,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
         private readonly ISocialGroupRepository groupRepository;
+        private readonly ISocialModerationRepository moderationRepository;
 
         public GroupCreationBlockController()
         {
             this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
+            this.moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
         }
 
         /// <summary>
@@ -76,7 +79,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     //Add the group and persist the group name in temp data to be used in the success message
                     var group = new Group(model.Name, model.Description);
-                    this.groupRepository.Add(group);
+                    var newGroup = this.groupRepository.Add(group);
+                    if (model.IsModerated)
+                    {
+                        this.CreateModerationWorkflowForGroup(newGroup);
+                    }
                     var successMessage = "Your group: " + model.Name + " was added successfully!";
                     AddToTempData("GroupCreationSuccessMessage", successMessage);
                 }
@@ -91,6 +98,41 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var errorMessage = "Group name and description cannot be empty";
                 AddToTempData("GroupCreationErrorMessage", errorMessage);
             }
+        }
+
+        /// <summary>
+        /// Creates a new workflow supporting the moderation of membership
+        /// within the group.
+        /// </summary>
+        /// <param name="group">Group which is to be moderated</param>
+        private void CreateModerationWorkflowForGroup(Group group)
+        {
+            // Define the transitions for workflow:            
+            // Pending -> (Accept) -> Accepted
+            //     |                      |-- (Approve) -> Approved
+            //     |                       `- (Reject)  -> Rejected
+            //      `---> (Ignore) -> Rejected
+
+            var workflowTransitions = new List<SocialWorkflowTransition>
+            {
+                new SocialWorkflowTransition(new SocialWorkflowState("Pending"),  new SocialWorkflowState("Accepted"), new SocialWorkflowAction("Accept")),
+                new SocialWorkflowTransition(new SocialWorkflowState("Pending"),  new SocialWorkflowState("Rejected"), new SocialWorkflowAction("Ignore")),
+                new SocialWorkflowTransition(new SocialWorkflowState("Accepted"), new SocialWorkflowState("Approved"), new SocialWorkflowAction("Approve")),
+                new SocialWorkflowTransition(new SocialWorkflowState("Accepted"), new SocialWorkflowState("Rejected"), new SocialWorkflowAction("Reject"))
+            };
+
+            // Save the new workflow with custom extension data which 
+            // identifies the group it is intended to be associated with.
+
+            var membershipWorkflow = new SocialWorkflow(
+                "Membership: " + group.Name,
+                workflowTransitions,
+                new SocialWorkflowState("Pending")
+            );
+
+            var workflowExtension = new MembershipModeration { Group = group.Id };
+
+            this.moderationRepository.Add(membershipWorkflow, workflowExtension);
         }
 
         /// <summary>

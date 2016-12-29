@@ -22,6 +22,11 @@
             @Html.TextBoxFor(m => m.Name, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Name" })
 
             @Html.TextAreaFor(m => m.Description, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "Group Description" })
+            <label>
+                Moderated
+                @Html.CheckBoxFor(m => m.IsModerated)
+            </label>
+
         </div>
         <div>
             <input type="submit" name="submit" value="Add">

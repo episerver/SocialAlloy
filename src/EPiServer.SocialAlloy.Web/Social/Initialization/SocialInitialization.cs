@@ -10,6 +10,7 @@ using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
+using EPiServer.SocialAlloy.Web.Social.Repositories.Moderation;
 
 namespace EPiServer.SocialAlloy.Web.Social.Initialization
 {
@@ -64,6 +65,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
             configuration.For<ISocialGroupRepository>().Use<SocialGroupRepository>();
             configuration.For<ISocialMemberRepository>().Use<SocialMemberRepository>();
+            configuration.For<ISocialModerationRepository>().Use<SocialModerationRepository>();
         }
 
         /// <summary>
