@@ -20,6 +20,7 @@
         {
             @Html.HiddenFor(m => m.CurrentBlockLink)
             @Html.HiddenFor(m => m.CurrentPageLink)
+            @Html.HiddenFor(m => m.GroupName)
             <div>
                 @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
                 @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })

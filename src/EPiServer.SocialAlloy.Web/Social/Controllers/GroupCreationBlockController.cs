@@ -58,7 +58,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(GroupCreationBlockViewModel model)
         {
-            var data = this.contentRepository.Get<IContentData>(model.CurrentBlockLink);
             AddGroup(model);
             return Redirect(UrlResolver.Current.GetUrl(model.CurrentPageLink));
         }

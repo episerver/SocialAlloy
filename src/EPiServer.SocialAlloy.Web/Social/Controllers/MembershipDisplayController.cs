@@ -48,14 +48,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 MemberList = new List<SocialCompositeMember>()
             };
 
-            GroupId groupId = GroupId.Empty;
-            
             //Retrieve the group id assigned to the block and populate the memberlist 
             try
             {
                 var group = groupRepository.Get(currentBlock.GroupName);
-                groupId = group.Id;
-                membershipDisplayBlockModel.MemberList = RetrieveMemberList(membershipDisplayBlockModel, groupId, currentBlock.DisplayPageSize);
+                membershipDisplayBlockModel.MemberList = RetrieveMemberList(membershipDisplayBlockModel, group.Id, currentBlock.DisplayPageSize);
             }
             catch(SocialRepositoryException ex)
             {
