@@ -76,7 +76,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     Filter = new GroupFilter { Name = groupName },
                     PageInfo = new PageInfo {  PageSize = 1, PageOffset = 0}
                 };
-                group = this.groupService.Get(criteria).Results.FirstOrDefault();
+                group = this.groupService.Get(criteria).Results.FirstOrDefault(); 
             }
             catch (SocialAuthenticationException ex)
             {
