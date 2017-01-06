@@ -3,9 +3,11 @@ using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -41,6 +43,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             // Create a feed block view model to fill the frontend block view
             var blockViewModel = new FeedBlockViewModel(currentBlock);
+            blockViewModel.Messages = new List<MessageViewModel>();
 
             // If user logged in, retrieve activity feed for logged in user
             if (this.User.Identity.IsAuthenticated)
@@ -59,8 +62,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         ///populate with activity feed for the logged in user and errors, if any</param>
         private void GetSocialActivityFeed(FeedBlock currentBlock, FeedBlockViewModel blockViewModel)
         {
-            blockViewModel.DisplayErrorMessage = String.Empty;
-
             try
             {
                 var userId = userRepository.GetUserId(this.User);
@@ -75,12 +76,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockViewModel.DisplayErrorMessage = ErrorGettingUserIdMessage;
+                    blockViewModel.Messages.Add(new MessageViewModel { Body = ErrorGettingUserIdMessage, Type = "error" });
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.DisplayErrorMessage = ex.Message;
+                blockViewModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
         }
     }

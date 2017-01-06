@@ -67,20 +67,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public int SubmittedRating { get; set; }
 
         /// <summary>
-        /// Message displayed in rating block if submitted rating was saved successfully.
+        /// Gets and sets message details to be displayed to the user
         /// </summary>
-        public string SubmitSuccessMessage { get; set; }
-
-        /// <summary>
-        /// Message displayed in rating block if an error was encountered while saving the submitted rating.
-        /// </summary>
-        public string SubmitErrorMessage { get; set; }
-
-        /// <summary>
-        /// Message displayed in rating block if an error was encountered while retrieving rating statistics or 
-        /// ratings for logged in user. 
-        /// </summary>
-        public string ErrorMessage { get; set; }
+        public List<MessageViewModel> Messages  { get; set; }
 
         /// <summary>
         /// Message displayed in rating block if no rating statistics are found for the page 

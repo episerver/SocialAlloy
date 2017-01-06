@@ -14,63 +14,52 @@
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
         <hr />
     }
+
+    @foreach (var message in Model.Messages)
+    {
+        var messageStyle = message.ResolveStyle(message.Type);
+        <div style="color:@messageStyle">@message.Body</div>
+    }
+
     <div style="margin-top:0.5em">
-        
-        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitSuccessMessage))
-        {
-            <div style="color: green;">@Model.SubmitSuccessMessage</div>
-        }
-
-        @if (this.User.Identity.IsAuthenticated && !String.IsNullOrWhiteSpace(Model.SubmitErrorMessage))
-        {
-            <div style="color: red;">@Model.SubmitErrorMessage</div>
-        }
-
-        @if (!String.IsNullOrWhiteSpace(Model.ErrorMessage))
-        {
-            <div style="color: red;">@Model.ErrorMessage</div>
-        }
-        else
-        {
-            if (this.User.Identity.IsAuthenticated)
+        @if (this.User.Identity.IsAuthenticated)
             {
                 if (Model.CurrentRating.HasValue)
                 {
-                    <div>You rated the page as @Model.CurrentRating out of @Model.RatingSettings.Last().ToString()</div>
-                }
-                else
-                {
-                    using (Html.BeginForm("Submit", null))
-                    {
-                        @Html.HiddenFor(m => m.CurrentBlockLink)
-                        @Html.HiddenFor(m => m.CurrentPageLink)
-                        <div class="clearfix">
-                            <div style="margin-bottom:0.15em;"><i>How do you rate this page?</i></div>
-                            <div style="margin-bottom:0.5em;">
-                                    @for (var numOfRatings = 0; numOfRatings < @Model.RatingSettings.Count; numOfRatings++)
-                                    {
-                                        @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingSettings[numOfRatings], 
-                                                    new { @style = "display:inline;", @onchange = "EnableRatingSubmitButton();" })
-                                        <label style="display:inline;margin-right:0.5em;">@Model.RatingSettings[numOfRatings].ToString().ToString()</label>
-                                    }
-                            </div>
-                            <div>
-                                <button type="submit" name="submitsocialrating" role="button" disabled="disabled" class="btn btn-primary" style="width:20%">Submit</button>
-                            </div>
-                        </div>
-                    }
-                }
-            }
-
-            if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
-            {
-                <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+                <div>You rated the page as @Model.CurrentRating out of @Model.RatingSettings.Last().ToString()</div>
             }
             else
             {
-                <div style="margin-top:0.5em"><strong>Average rating: @Model.Average.ToString("F")</strong></div>
-                <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
+                using (Html.BeginForm("Submit", null))
+                {
+                    @Html.HiddenFor(m => m.CurrentBlockLink)
+                    @Html.HiddenFor(m => m.CurrentPageLink)
+                    <div class="clearfix">
+                        <div style="margin-bottom:0.15em;"><i>How do you rate this page?</i></div>
+                        <div style="margin-bottom:0.5em;">
+                            @for (var numOfRatings = 0; numOfRatings < @Model.RatingSettings.Count; numOfRatings++)
+                            {
+                                @Html.RadioButtonFor(r => Model.SubmittedRating, Model.RatingSettings[numOfRatings],
+                                                    new { @style = "display:inline;", @onchange = "EnableRatingSubmitButton();" })
+                                <label style="display:inline;margin-right:0.5em;">@Model.RatingSettings[numOfRatings].ToString()</label>
+                            }
+                        </div>
+                        <div>
+                            <input type="submit" name="submitsocialrating" style="width:20%" value="Submit">
+                        </div>
+                    </div>
+                }
             }
+        }
+
+        @if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
+            {
+            <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
+        }
+        else
+        {
+            <div style="margin-top:0.5em"><strong>Average rating: @Model.Average.ToString("F")</strong></div>
+                <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
         }
     </div>
 </div>

@@ -37,7 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         /// </summary>
         [Display(
             GroupName = SystemTabNames.Content,
-            Order = 1)]
+            Order = 3)]
         public virtual bool SendActivity { get; set; }
 
         /// <summary>

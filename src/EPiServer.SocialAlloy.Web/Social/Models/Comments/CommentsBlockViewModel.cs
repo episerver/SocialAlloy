@@ -21,7 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             CommentBoxRows = block.CommentBoxRows;
-            CommentMaxLength = block.CommentMaxLength;
+            CommentMaxLength = block.CommentMaxLength; 
             CommentsDisplayMax = block.CommentsDisplayMax;
             CommentAuthor = form.Author;
             CommentBody = form.Body;
@@ -59,19 +59,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public IEnumerable<SocialComment> Comments { get; set; }
 
         /// <summary>
-        /// Gets or sets a success message that should be flashed in the view.
+        /// Gets and sets message details to be displayed to the user
         /// </summary>
-        public string SubmitSuccessMessage { get; set; }
-
-        /// <summary>
-        /// Gets or sets an error message that should be flashed in the view.
-        /// </summary>
-        public string SubmitErrorMessage { get; set; }
-
-        /// <summary>
-        /// Gets or sets an error message that should be flashed in the message display view.
-        /// </summary>
-        public string DisplayErrorMessage { get; set; }
+        public List<MessageViewModel> Messages { get; set; }
 
         /// <summary>
         /// Gets or sets the username for the user who may currently submit comments.

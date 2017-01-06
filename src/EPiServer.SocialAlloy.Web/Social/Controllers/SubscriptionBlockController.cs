@@ -3,6 +3,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
@@ -48,20 +49,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
-            // Restore the saved model state
-            LoadModelState(currentBlockLink);
-
             // Create a subscription form view model to fill the frontend form view
             var formViewModel = new SubscriptionFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
 
             // Create a subscription block view model to fill the frontend block view
             var blockViewModel = new SubscriptionBlockViewModel(currentBlock, formViewModel);
 
+            //get messages for view
+            blockViewModel.Messages = PopulateMessages();
+      
             // Set Block View Model Properties
             SetBlockViewModelProperties(blockViewModel);
-
-            // Apply current model state to the subscription block view model
-            ApplyModelStateToSubscriptionBlockViewModel(blockViewModel);
 
             // Render the frontend block view
             return PartialView("~/Views/Social/SubscriptionBlock/SubscriptionView.cshtml", blockViewModel);
@@ -109,21 +107,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 if (actionName == Action_Subscribe)
                 {
                     this.subscriptionRepository.Add(subscription);
-                    blockViewModel.UserSubscribedToPage = true;
                 }
                 else
                 {
                     this.subscriptionRepository.Remove(subscription);
-                    blockViewModel.UserSubscribedToPage = false;
                 }
-                blockViewModel.SubmitSuccessMessage = SubmitSuccessMessage;
+                AddToTempData("SubscriptionSuccessMessage", SubmitSuccessMessage);
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.SubmitErrorMessage = ex.Message;
+                AddToTempData("SubscriptionErrorMessage", ex.Message);
             }
-
-            SaveModelState(formViewModel.CurrentBlockLink, CollectViewModelStateToSave(blockViewModel));
 
             return Redirect(UrlResolver.Current.GetUrl(formViewModel.CurrentPageLink));
         }
@@ -141,57 +135,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
                 Type = SocialSubscription.PageSubscription
             };
-        }
-
-        /// <summary>
-        /// Collects subscription block view model state that needs to be saved.
-        /// </summary>
-        /// <param name="blockViewModel">The subscription block view model.</param>
-        /// <returns>A model state dictionary.</returns>
-        private ModelStateDictionary CollectViewModelStateToSave(SubscriptionBlockViewModel blockViewModel)
-        {
-            var transientState = new ModelStateDictionary
-            {
-                new KeyValuePair<string, ModelState>
-                (
-                    ModelState_SubmitSuccessMessage,
-                    new ModelState() {
-                        Value = new ValueProviderResult(blockViewModel.SubmitSuccessMessage, null, CultureInfo.CurrentCulture)
-                    }
-                ),
-                new KeyValuePair<string, ModelState>
-                (
-                    ModelState_SubmitErrorMessage,
-                    new ModelState() {
-                        Value = new ValueProviderResult(blockViewModel.SubmitErrorMessage, null, CultureInfo.CurrentCulture)
-                    }
-                )
-            };
-
-            var modelState = ViewData.ModelState;
-            if (transientState != null)
-            {
-                modelState.Merge(transientState);
-            }
-
-            return modelState;
-        }
-
-        /// <summary>
-        /// Applies current model state to the subscription block view model.
-        /// </summary>
-        /// <param name="blockViewModel">The subscription block view model to apply model state to.</param>
-        private void ApplyModelStateToSubscriptionBlockViewModel(SubscriptionBlockViewModel blockViewModel)
-        {
-            // Get success/error model state
-            var successMessage = GetModelState(ModelState_SubmitSuccessMessage);
-            var errorMessage = GetModelState(ModelState_SubmitErrorMessage);
-            var userSubscribedToCurrentPage = GetModelState(ModelState_UserSubscribedToPage);
-
-            // Apply success/error model state to the view model
-            blockViewModel.SubmitSuccessMessage = successMessage != null ? (string)successMessage.Value.RawValue : "";
-            blockViewModel.SubmitErrorMessage = errorMessage != null ? (string)errorMessage.Value.RawValue : blockViewModel.SubmitErrorMessage;
-            blockViewModel.UserSubscribedToPage = blockViewModel.UserSubscribedToPage;
         }
 
         /// <summary>
@@ -233,8 +176,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.SubmitErrorMessage = ex.Message;
+                blockViewModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
+        }
+
+        /// <summary>
+        /// Populates the messages that will be displayed to the user in the group creation view.
+        /// </summary>
+        /// <returns>A list of messages used to convey statuses to the user</returns>
+        private List<MessageViewModel> PopulateMessages()
+        {
+            var successMessageBody = GetFromTempData<string>("SubscriptionSuccessMessage");
+            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
+
+            var errorMessageBody = GetFromTempData<string>("SubscriptionErrorMessage");
+            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
+
+            return new List<MessageViewModel> { successMessage, errorMessage };
         }
     }
 }
