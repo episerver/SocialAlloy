@@ -22,6 +22,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialModerationRepository moderationRepository;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GroupCreationBlockController()
         {
             this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
@@ -114,7 +117,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
-        //Validates the group name and group description properties
+        /// <summary>
+        /// Validates the group name and group description properties
+        /// </summary>
+        /// <param name="groupName">The name of the new group</param>
+        /// <param name="groupDescription">The description of the new group</param>
+        /// <returns>Returns bool for if the group name and description are populated</returns>
         private bool ValidateGroupInputs(string groupName, string groupDescription)
         {
             return !string.IsNullOrWhiteSpace(groupName) && !string.IsNullOrWhiteSpace(groupDescription);

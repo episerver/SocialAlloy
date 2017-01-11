@@ -24,6 +24,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialMemberRepository memberRepository;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MembershipDisplayController()
         {
             groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
@@ -78,10 +81,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
         }
 
-        //Retrieves a list of members to populate the view model with. 
+        /// <summary>
+        /// Retrieves a list of members to populate the view model with. 
+        /// </summary>
+        /// <param name="viewModel">The model for the membership display block</param>
+        /// <param name="groupId">The id of the group that will have its members displayed</param>
+        /// <param name="pageSize">The number of members to be displayed</param>
+        /// <returns></returns>
         private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlockViewModel viewModel, string groupId, int pageSize)
         {
-
             //Constructs a social member filter with groupId from the model and paging information that was configured in admin view
             var memberFilter = new SocialMemberFilter
             {

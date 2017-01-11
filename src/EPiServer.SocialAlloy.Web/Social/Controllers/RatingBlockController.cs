@@ -9,6 +9,7 @@ using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -62,7 +63,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetRating(target, blockModel);
             }
 
-            if (blockModel.Messages.Count == 0) { GetRatingStatistics(target, blockModel); }
+            //Conditionally retrieving ratingstatistics based on any errors that might have been encountered
+            if (blockModel.Messages.Any(x => x.Type == "error")) { GetRatingStatistics(target, blockModel); }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }

@@ -137,11 +137,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <returns>AddMemberRequest: the workflowItem extension data</returns>
         public AddMemberRequest Get(string user, string group)
         {
-             AddMemberRequest memberRequest = null;
+            AddMemberRequest memberRequest = null;
 
             //Construct a filter to return the desired target under moderation
             var filter = new CompositeCriteria<WorkflowItemFilter, AddMemberRequest>();
-            filter.Filter.Target = Reference.Create(string.Format("members://{0}/{1}", group, user));
+            filter.Filter.Target = Reference.Create(CreateUri(group, user));
 
             try
             {
@@ -234,9 +234,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         {
             var populatedWorkflowId = WorkflowId.Create(workflowId);
 
-            var membershipRequest = new AddMemberRequest(socialMember, memberExtensionData);
+            var requestReference = Reference.Create(CreateUri(socialMember.GroupId, socialMember.UserReference));
 
-            var requestReference = membershipRequest.ToReference();
+            var membershipRequest = new AddMemberRequest(socialMember, memberExtensionData);
 
             try
             {
@@ -256,7 +256,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                     //retrieve the current state of the workflow item once the begintransitionsession begins.
                     var filter = new WorkflowItemFilter { Target = requestReference };
                     var criteria = new Criteria<WorkflowItemFilter> { Filter = filter };
-                    var workflowItem = this.workflowItemService.Get(criteria).Results.First();
+                    var workflowItem = this.workflowItemService.Get(criteria).Results.Last();
 
                     // Example: Current State: "Pending", Action: "Approve" => Transitioned State: "Approved"
                     var transitionedState = workflow.Transition(workflowItem.State, new WorkflowAction(action));
@@ -264,7 +264,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                     var subsequentWorkflowItem = new WorkflowItem(
                         workflow.Id,
                         transitionedState,
-                        membershipRequest.ToReference()
+                        requestReference
                     );
 
                     this.workflowItemService.Add(subsequentWorkflowItem, membershipRequest, transitionToken);
@@ -326,7 +326,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                 if (listOfWorkflow.Count() > 0)
                 {
                     var workflow = listOfWorkflow.First().Data;
-                    expectedSocialWorkflow = new SocialWorkflow(workflow.Id.Id, workflow.InitialState.Name);
+                    expectedSocialWorkflow = new SocialWorkflow(workflow.Id.Id, workflow.Name, workflow.InitialState.Name);
                 }
             }
             catch (SocialAuthenticationException ex)
@@ -358,6 +358,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         public bool IsModerated(string groudId)
         {
             return this.GetWorkflowFor(groudId) != null;
+        }
+
+        /// <summary>
+        /// Creates a unique uri to be used with to track the progression of a member being moderated for group admission 
+        /// </summary>
+        /// <param name="group">Id of the group that a member is trying to join</param>
+        /// <param name="user">The name of the member that is trying to join a group</param>
+        /// <returns></returns>
+        public string CreateUri(string group, string user)
+        {
+            return
+               string.Format(
+                   "members://{0}/{1}",
+                   group,
+                   user
+               );
         }
 
         /// <summary>

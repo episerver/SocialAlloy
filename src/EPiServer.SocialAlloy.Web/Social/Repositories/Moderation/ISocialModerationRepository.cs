@@ -1,7 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
-using EPiServer.Social.Moderation.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
 
@@ -9,9 +6,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     public interface ISocialModerationRepository
     {
-
+        /// <summary>
+        /// Adds a new workflow to the underlying repository for a specified group. 
+        /// </summary>
+        /// <param name="group">The group that will be associated with the workflow</param>
         void Add(SocialGroup group);
 
+        /// <summary>
+        /// Adds a new workflowitem to the underlying repository
+        /// </summary>
+        /// <param name="socialWorkflow">The workflow intem to be added</param>
+        /// <param name="membershipRequest">Extension data containing member details that will be needed if member admission is approved</param>
         void Add(SocialWorkflowItem socialWorkflow, AddMemberRequest membershipRequest);
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="user">The user reference for the member requesting group admission</param>
         /// <param name="group">The group id for the group the user is looking to gain admission</param>
-        /// <returns></returns>
+        /// <returns>The workflowitem extension data</returns>
         AddMemberRequest Get(string user, string group);
 
         /// <summary>
@@ -43,16 +48,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Returns the moderation workflow supporting the specified group.
         /// </summary>
-        /// <param name="grouId">The Id of the group that a workflow is associated with</param>
+        /// <param name="groupId">The Id of the group that a workflow is associated with</param>
         /// <returns>Moderation workflow supporting the specified group</returns>
-        SocialWorkflow GetWorkflowFor(string grouId);
+        SocialWorkflow GetWorkflowFor(string groupId);
 
         /// <summary>
         /// Returns true if the specified group has a moderation workflow,
         /// false otherwise.
         /// </summary>
-        /// <param name="group">ID of the group</param>
+        /// <param name="groupId">ID of the group</param>
         /// <returns>True if the specified group has a moderation workflow, false otherwise</returns>
-        bool IsModerated(string group);
+        bool IsModerated(string groupId);
+
+        /// <summary>
+        /// Creates a unique uri to be used with to track the progression of a member being moderated for group admission 
+        /// </summary>
+        /// <param name="group">Id of the group that a member is trying to join</param>
+        /// <param name="user">The name of the member that is trying to join a group</param>
+        /// <returns></returns>
+        string CreateUri(string group, string user);
     }
 }

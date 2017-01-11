@@ -161,12 +161,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="extensionData">The extension data for the membership request</param>
         private void AddAModeratedMember(SocialMember member, MemberExtensionData extensionData)
         {
-            // Prepare an instance of a data object describing the membership
-            // request. This will be captured as extension data associated with 
-            // our workflow item.
+            // Define a unique reference representing the entity
+            // under moderation. Note that this entity may be
+            // transient or may not yet have been assigned a
+            // unique identifier. Defining an item reference allows
+            // you to bridge this gap.
 
-            var membershipRequest = new AddMemberRequest(member, extensionData);
+            // For example: "members:/{group-id}/{user-reference}"
 
+            var targetReference = moderationRepository.CreateUri(member.GroupId, member.UserReference);
+            
             // Retrieve the workflow supporting moderation of
             // membership for the group to which the user is
             // being added.
@@ -178,22 +182,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             var initialState = moderationWorkflow.InitialState;
 
-            // Define a unique reference representing the entity
-            // under moderation. Note that this entity may be
-            // transient or may not yet have been assigned a
-            // unique identifier. Defining an item reference allows
-            // you to bridge this gap.
+            // Prepare an instance of a data object describing the membership
+            // request. This will be captured as extension data associated with 
+            // our workflow item.
 
-            // For example: "members:/{group-id}/{user-reference}"
+            var membershipRequest = new AddMemberRequest(member, extensionData);
 
-            var targetReference = membershipRequest.ToReference();
-       
             // Create a new workflow item...
 
             var membershipRequestWorkflowRecord = new SocialWorkflowItem(
                 moderationWorkflow.Id,      // ...under the group's moderation workflow
                 initialState,               // ...in the workflow's initial state
-                targetReference.Id             // ...identified with this reference
+                targetReference             // ...identified with this reference
             );
 
             this.moderationRepository.Add(membershipRequestWorkflowRecord, membershipRequest);
@@ -214,7 +214,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
-        //Validates the user name and user email
+        /// <summary>
+        /// Validates the user name and user email
+        /// </summary>
+        /// <param name="userName">The username of the member</param>
+        /// <param name="userEmail">Ther email of the  member</param>
+        /// <returns>Returns bool for if the username and email are populated</returns>
         private bool ValidateMemberInputs(string userName, string userEmail)
         {
             return !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(userEmail);

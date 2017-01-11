@@ -1,12 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {

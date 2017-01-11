@@ -55,10 +55,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<IPageRepository>().Use<PageRepository>();
-
             configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
             configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
-
             configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
             configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
             configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();

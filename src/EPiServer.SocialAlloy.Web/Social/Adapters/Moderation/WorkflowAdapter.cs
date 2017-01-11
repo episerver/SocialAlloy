@@ -10,21 +10,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
     public class WorkflowAdapter
     {
         /// <summary>
-        /// Converts a Worflow into a WorkflowViewModel
+        /// Converts a Worflow into a SocialWorkflow
         /// </summary>
         /// <param name="workflow">Workflow to be adapted</param>
-        /// <returns>WorkflowViewModel</returns>
-        public WorkflowViewModel Adapt(Workflow workflow)
+        /// <returns>SocialWorkflow</returns>
+        public SocialWorkflow Adapt(Workflow workflow)
         {
-            WorkflowViewModel viewModel = null;
+            SocialWorkflow viewModel = null;
 
             if (workflow != null)
             {
-                viewModel = new WorkflowViewModel
-                {
-                    Id = workflow.Id.ToString(),
-                    Name = workflow.Name
-                };
+                viewModel = new SocialWorkflow(workflow.Id.ToString(), workflow.Name, workflow.InitialState.Name);
             }
 
             return viewModel;

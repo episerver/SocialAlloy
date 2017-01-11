@@ -15,7 +15,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// </summary>
         public ModerationViewModel()
         {
-            this.Workflows = new List<WorkflowViewModel>();
+            this.Workflows = new List<SocialWorkflow>();
             this.Items = new List<MembershipRequestModel>();
         }
 
@@ -23,12 +23,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// Gets or sets a collection of workflows available within
         /// the application.
         /// </summary>
-        public IEnumerable<WorkflowViewModel> Workflows { get; set; }
+        public IEnumerable<SocialWorkflow> Workflows { get; set; }
 
         /// <summary>
         /// Gets or sets the workflow selected as the "current" workflow.
         /// </summary>
-        public WorkflowViewModel SelectedWorkflow { get; set; }
+        public SocialWorkflow SelectedWorkflow { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of items, associated with the

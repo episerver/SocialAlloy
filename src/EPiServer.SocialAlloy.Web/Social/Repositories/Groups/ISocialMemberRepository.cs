@@ -1,6 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
 

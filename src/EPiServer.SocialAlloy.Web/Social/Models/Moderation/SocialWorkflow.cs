@@ -7,9 +7,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
     /// </summary>
     public class SocialWorkflow
     {
-        public SocialWorkflow(string id, string initialState )
+        public SocialWorkflow(string id, string name, string initialState )
         {
             this.Id = id;
+            this.Name = name;
             this.InitialState = initialState;
         }
         public string Id { get; set; }
@@ -19,5 +20,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// </summary>
         public string InitialState { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the workflow.
+        /// </summary>
+        public string Name { get; set; }
     }
 }

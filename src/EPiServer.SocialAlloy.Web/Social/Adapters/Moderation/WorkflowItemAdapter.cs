@@ -13,11 +13,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
     {
         private Workflow workflow;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="workflow">The workflow that will be adapted</param>
         public WorkflowItemAdapter(Workflow workflow)
         {
             this.workflow = workflow;
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WorkflowItemAdapter()
         {
 
@@ -60,26 +67,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
             }
 
             return workflowItem;
-        }
-
-        /// <summary>
-        /// Converts a WorkflowItem into a SocialWorkflowItem
-        /// </summary>
-        /// <param name="workflowItem">The WorkflowItem to be adapted</param>
-        /// <returns>SocialWorkflowItem</returns>
-        public SocialWorkflowItem Adapt(WorkflowItem workflowItem)
-        {
-            SocialWorkflowItem socialWorkflowItem = null;
-
-            if (workflowItem != null)
-            {
-                var socialWorkflowId = workflowItem.Id.Id;
-                var socialWorkflowState = workflowItem.State.Name;
-                var socialWorkflowTarget = workflowItem.Target.Id;
-                socialWorkflowItem = new SocialWorkflowItem(socialWorkflowId, socialWorkflowState, socialWorkflowTarget);
-            }
-
-            return socialWorkflowItem;
         }
     }
 }

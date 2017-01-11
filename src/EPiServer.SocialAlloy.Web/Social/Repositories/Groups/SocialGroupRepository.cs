@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using EPiServer.Social.Comments.Core;
+﻿using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
+using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {

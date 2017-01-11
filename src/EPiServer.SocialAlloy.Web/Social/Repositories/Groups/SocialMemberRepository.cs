@@ -1,12 +1,11 @@
 ﻿using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
+using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
-using System;
 using System.Linq;
-using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {

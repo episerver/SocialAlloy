@@ -441,15 +441,10 @@
     <Compile Include="Social\Models\Groups\SocialMember.cs" />
     <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
     <Compile Include="Social\Models\Moderation\AddMemberRequest.cs" />
-    <Compile Include="Social\Models\Moderation\IApprovable.cs" />
     <Compile Include="Social\Models\Moderation\MembershipModeration.cs" />
     <Compile Include="Social\Models\Moderation\ModerationViewModel.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
-    <Compile Include="Social\Models\Moderation\SocialWorkflowAction.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflowItem.cs" />
-    <Compile Include="Social\Models\Moderation\SocialWorkflowState.cs" />
-    <Compile Include="Social\Models\Moderation\SocialWorkflowTransition.cs" />
-    <Compile Include="Social\Models\Moderation\WorkflowViewModel.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />

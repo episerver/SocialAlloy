@@ -10,7 +10,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
     /// a request for membership to a group. It is intended to
     /// support the moderation process around group membership.
     /// </summary>
-    public class AddMemberRequest : IApprovable
+    public class AddMemberRequest 
     {
         private readonly ISocialMemberRepository memberRepository;
         /// <summary>
@@ -41,30 +41,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// Membership extension data needed for members to be added to a group
         /// </summary>
         public MemberExtensionData ExtensionData { get; set; }
-
-
-        /// <summary>
-        /// Approves the membership request represented by this instance,
-        /// commiting the user as a member of the target group.
-        /// </summary>
-        public void Approve()
-        {
-            memberRepository.Add(this.Member, this.ExtensionData);
-        }
-
-        /// <summary>
-        /// Returns a reference identifying this membership request.
-        /// </summary>
-        /// <returns>Reference identifying this membership request</returns>
-        public Reference ToReference()
-        {
-            return Reference.Create(
-                string.Format(
-                    "members://{0}/{1}",
-                    this.Member.GroupId.ToString(),
-                    this.Member.UserReference.ToString()
-                )
-            );
-        }
     }
 }
