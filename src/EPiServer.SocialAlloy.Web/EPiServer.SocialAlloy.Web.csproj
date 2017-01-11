@@ -437,6 +437,7 @@
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
     <Compile Include="Social\Models\Groups\SocialCompositeMember.cs" />
+    <Compile Include="Social\Models\Groups\SocialGroup.cs" />
     <Compile Include="Social\Models\Groups\SocialMember.cs" />
     <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
     <Compile Include="Social\Models\Moderation\AddMemberRequest.cs" />

@@ -8,30 +8,30 @@ using System.Web;
 namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
 {
     /// <summary>
-    /// The SocialWorkflowItem defines the workflow item details necessary to add and retrieve workflow items within the SocialAlloy sample
+    /// The SocialWorkflowItem class describes a workflow item model used by the SocialAlloy site
     /// </summary>
     public class SocialWorkflowItem
     {
-        public SocialWorkflowItem(WorkflowId workflowId, WorkflowState workflowState, Reference target)
+        public SocialWorkflowItem(string id, string state, string target)
         {
-            WorkflowId = workflowId;
-            WorkflowState = workflowState;
+            Id = id;
+            State = state;
             Target = target;
         }
 
         /// <summary>
-        /// The id of the workflow that the SocialWorkflowItem is associated with
+        /// Gets or sets the id of the workflow that the SocialWorkflowItem is associated with
         /// </summary>
-        public WorkflowId WorkflowId { get; set; }
+        public String Id { get; set; }
 
         /// <summary>
-        /// The current state that a workflow item is in within the workflow
+        /// Gets or sets the current state that a workflow item is in within the workflow
         /// </summary>
-        public WorkflowState WorkflowState { get; set; }
+        public String State { get; set; }
 
         /// <summary>
-        /// A reference to the member and group data for this workflow item
+        /// Gets or sets a reference to the member and group data for this workflow item
         /// </summary>
-        public Reference Target { get; set; }
+        public String Target { get; set; }
     }
 }

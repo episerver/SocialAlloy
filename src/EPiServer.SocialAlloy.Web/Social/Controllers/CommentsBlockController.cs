@@ -7,9 +7,7 @@ using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -66,7 +64,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     }
                 );
 
-                blockViewModel.Comments = ValidateCommentList(socialComments);
+                blockViewModel.Comments = socialComments;
             }
             catch (SocialRepositoryException ex)
             {
@@ -75,7 +73,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             return PartialView("~/Views/Social/CommentsBlock/CommentsView.cshtml", blockViewModel);
         }
-
 
         /// <summary>
         /// Submit handles the submitting of new comments.  It accepts a comment form model,
@@ -122,7 +119,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SocialComment addedComment = null;
 
             try
-            { 
+            {
                 addedComment = this.commentRepository.Add(newComment);
                 AddToTempData("CommentAddSuccessMessage", SubmitSuccessMessage);
             }
@@ -201,12 +198,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             return errors;
-        }
-
-        //Validates the list of members
-        private IEnumerable<SocialComment> ValidateCommentList(IEnumerable<SocialComment> commentList)
-        {
-            return commentList != null && commentList.Any() ? commentList : new List<SocialComment>();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Gets and sets message details to be displayed to the user
+        /// Gets or sets message details to be displayed to the user.
         /// </summary>
         public List<MessageViewModel> Messages { get; set; }
         
@@ -32,27 +32,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public string MemberName { get; set; }
 
         /// <summary>
-        /// Gets and sets the value of the user email to be added as member extensiond data.
+        /// Gets or sets the member email to be added as member extension data.
         /// </summary>
         public string MemberEmail { get; set; }
 
         /// <summary>
-        /// Gets and sets the value of the user's company to be added as member extension data.
+        /// Gets or sets the members's company to be added as member extension data.
         /// </summary>
         public string MemberCompany { get; set; }
 
         /// <summary>
-        /// Gets and sets the value for i
+        /// Gets or sets the value for whether the group has member admission moderation.
         /// </summary>
         public bool IsModerated { get; set; }
 
         /// <summary>
-        /// Gets and sets the GroupId of the group that a user will be added to. 
+        /// Gets or sets the GroupId of the group that a member will be added to. 
         /// </summary>
         public string GroupId { get; set; }
 
         /// <summary>
-        /// Gets and sets the name of the group that a user will be added to. 
+        /// Gets or sets the name of the group that a member will be added to. 
         /// </summary>
         public string GroupName { get; set; }
 

@@ -39,7 +39,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var member = new Member(socialMember.UserReference, socialMember.GroupId);
+                var userReference = Reference.Create(socialMember.UserReference);
+                var groupId = GroupId.Create(socialMember.GroupId);
+                var member = new Member(userReference, groupId);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, memberExtension);
                 var addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data);
                 addedSocialCompositeMember = socialMemberAdapter.Adapt(addedSocialMember, addedCompositeMember.Extension);
@@ -70,7 +72,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Retrieves a page of members from the EPiServer Social member repository.
         /// </summary>
-        /// <param name="socialMemberFilter">The social filter used to properly construct the composite filter used to return members.</param>
+        /// <param name="socialMemberFilter">The filter by which to retrieve members by</param>
         /// <returns>The list of members that are part of the specified group.</returns>
         public IEnumerable<SocialCompositeMember> Get(SocialMemberFilter socialMemberFilter)
         {
@@ -79,7 +81,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
-                var memberFilter = new MemberFilter { Group = socialMemberFilter.GroupId };
+                var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId)};
                 var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>() { Filter = memberFilter, PageInfo = pageInfo };
                 var compositeMember = this.memberService.Get(compositeFilter).Results;
                 returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(socialMemberAdapter.Adapt(x.Data), x.Extension));
@@ -103,6 +105,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             return returnedMembers;
         }
-
     }
 }

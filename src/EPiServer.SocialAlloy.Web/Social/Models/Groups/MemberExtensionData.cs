@@ -12,13 +12,13 @@
         }
 
         /// <summary>
-        /// Email of the member 
+        /// Gets or sets the email of the member 
         /// </summary>
-        public string  Email { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
-        /// Company the member works for.
+        /// Gets or sets the company the member works for.
         /// </summary>
-        public string  Company { get; set; }
+        public string Company { get; set; }
     }
 }

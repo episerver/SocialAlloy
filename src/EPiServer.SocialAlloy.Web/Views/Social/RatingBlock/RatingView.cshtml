@@ -1,6 +1,5 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models
-
 @model RatingBlockViewModel
 <script type="text/javascript">
     function EnableRatingSubmitButton() {
@@ -23,9 +22,9 @@
 
     <div style="margin-top:0.5em">
         @if (this.User.Identity.IsAuthenticated)
+        {
+            if (Model.CurrentRating.HasValue)
             {
-                if (Model.CurrentRating.HasValue)
-                {
                 <div>You rated the page as @Model.CurrentRating out of @Model.RatingSettings.Last().ToString()</div>
             }
             else
@@ -53,13 +52,13 @@
         }
 
         @if (!String.IsNullOrWhiteSpace(Model.NoStatisticsFoundMessage))
-            {
+        {
             <div style="color: blue;">@Model.NoStatisticsFoundMessage</div>
         }
         else
         {
             <div style="margin-top:0.5em"><strong>Average rating: @Model.Average.ToString("F")</strong></div>
-                <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
+            <div><strong>Total # of ratings: @Model.TotalCount</strong></div>
         }
     </div>
 </div>

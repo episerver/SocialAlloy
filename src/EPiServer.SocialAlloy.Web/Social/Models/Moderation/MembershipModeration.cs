@@ -6,7 +6,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
     /// The MembershipModeration class is intended to identify
     /// the relationship between a moderation workflow and
     /// the group which is supports for moderating membership
-    /// requests.
+    /// requests. This serves as an extension data added to workflows
     /// </summary>
     public class MembershipModeration
     {

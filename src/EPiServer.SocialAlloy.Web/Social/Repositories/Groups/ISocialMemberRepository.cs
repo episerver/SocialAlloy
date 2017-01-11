@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
+    /// <summary>
+    /// The ISocialMemberRepository interface describes a component capable
+    /// of persisting, and retrieving social member data from
+    /// an underlying data store.
+    /// </summary>
     public interface ISocialMemberRepository
     {
         /// <summary>
@@ -19,7 +24,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <summary>
         /// Retrieves a list of members to the underlying member repository.
         /// </summary>
-        /// <param name="memberFilter">The member filter used to retrieve the correct list of members</param>
+        /// <param name="memberFilter">The filter by which to retrieve members by.</param>
         /// <returns>The list of members that are part of the specified group.</returns>
         IEnumerable<SocialCompositeMember> Get(SocialMemberFilter memberFilter);
     }

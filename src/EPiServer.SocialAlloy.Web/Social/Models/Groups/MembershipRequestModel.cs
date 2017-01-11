@@ -5,6 +5,9 @@ using System.Web;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
+    /// <summary>
+    /// MembershipRequestModel represents the workflow items that have been added for moderation.  
+    /// </summary>
     public class MembershipRequestModel
     {
         /// <summary>

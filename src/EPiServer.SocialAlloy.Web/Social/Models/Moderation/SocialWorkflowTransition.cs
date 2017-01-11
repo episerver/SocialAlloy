@@ -5,22 +5,22 @@
     /// </summary>
     public class SocialWorkflowTransition
     {
-        public SocialWorkflowTransition(SocialWorkflowState initialState, SocialWorkflowState secondaryState, SocialWorkflowAction action)
+        public SocialWorkflowTransition(SocialWorkflowState origin, SocialWorkflowState destination, SocialWorkflowAction action)
         {
-            InitialState = initialState;
-            SecondaryState = secondaryState;
+            Origin = origin;
+            Destination = destination;
             Action = action;
         }
 
         /// <summary>
         /// The ititial state that a workflow item will be in before the action
         /// </summary>
-        public SocialWorkflowState InitialState { get; set; }
+        public SocialWorkflowState Origin { get; set; }
 
         /// <summary>
         /// The secondary state that a workflow item will be in after the action
         /// </summary>
-        public SocialWorkflowState SecondaryState { get; set; }
+        public SocialWorkflowState Destination { get; set; }
 
         /// <summary>
         /// The action used to move a workflow item from its initial state to its secondary state

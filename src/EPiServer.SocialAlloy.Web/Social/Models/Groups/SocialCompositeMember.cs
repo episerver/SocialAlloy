@@ -6,7 +6,8 @@ using System.Web;
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
     /// <summary>
-    /// A composite class combining of SocialMember and MemberExtensionData
+    /// The SocialCompositeMember represents the structure containing the member model used by 
+    /// the SocialAlloy site along with extension data containing other member-related information 
     /// </summary>
     public class SocialCompositeMember
     {

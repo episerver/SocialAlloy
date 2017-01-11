@@ -31,7 +31,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         }
 
         /// <summary>
-        /// The heading for the frontend rating block display.
+        /// Gets the heading for the frontend rating block display.
         /// </summary>
         public string Heading { get; }
 
@@ -41,28 +41,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// The rating value settings for the frontend rating block display.
+        /// Gets or sets the rating value settings for the frontend rating block display.
         /// </summary>
 
         public List<int> RatingSettings { get; set; }
 
         /// <summary>
-        /// The total number of ratings found for the page containing the rating block.
+        /// Gets or sets the total number of ratings found for the page containing the rating block.
         /// </summary>
         public long TotalCount { get; set; }
 
         /// <summary>
-        /// The average of all ratings submitted for the page containing the rating block.
+        /// Gets or sets the average of all ratings submitted for the page containing the rating block.
         /// </summary>
         public double Average { get; set; }
 
         /// <summary>
-        /// The existing rating, if any submitted by Rater for the page containing the rating block.
+        /// Gets or sets the existing rating, if any submitted by Rater for the page containing the rating block.
         /// </summary>
         public int? CurrentRating { get; set; }
 
         /// <summary>
-        /// The new rating submitted by Rater for the page containing the rating block.
+        /// Gets or sets the new rating submitted by Rater for the page containing the rating block.
         /// </summary>
         public int SubmittedRating { get; set; }
 
@@ -72,7 +72,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public List<MessageViewModel> Messages  { get; set; }
 
         /// <summary>
-        /// Message displayed in rating block if no rating statistics are found for the page 
+        /// Gets or sets the message displayed in rating block if no rating statistics are found for the page 
         /// to prompt user to submit a rating for this page.
         /// </summary>
         public string NoStatisticsFoundMessage { get; set; }

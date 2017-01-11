@@ -14,7 +14,6 @@
         <div style="color:@messageStyle">@message.Body</div>
     }
 
-
     @if (Model.IsModerated)
             {
         <div class="alert">
@@ -29,16 +28,16 @@
             @Html.HiddenFor(m => m.CurrentBlockLink)
             @Html.HiddenFor(m => m.CurrentPageLink)
             @Html.HiddenFor(m => m.IsModerated)
-            @Html.HiddenFor(m=> m.GroupId)
+            @Html.HiddenFor(m => m.GroupId)
             @Html.HiddenFor(m => m.GroupName)
             <div>
                 @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
                 @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
                 @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
             </div>
-                <div>
-                    <input type="submit" name="submit" value="Join @Model.GroupName">
-                </div>
+            <div>
+                <input type="submit" name="submit" value="Join @Model.GroupName">
+            </div>
         }
     }
     else
@@ -46,5 +45,4 @@
         <div style="color: red">A group must be properly configured to use this block</div>
     }
     <br />
-
 </div>

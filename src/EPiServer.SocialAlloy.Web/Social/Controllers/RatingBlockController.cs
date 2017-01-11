@@ -62,7 +62,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetRating(target, blockModel);
             }
 
-            GetRatingStatistics(target, blockModel);
+            if (blockModel.Messages.Count == 0) { GetRatingStatistics(target, blockModel); }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }
@@ -81,10 +81,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             ValidateSubmitRatingForm(ratingForm, blockModel);
 
-            // Add the rating
-            AddRating(ratingForm.SubmittedRating.Value, blockModel);
+            // Add the rating and verify success
+            var addRatingSuccess = AddRating(ratingForm.SubmittedRating.Value, blockModel);
 
-            if (currentBlock.SendActivity)
+            if (addRatingSuccess && currentBlock.SendActivity)
             {
                 // Add a rating activity
                 AddActivity(ratingForm.SubmittedRating.Value, blockModel);
@@ -161,18 +161,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="value">The value of the submitted rating</param>
         /// <param name="blockModel">a reference to the RatingBlockViewModel to 
         /// populate with errors, if any</param>
-        private void AddRating(int value, RatingBlockViewModel blockModel)
+        private bool AddRating(int value, RatingBlockViewModel blockModel)
         {
             try
             {
                 ratingRepository.AddRating(this.userId, this.pageId, value);
                 var successMessage = "Thank you for submitting your rating!";
                 AddToTempData("RatingAddSuccessMessage", successMessage);
+                return true;
             }
             catch (SocialRepositoryException ex)
             {
                 AddToTempData("RatingAddErrorMessage", ex.Message);
             }
+            return false;
         }
 
         /// <summary>

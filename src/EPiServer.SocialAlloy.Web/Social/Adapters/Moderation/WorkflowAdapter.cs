@@ -29,45 +29,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
 
             return viewModel;
         }
-
-        /// <summary>
-        /// Converts a SocialWorkflow into a Workflow
-        /// </summary>
-        /// <param name="socialWorkflow">The SocialWorkflow to be adapted</param>
-        /// <returns>Workflow</returns>
-        public Workflow Adapt(SocialWorkflow socialWorkflow)
-        {
-            Workflow workflow = null;
-
-            if (socialWorkflow != null)
-            {
-                var workflowName = socialWorkflow.workflowName;
-                var workflowTransitions = socialWorkflow.workflowTransitions.Select(x => Adapt(x)).ToList();
-                var workflowState = new WorkflowState(socialWorkflow.workflowState.Name);
-                workflow = new Workflow(workflowName, workflowTransitions, workflowState);
-            }
-
-            return workflow;
-        }
-
-        /// <summary>
-        /// Converts a SocialWorkflowTransition into a WorkflowTransition
-        /// </summary>
-        /// <param name="socialWorkflowTransition">The socialWorkflowTransition to be adapted</param>
-        /// <returns>WorkflowTransition</returns>
-        public WorkflowTransition Adapt(SocialWorkflowTransition socialWorkflowTransition)
-        {
-            WorkflowTransition workflowTransition = null;
-
-            if (socialWorkflowTransition != null)
-            {
-                var from = new WorkflowState(socialWorkflowTransition.InitialState.Name);
-                var to = new WorkflowState(socialWorkflowTransition.SecondaryState.Name);
-                var action = new WorkflowAction(socialWorkflowTransition.Action.Name);
-                workflowTransition = new WorkflowTransition(from, to, action);
-            }
-
-            return workflowTransition;
-        }
     }
 }

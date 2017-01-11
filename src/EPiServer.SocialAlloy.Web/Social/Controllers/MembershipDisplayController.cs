@@ -45,23 +45,33 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 ShowHeading = currentBlock.ShowHeading,
                 GroupName = currentBlock.GroupName,
                 Messages = new List<MessageViewModel>(),
-                MemberList = new List<SocialCompositeMember>()
+                Members = new List<SocialCompositeMember>()
             };
 
             //Retrieve the group id assigned to the block and populate the memberlist 
             try
             {
                 var group = groupRepository.Get(currentBlock.GroupName);
-                membershipDisplayBlockModel.MemberList = RetrieveMemberList(membershipDisplayBlockModel, group.Id, currentBlock.DisplayPageSize);
+
+                //Validate that the group exists 
+                if (group != null)
+                {
+                    var groupId = group.Id;
+                    membershipDisplayBlockModel.Members = RetrieveMemberList(membershipDisplayBlockModel, groupId, currentBlock.DisplayPageSize);
+                }
+                else
+                {
+                    var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
+                    membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = errorMessage, Type = "error" });
+                }
             }
-            catch(SocialRepositoryException ex)
+            catch (SocialRepositoryException ex)
             {
                 membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
-            catch(NullReferenceException)
+            catch (GroupDoesNotExistException ex)
             {
-                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
-                membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = errorMessage, Type = "error" });
+                membershipDisplayBlockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
             }
 
             //Return block view with populated model
@@ -69,8 +79,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         //Retrieves a list of members to populate the view model with. 
-        private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlockViewModel viewModel, GroupId groupId, int pageSize)
+        private List<SocialCompositeMember> RetrieveMemberList(MembershipDisplayBlockViewModel viewModel, string groupId, int pageSize)
         {
+
             //Constructs a social member filter with groupId from the model and paging information that was configured in admin view
             var memberFilter = new SocialMemberFilter
             {
@@ -78,16 +89,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 PageSize = pageSize
             };
 
-            //Retrieves the list of members
-            IEnumerable<SocialCompositeMember> memberList = memberRepository.Get(memberFilter);
-           
-            return ValidateMemberList(memberList);
-        }
-
-        //Validates the list of members
-        private List<SocialCompositeMember> ValidateMemberList(IEnumerable<SocialCompositeMember> memberList)
-        {
-            return memberList != null && memberList.Any() ? memberList.ToList() : new List<SocialCompositeMember>();
+            //Retrieves ad returns the list of members
+            return memberRepository.Get(memberFilter).ToList();
         }
     }
 }

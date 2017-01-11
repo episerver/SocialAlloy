@@ -3,17 +3,18 @@
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
-    /// The SocialMemberFilter class exposes a set of properties by which social member repo can use to filter
+    /// The SocialMemberFilter  describes the specifications by which
+    /// member data should be retrieved.
     /// </summary>
     public class SocialMemberFilter
     {
         /// <summary>
-        /// The group id to filter on.
+        /// Gets or sets the group id to filter on.
         /// </summary>
-        public GroupId GroupId { get; set; }
+        public string GroupId { get; set; }
 
         /// <summary>
-        /// The number of members to retrieve.
+        /// Gets or sets the number of members to retrieve.
         /// </summary>
         public int PageSize { get; set; }
     }

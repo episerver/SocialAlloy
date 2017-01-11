@@ -26,6 +26,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly ISocialMemberRepository memberRepository;
         private readonly ISocialModerationRepository moderationRepository;
 
+        /// <summary>
+        /// Constructor for admission block
+        /// </summary>
         public GroupAdmissionBlockController()
         {
             groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
@@ -42,7 +45,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var currentBlockLink = ((IContent)currentBlock).ContentLink;
 
-            //populate model to pass to block view
+            //Populate model to pass to block view
             var blockModel = new GroupAdmissionBlockViewModel()
             {
                 Heading = currentBlock.Heading,
@@ -51,29 +54,37 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 CurrentPageLink = pageRouteHelper.PageLink,
             };
 
-            //retrieving moderation infromation for the model to display in the view
+            //Retrieves moderation information for the model to display in the view
             try
             {
-                var groupId = groupRepository.Get(currentBlock.GroupName).Id;
-                blockModel.GroupName = currentBlock.GroupName;
-                blockModel.GroupId = groupId.ToString();
-                blockModel.IsModerated = moderationRepository.IsModerated(groupId);
-                blockModel.Messages = PopulateMessages();
+                var group = groupRepository.Get(currentBlock.GroupName);
+                //Validate that the group exists 
+                if (group != null)
+                {
+                    var groupId = group.Id;
+                    blockModel.GroupName = currentBlock.GroupName;
+                    blockModel.GroupId = groupId.ToString();
+                    blockModel.IsModerated = moderationRepository.IsModerated(groupId);
+                }
+                else
+                {
+                    var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
+                    AddToTempData("GroupAdmissionErrorMessage", errorMessage);
+                }
             }
             catch (SocialRepositoryException ex)
             {
                 AddToTempData("GroupAdmissionErrorMessage", ex.Message);
             }
-            catch (NullReferenceException)
+            catch (GroupDoesNotExistException ex)
             {
-                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
-                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
+                AddToTempData("GroupAdmissionErrorMessage", ex.Message);
             }
-
-            //remove existing values from input fields
+            blockModel.Messages = PopulateMessages();
+            //Remove existing values from input fields
             ModelState.Clear();
 
-            //return block view
+            //Return block view
             return PartialView("~/Views/Social/GroupAdmissionBlock/Index.cshtml", blockModel);
         }
 
@@ -87,34 +98,37 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                AddMember(blockModel, GroupId.Create(blockModel.GroupId));
+                AddMember(blockModel, blockModel.GroupId);
             }
             catch (SocialRepositoryException ex)
             {
                 AddToTempData("GroupAdmissionErrorMessage", ex.Message);
             }
-            catch (NullReferenceException)
-            {
-                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
-                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
-            }
 
             return Redirect(UrlResolver.Current.GetUrl(blockModel.CurrentPageLink));
         }
 
-        private void AddMember(GroupAdmissionBlockViewModel blockModel, GroupId groupId)
+        /// <summary>
+        /// Determines how a member is added to a group. 
+        /// If the group is moderated a request for membership is added into the group moderation workflow. 
+        /// If the group is not moderated the member is  added to the underlying membership repository
+        /// </summary>
+        /// <param name="blockModel">The viewmodel for the GroupAdmission view</param>
+        /// <param name="groupId">The id of the group that the member is being added to</param>
+        private void AddMember(GroupAdmissionBlockViewModel blockModel, string groupId)
         {
             var validatedInputs = ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail);
             if (validatedInputs)
             {
                 try
                 {
-                    //populated the SocialMember and extension data
-                    var member = new SocialMember(Reference.Create(blockModel.MemberName), groupId);
+                    //Populated the SocialMember and extension data
+                    var member = new SocialMember(blockModel.MemberName, groupId);
                     var extensionData = new MemberExtensionData(blockModel.MemberEmail, blockModel.MemberCompany);
 
                     if (blockModel.IsModerated)
                     {
+                        //Adds request for membership into moderation workflow
                         this.AddAModeratedMember(member, extensionData);
                     }
                     else
@@ -143,8 +157,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Submits a membership request to the specified group's
         /// moderation workflow for approval.
         /// </summary>
-        /// <param name="groupId">Group to which a member should be added</param>
-        /// <param name="userReference">User who is pending approval for membership</param>
+        /// <param name="member">The member information for the membership request</param>
+        /// <param name="extensionData">The extension data for the membership request</param>
         private void AddAModeratedMember(SocialMember member, MemberExtensionData extensionData)
         {
             // Prepare an instance of a data object describing the membership
@@ -173,13 +187,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // For example: "members:/{group-id}/{user-reference}"
 
             var targetReference = membershipRequest.ToReference();
-
+       
             // Create a new workflow item...
 
             var membershipRequestWorkflowRecord = new SocialWorkflowItem(
                 moderationWorkflow.Id,      // ...under the group's moderation workflow
                 initialState,               // ...in the workflow's initial state
-                targetReference             // ...identified with this reference
+                targetReference.Id             // ...identified with this reference
             );
 
             this.moderationRepository.Add(membershipRequestWorkflowRecord, membershipRequest);

@@ -1,14 +1,12 @@
 ﻿using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
 {
+    /// <summary>
+    /// Adapter used to easily translate SocialAlloy Workflow types with EPi.Social Workflow types
+    /// </summary>
     public interface ISocialMemberAdapter
     {
         /// <summary>
@@ -22,7 +20,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <summary>
         /// Adapts a Member into a SocialMember
         /// </summary>
-        /// <param name="member">The member to be adapted </param>
+        /// <param name="member">The member to be adapted</param>
         /// <returns>The adapted SocialMember</returns>
         SocialMember Adapt(Member member);
     }

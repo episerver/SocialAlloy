@@ -6,7 +6,7 @@ using System.Web.Mvc;
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
-    /// The GroupController handles the display of information
+    /// The ModerationController handles the display of information
     /// for membership requests under moderation and faciliates
     /// the actions which may be taken upon them.
     /// </summary>
@@ -35,7 +35,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Retrieves relevant membership infromation and takes the specified action on a membership request under moderation.
+        /// Retrieves relevant membership information and takes the specified action on a membership request under moderation.
         /// </summary>
         /// <param name="user">User associated with the membership request</param>
         /// <param name="group">Group associated with the membership request</param>
@@ -47,17 +47,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public ActionResult Index(string user, string group, string workflow, string state, string workflowAction)
         {
             var addMemberRequest = this.moderationRepository.Get(user, group);
-            var workflowItemToModerate = new MembershipRequestModel
-            {
-                User = user,
-                Group = group,
-                Member = addMemberRequest.Extension.Member,
-                ExtensionData = addMemberRequest.Extension.ExtensionData,
-                State = state,
-                WorkflowId = workflow
-            };
-
-            this.moderationRepository.Moderate(workflowItemToModerate, workflowAction);
+       
+            this.moderationRepository.Moderate(workflow, addMemberRequest.Member, addMemberRequest.ExtensionData, workflowAction);
 
             return RedirectToAction("Index");
         }

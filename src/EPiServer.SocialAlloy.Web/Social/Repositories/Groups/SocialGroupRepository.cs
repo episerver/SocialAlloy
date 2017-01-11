@@ -7,6 +7,7 @@ using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
+using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
@@ -30,12 +31,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="group">The group to add.</param>
         /// <returns>The added group.</returns>
-        public Group Add(Group group)
+        public SocialGroup Add(SocialGroup socialGroup)
         {
             Group addedGroup = null;
-
+            
             try
             {
+                var group = new Group(socialGroup.Name, socialGroup.Description);
                 addedGroup = this.groupService.Add(group);
                 if (addedGroup == null)
                     throw new SocialRepositoryException("The new group could not be added. Please try again");
@@ -57,7 +59,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-            return addedGroup;
+            return new SocialGroup(addedGroup.Id.Id, addedGroup.Name, addedGroup.Description);
         }
 
         /// <summary>
@@ -65,9 +67,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="groupName">The name of the group that is to be retrieved from the underlying data store.</param>
         /// <returns>The requested group.</returns>
-        public Group Get(string groupName)
+        public SocialGroup Get(string groupName)
         {
-            Group group = null;
+            SocialGroup socialGroup = null;
 
             try
             {
@@ -76,7 +78,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     Filter = new GroupFilter { Name = groupName },
                     PageInfo = new PageInfo {  PageSize = 1, PageOffset = 0}
                 };
-                group = this.groupService.Get(criteria).Results.FirstOrDefault(); 
+                var group = this.groupService.Get(criteria).Results.FirstOrDefault();
+                if(group != null)
+                {
+                    socialGroup = new SocialGroup(group.Id.Id, group.Name, group.Description);
+                }
+                else
+                {
+                    throw new GroupDoesNotExistException("The group that has been specified for this block does not exist");
+                }
+                
             }
             catch (SocialAuthenticationException ex)
             {
@@ -95,7 +106,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-            return group;
+            return socialGroup;
         }
     }
 }

@@ -32,18 +32,11 @@
             <input type="submit" name="submit" value="Add Comment">
         </div>
     }
-
     <br />
-
 
     @foreach (var comment in Model.Comments)
     {
-        var author = "anonymous";
-        if (!comment.AuthorUsername.IsEmpty())
-        {
-            author = comment.AuthorUsername.ToString();
-        }
-        <div style="font-weight: bold;"> @comment.Created.ToLocalTime() @author said:</div>
+        <div style="font-weight: bold;"> @comment.Created.ToLocalTime() @comment.AuthorUsername said:</div>
         <div>@comment.Body </div>
         <br />
     } 

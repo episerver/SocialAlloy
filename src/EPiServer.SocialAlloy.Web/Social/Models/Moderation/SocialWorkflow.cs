@@ -3,30 +3,21 @@
 namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
 {
     /// <summary>
-    /// The SocialWorkflow defines the workflow details necessary to add and retrieve workflows within the SocialAlloy sample
+    /// The SocialWorkflow describes a workflow model used by the SocialAlloy site.
     /// </summary>
     public class SocialWorkflow
     {
-        public SocialWorkflow(string workflowName, List<SocialWorkflowTransition> workflowTransitions, SocialWorkflowState workflowState )
+        public SocialWorkflow(string id, string initialState )
         {
-            this.workflowName = workflowName;
-            this.workflowTransitions = workflowTransitions;
-            this.workflowState = workflowState;
+            this.Id = id;
+            this.InitialState = initialState;
         }
-        /// <summary>
-        /// The name of the workflow
-        /// </summary>
-        public string workflowName { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
-        /// The transitions that a social workflow can go through
+        /// Gets or sets the initial state of a workflow item that enters this social workflow
         /// </summary>
-        public List<SocialWorkflowTransition> workflowTransitions { get; set; }
-
-        /// <summary>
-        /// The initial state of a workflow item that enters this social workflow
-        /// </summary>
-        public SocialWorkflowState workflowState { get; set; }
+        public string InitialState { get; set; }
 
     }
 }

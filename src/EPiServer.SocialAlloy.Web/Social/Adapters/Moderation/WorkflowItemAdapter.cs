@@ -32,8 +32,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
         {
             return new MembershipRequestModel
             {
-                User = item.Extension.Member.UserReference.ToString(),
-                Group = item.Extension.Member.GroupId.ToString(),
+                User = item.Extension.Member.UserReference,
+                Group = item.Extension.Member.GroupId,
                 WorkflowId = item.Data.Workflow.ToString(),
                 Created = item.Data.Created,
                 State = item.Data.State.Name,
@@ -52,7 +52,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
 
             if (socialWorkflowItem != null)
             {
-                workflowItem = new WorkflowItem(socialWorkflowItem.WorkflowId, socialWorkflowItem.WorkflowState, socialWorkflowItem.Target);
+                var id = new WorkflowId(socialWorkflowItem.Id);
+                var state = new WorkflowState(socialWorkflowItem.State);
+                var target = Reference.Create(socialWorkflowItem.Target);
+
+                workflowItem =  new WorkflowItem(id, state, target);
             }
 
             return workflowItem;
@@ -69,7 +73,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
 
             if (workflowItem != null)
             {
-                socialWorkflowItem = new SocialWorkflowItem(workflowItem.Workflow, workflowItem.State, workflowItem.Target);
+                var socialWorkflowId = workflowItem.Id.Id;
+                var socialWorkflowState = workflowItem.State.Name;
+                var socialWorkflowTarget = workflowItem.Target.Id;
+                socialWorkflowItem = new SocialWorkflowItem(socialWorkflowId, socialWorkflowState, socialWorkflowTarget);
             }
 
             return socialWorkflowItem;

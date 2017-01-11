@@ -21,12 +21,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public bool ShowHeading { get; set; }
 
         /// <summary>
-        /// Gets and sets message details to be displayed to the user
+        /// Gets or sets message details to be displayed to the user
         /// </summary>
         public List<MessageViewModel> Messages { get; set; }
 
         /// <summary>
-        /// Gets the name of the group.
+        /// Gets or sets the name of the group.
         /// </summary>
         public string Name { get; set; }
 

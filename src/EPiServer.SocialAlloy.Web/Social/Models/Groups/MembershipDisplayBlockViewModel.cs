@@ -29,7 +29,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// <summary>
         /// List of the users associated with the group
         /// </summary>
-        public List<SocialCompositeMember> MemberList { get; set; }
+        public List<SocialCompositeMember> Members { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user
