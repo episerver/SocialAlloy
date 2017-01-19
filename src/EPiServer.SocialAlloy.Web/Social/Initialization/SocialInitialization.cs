@@ -5,10 +5,12 @@ using EPiServer.ServiceLocation;
 using EPiServer.Social.Comments.Core;
 using EPiServer.SocialAlloy.Web.Social.Adapters;
 using EPiServer.SocialAlloy.Web.Social.Models;
+using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
+using EPiServer.SocialAlloy.Web.Social.Repositories.Moderation;
 
 namespace EPiServer.SocialAlloy.Web.Social.Initialization
 {
@@ -53,14 +55,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<IPageRepository>().Use<PageRepository>();
-
             configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
             configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
-
             configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
             configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
             configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
             configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
+            configuration.For<ISocialGroupRepository>().Use<SocialGroupRepository>();
+            configuration.For<ISocialMemberRepository>().Use<SocialMemberRepository>();
+            configuration.For<ISocialModerationRepository>().Use<SocialModerationRepository>();
         }
 
         /// <summary>

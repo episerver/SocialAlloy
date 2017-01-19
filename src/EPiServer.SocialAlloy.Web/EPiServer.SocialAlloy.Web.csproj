@@ -197,6 +197,46 @@
       <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPiServer.Social.Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Groups.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Groups.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Groups.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Groups.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.Site.1.0.0\lib\EPiServer.Social.Groups.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Moderation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Moderation.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Moderation.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Rest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Moderation.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Rest.Contracts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Social.Moderation.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.Site.1.0.0\lib\EPiServer.Social.Moderation.Site.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer.Social.Ratings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.dll</HintPath>
       <Private>True</Private>
@@ -380,16 +420,35 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
-    <Compile Include="Social\Blocks\FeedBlock.cs" />
-    <Compile Include="Social\Blocks\RatingSetting.cs" />
-    <Compile Include="Social\Blocks\RatingSettingProperty.cs" />
-    <Compile Include="Social\Blocks\SubscriptionBlock.cs" />
+    <Compile Include="Social\Adapters\Groups\SocialMemberAdapter.cs" />
+    <Compile Include="Social\Adapters\Moderation\SocialWorkflowAdapter.cs" />
+    <Compile Include="Social\Adapters\Moderation\WorkflowItemAdapter.cs" />
+    <Compile Include="Social\Blocks\Comments\CommentsBlock.cs" />
+    <Compile Include="Social\Blocks\ActivityStreams\FeedBlock.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingBlock.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingSetting.cs" />
+    <Compile Include="Social\Blocks\Ratings\RatingSettingProperty.cs" />
+    <Compile Include="Social\Blocks\ActivityStreams\SubscriptionBlock.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
+    <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
+    <Compile Include="Social\Common\Models\MessageViewModel.cs" />
+    <Compile Include="Social\Controllers\ModerationController.cs" />
+    <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
+    <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
+    <Compile Include="Social\Models\Groups\SocialCompositeMember.cs" />
+    <Compile Include="Social\Models\Groups\SocialGroup.cs" />
+    <Compile Include="Social\Models\Groups\SocialMember.cs" />
+    <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
+    <Compile Include="Social\Models\Moderation\MembershipModeration.cs" />
+    <Compile Include="Social\Models\Moderation\ModerationViewModel.cs" />
+    <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
+    <Compile Include="Social\Models\Moderation\SocialWorkflowItem.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialFeedRepository.cs" />
     <Compile Include="Social\Controllers\SubscriptionBlockController.cs" />
+    <Compile Include="Social\Controllers\GroupAdmissionBlockController.cs" />
     <Compile Include="Social\Initialization\SocialInitialization.cs" />
     <Compile Include="Business\PageContextActionFilter.cs" />
     <Compile Include="Business\PageTypeExtensions.cs" />
@@ -460,13 +519,17 @@
     <Compile Include="Models\ViewModels\SearchContentModel.cs" />
     <Compile Include="Models\ViewModels\VideoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Social\Blocks\CommentsBlock.cs" />
-    <Compile Include="Social\Blocks\RatingBlock.cs" />
+    <Compile Include="Social\Blocks\Groups\GroupCreationBlock.cs" />
+    <Compile Include="Social\Blocks\Groups\MembershipDisplayBlock.cs" />
+    <Compile Include="Social\Blocks\Groups\GroupAdmissionBlock.cs" />
     <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
     <Compile Include="Social\Common\Exceptions\SocialRepositoryException.cs" />
     <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
+    <Compile Include="Social\Controllers\GroupCreationBlockController.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
+    <Compile Include="Social\Models\Groups\GroupAdmissionBlockViewModel.cs" />
+    <Compile Include="Social\Models\Groups\GroupCreationBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\ISocialActivity.cs" />
     <Compile Include="Social\Adapters\ActivityStreams\ISocialActivityAdapter.cs" />
@@ -481,6 +544,9 @@
     <Compile Include="Social\Models\Comments\SocialCommentFilter.cs" />
     <Compile Include="Social\Models\Comments\SocialComment.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialRatingActivity.cs" />
+    <Compile Include="Social\Repositories\Groups\ISocialGroupRepository.cs" />
+    <Compile Include="Social\Repositories\Groups\ISocialMemberRepository.cs" />
+    <Compile Include="Social\Repositories\Groups\SocialMemberRepository.cs" />
     <Compile Include="Social\Models\Ratings\SocialRatingStatistics.cs" />
     <Compile Include="Social\Models\Ratings\SocialRatingFilter.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialSubscription.cs" />
@@ -488,6 +554,8 @@
     <Compile Include="Social\Models\ActivityStreams\SubscriptionBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\SubscriptionFormViewModel.cs" />
     <Compile Include="Social\Repositories\Comments\ISocialCommentRepository.cs" />
+    <Compile Include="Social\Repositories\Moderation\ISocialModerationRepository.cs" />
+    <Compile Include="Social\Repositories\Moderation\SocialModerationRepository.cs" />
     <Compile Include="Social\Repositories\Ratings\ISocialRatingRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialSubscriptionRepository.cs" />
     <Compile Include="Social\Repositories\Common\PageRepository.cs" />
@@ -499,9 +567,15 @@
     <Compile Include="Social\Repositories\Ratings\SocialRatingRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialSubscriptionRepository.cs" />
     <Compile Include="Social\Repositories\Common\UserRepository.cs" />
+    <Compile Include="Social\Repositories\Groups\SocialGroupRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EPiServer.SocialAlloy.ExtensionData\EPiServer.SocialAlloy.ExtensionData.csproj">
+      <Project>{fb46b851-8536-490d-9f22-4f2eda32fe7f}</Project>
+      <Name>EPiServer.SocialAlloy.ExtensionData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="ClientResources\Images\icons\layoutIcons24x24.png" />
     <Content Include="ClientResources\Scripts\Editors\StringList.js" />
@@ -667,11 +741,18 @@
     <None Include="Setup\Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
     <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
     <Content Include="Views\Social\SubscriptionBlock\SubscriptionView.cshtml" />
     <Content Include="Views\Social\FeedBlock\FeedView.cshtml" />
+    <Content Include="Views\Social\GroupCreationBlock\Index.cshtml" />
+    <Content Include="Views\Social\GroupAdmissionBlock\Index.cshtml" />
+    <Content Include="Views\Social\MembershipDisplayBlock\Index.cshtml" />
+    <Content Include="Views\Social\Moderation\Index.cshtml" />
+    <Content Include="Views\Shared\Layouts\_DemoRoot.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

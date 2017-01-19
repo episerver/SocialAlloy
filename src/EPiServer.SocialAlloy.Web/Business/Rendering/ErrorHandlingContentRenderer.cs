@@ -34,7 +34,7 @@ namespace EPiServer.SocialAlloy.Web.Business.Rendering
         {
             try
             {
-                _mvcRenderer.Render(helper, partialRequestHandler, contentData, templateModel);
+                _mvcRenderer.Render(helper, partialRequestHandler, contentData, templateModel); 
             }
             catch (NullReferenceException ex)
             {
