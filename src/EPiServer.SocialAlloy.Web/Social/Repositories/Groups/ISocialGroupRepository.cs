@@ -22,6 +22,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="groupName">The name of the group that is to be retrieved from the underlying data store.</param>
         /// <returns>The desired group.</returns>
         SocialGroup Get(string groupName);
-
     }
 }

@@ -1,33 +1,42 @@
 ﻿using EPiServer.Social.Groups.Core;
+using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 
 namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
 {
     /// <summary>
     /// Adapter used to easily translate SocialAlloy WorkflowItem types with EPi.Social WorkflowItme types
     /// </summary>
-    public class SocialMemberAdapter : ISocialMemberAdapter
+    public class SocialMemberAdapter
     {
         /// <summary>
-        /// Adapts a SocialMember with its corresponding extension data.
+        /// Adapts SocialMember into an AddMemberRequest
         /// </summary>
         /// <param name="member">The SocialMember to be adapted</param>
-        /// <param name="extension">The MemberExtensionData to be adapted</param>
-        /// <returns>The adapted SocialCompositeMember</returns>
-        public SocialCompositeMember Adapt(SocialMember member, MemberExtensionData extension)
+        /// <returns>AddMemberRequest</returns>
+        public AddMemberRequest Adapt(SocialMember member)
         {
-            return new SocialCompositeMember { Member = member, MemberExtension = extension };
+            return new AddMemberRequest(member.GroupId, member.UserReference, member.Email, member.Company);
+        }
+
+        /// <summary>
+        /// Adapts an AddMemberRequest into a SocialMember
+        /// </summary>
+        /// <param name="memberRequest">The AddMemberRequest to be adapted</param>
+        /// <returns>SocialMember</returns>
+        public SocialMember Adapt(AddMemberRequest memberRequest)
+        {
+            return new SocialMember(memberRequest.User, memberRequest.Group, memberRequest.Email, memberRequest.Company);
         }
 
         /// <summary>
         /// Adapts a Member into a SocialMember
         /// </summary>
         /// <param name="member">The member to be adapted </param>
-        /// <returns>The adapted SocialMember</returns>
-        public SocialMember Adapt(Member member)
+        /// <returns>SocialMember</returns>
+        public SocialMember Adapt(Member member, MemberExtensionData extension)
         {
-            return new SocialMember(member.User.Id, member.Group.Id);
+            return new SocialMember(member.User.Id, member.Group.Id, extension.Email, extension.Company);
         }
     }
 }

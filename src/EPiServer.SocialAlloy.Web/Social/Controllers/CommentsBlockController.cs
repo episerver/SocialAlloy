@@ -23,11 +23,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly ISocialCommentRepository commentRepository;
         private readonly IPageRepository pageRepository;
         private readonly ISocialActivityRepository activityRepository;
-
-        private const string ModelState_SubmitSuccessMessage = "SubmitSuccessMessage";
-        private const string ModelState_SubmitErrorMessage = "SubmitErrorMessage";
+        private const string MessageKey = "CommentBlock";
         private const string SubmitSuccessMessage = "Your comment was submitted successfully!";
         private const string BodyValidationErrorMessage = "Cannot add an empty comment.";
+        private const string ErrorMessage = "Error";
+        private const string SuccessMessage = "Success";
 
         /// <summary>
         /// Constructor
@@ -52,7 +52,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             // Create a comments block view model to fill the frontend block view
             var blockViewModel = new CommentsBlockViewModel(currentBlock, formViewModel);
-            blockViewModel.Messages = PopulateMessages();
+            blockViewModel.Messages = RetrieveMessages(MessageKey);
 
             // Try to get recent comments
             try
@@ -68,7 +68,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
+                blockViewModel.Messages.Add(new MessageViewModel( ex.Message, ErrorMessage));
             }
 
             return PartialView("~/Views/Social/CommentsBlock/CommentsView.cshtml", blockViewModel);
@@ -101,7 +101,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             else
             {
                 // Flag the CommentBody model state with validation error
-                AddToTempData("CommentAddActivityErrorMessage", errors.First());
+                AddMessage(MessageKey, new MessageViewModel(errors.First(), ErrorMessage));
             }
 
             return Redirect(UrlResolver.Current.GetUrl(formViewModel.CurrentPageLink));
@@ -121,11 +121,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 addedComment = this.commentRepository.Add(newComment);
-                AddToTempData("CommentAddSuccessMessage", SubmitSuccessMessage);
+                AddMessage(MessageKey, new MessageViewModel(SubmitSuccessMessage, SuccessMessage));
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("CommentAddErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
 
             return addedComment;
@@ -145,7 +145,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("CommentActivityAddErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
 
@@ -162,24 +162,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 Body = formViewModel.Body,
                 AuthorId = this.userRepository.GetUserId(this.User)
             };
-        }
-
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the group admission view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateMessages()
-        {
-            var commentSuccessMessageBody = GetFromTempData<string>("CommentAddSuccessMessage");
-            var commentSuccessMessage = new MessageViewModel { Body = commentSuccessMessageBody, Type = "success" };
-
-            var commentAddErrorMessageBody = GetFromTempData<string>("CommentAddErrorMessage");
-            var commentErrorMessage = new MessageViewModel { Body = commentAddErrorMessageBody, Type = "error" };
-
-            var commentAddActivityErrorMessageBody = GetFromTempData<string>("CommentAddActivityErrorMessage");
-            var commentAddActivityErrorMessage = new MessageViewModel { Body = commentAddActivityErrorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { commentSuccessMessage, commentErrorMessage, commentAddActivityErrorMessage };
         }
 
         /// <summary>

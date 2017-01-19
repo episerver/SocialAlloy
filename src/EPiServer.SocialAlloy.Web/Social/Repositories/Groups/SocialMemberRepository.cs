@@ -1,5 +1,6 @@
 ﻿using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
+using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
@@ -32,20 +33,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="socialMember">The member to add.</param>
         /// <param name="memberExtension">The member extension data to add.</param>
         /// <returns>The added member.</returns>
-        public SocialCompositeMember Add(SocialMember socialMember, MemberExtensionData memberExtension)
+        public SocialMember Add(SocialMember socialMember)
         {
-            SocialCompositeMember addedSocialCompositeMember = null;
+            SocialMember addedSocialMember = null;
 
             try
             {
                 var userReference = Reference.Create(socialMember.UserReference);
                 var groupId = GroupId.Create(socialMember.GroupId);
                 var member = new Member(userReference, groupId);
-                var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, memberExtension);
-                var addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data);
-                addedSocialCompositeMember = socialMemberAdapter.Adapt(addedSocialMember, addedCompositeMember.Extension);
+                var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company);
+                var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
+                addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
 
-                if (addedSocialCompositeMember == null)
+                if (addedSocialMember == null)
                     throw new SocialRepositoryException("The new member could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
@@ -65,7 +66,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
 
-            return addedSocialCompositeMember;
+            return addedSocialMember;
         }
 
         /// <summary>
@@ -73,17 +74,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="socialMemberFilter">The filter by which to retrieve members by</param>
         /// <returns>The list of members that are part of the specified group.</returns>
-        public IEnumerable<SocialCompositeMember> Get(SocialMemberFilter socialMemberFilter)
+        public IEnumerable<SocialMember> Get(SocialMemberFilter socialMemberFilter)
         {
-            IEnumerable<SocialCompositeMember> returnedMembers = null;
+            IEnumerable<SocialMember> returnedMembers = null;
 
             try
             {
                 var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
-                var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId)};
+                var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
                 var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>() { Filter = memberFilter, PageInfo = pageInfo };
                 var compositeMember = this.memberService.Get(compositeFilter).Results;
-                returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(socialMemberAdapter.Adapt(x.Data), x.Extension));
+                returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(x.Data, x.Extension));
             }
             catch (SocialAuthenticationException ex)
             {

@@ -21,6 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly ISocialFeedRepository feedRepository;
+        private const string ErrorMessage = "Error";
         private const string ErrorGettingUserIdMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
 
         /// <summary>
@@ -76,12 +77,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockViewModel.Messages.Add(new MessageViewModel { Body = ErrorGettingUserIdMessage, Type = "error" });
+                    blockViewModel.Messages.Add(new MessageViewModel(ErrorGettingUserIdMessage, ErrorMessage));
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
+                blockViewModel.Messages.Add(new MessageViewModel( ex.Message, ErrorMessage));
             }
         }
     }

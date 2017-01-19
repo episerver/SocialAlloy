@@ -1,5 +1,6 @@
 ﻿using EPiServer.Social.Common;
 using EPiServer.Social.Moderation.Core;
+using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
 using System.Linq;
@@ -39,8 +40,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
         {
             return new MembershipRequestModel
             {
-                User = item.Extension.Member.UserReference,
-                Group = item.Extension.Member.GroupId,
+                User = item.Extension.User,
+                Group = item.Extension.Group,
                 WorkflowId = item.Data.Workflow.ToString(),
                 Created = item.Data.Created,
                 State = item.Data.State.Name,

@@ -12,12 +12,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userReference">Reference which uniquely identifies the user assigned to a group</param>
-        /// <param name="groupId">ID of the group to which the user is assigned</param>
-        public SocialMember( string userReference, string groupId)
+        /// <param name="userReference">Reference which uniquely identifies the member assigned to a group</param>
+        /// <param name="groupId">ID of the group to which the member is assigned</param>
+        /// <param name="email">The email of the member</param>
+        /// <param name="company">The company that a member is associated with</param>
+        public SocialMember( string userReference, string groupId, string email, string company)
         {
             UserReference = userReference;
             GroupId = groupId;
+            Email = email;
+            Company = company;
         }
 
         /// <summary>
@@ -31,5 +35,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// as a member.
         /// </summary>
         public string GroupId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email of the member 
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the company the member works for.
+        /// </summary>
+        public string Company { get; set; }
     }
 }

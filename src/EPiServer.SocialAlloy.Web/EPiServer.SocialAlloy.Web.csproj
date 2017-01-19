@@ -420,9 +420,8 @@
     <Compile Include="Business\Initialization\DisplayModesInitialization.cs" />
     <Compile Include="Business\Initialization\DisplayRegistryInitialization.cs" />
     <Compile Include="Business\Initialization\FilterConfig.cs" />
-    <Compile Include="Social\Adapters\Groups\ISocialMemberAdapter.cs" />
     <Compile Include="Social\Adapters\Groups\SocialMemberAdapter.cs" />
-    <Compile Include="Social\Adapters\Moderation\WorkflowAdapter.cs" />
+    <Compile Include="Social\Adapters\Moderation\SocialWorkflowAdapter.cs" />
     <Compile Include="Social\Adapters\Moderation\WorkflowItemAdapter.cs" />
     <Compile Include="Social\Blocks\Comments\CommentsBlock.cs" />
     <Compile Include="Social\Blocks\ActivityStreams\FeedBlock.cs" />
@@ -440,7 +439,6 @@
     <Compile Include="Social\Models\Groups\SocialGroup.cs" />
     <Compile Include="Social\Models\Groups\SocialMember.cs" />
     <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
-    <Compile Include="Social\Models\Moderation\AddMemberRequest.cs" />
     <Compile Include="Social\Models\Moderation\MembershipModeration.cs" />
     <Compile Include="Social\Models\Moderation\ModerationViewModel.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
@@ -532,7 +530,6 @@
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
     <Compile Include="Social\Models\Groups\GroupAdmissionBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockViewModel.cs" />
-    <Compile Include="Social\Models\Groups\MemberExtensionData.cs" />
     <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\ISocialActivity.cs" />
     <Compile Include="Social\Adapters\ActivityStreams\ISocialActivityAdapter.cs" />
@@ -573,7 +570,12 @@
     <Compile Include="Social\Repositories\Groups\SocialGroupRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EPiServer.SocialAlloy.ExtensionData\EPiServer.SocialAlloy.ExtensionData.csproj">
+      <Project>{fb46b851-8536-490d-9f22-4f2eda32fe7f}</Project>
+      <Name>EPiServer.SocialAlloy.ExtensionData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="ClientResources\Images\icons\layoutIcons24x24.png" />
     <Content Include="ClientResources\Scripts\Editors\StringList.js" />

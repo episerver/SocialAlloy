@@ -1,6 +1,5 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
@@ -8,11 +7,8 @@ using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
-using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
-using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -25,6 +21,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialMemberRepository memberRepository;
         private readonly ISocialModerationRepository moderationRepository;
+        private const string MessageKey = "GroupAdmissionBlock";
+        private const string ErrorMessage = "Error";
+        private const string SuccessMessage = "Success";
 
         /// <summary>
         /// Constructor for admission block
@@ -69,18 +68,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 else
                 {
                     var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
-                    AddToTempData("GroupAdmissionErrorMessage", errorMessage);
+                    AddMessage(MessageKey, new MessageViewModel(errorMessage, ErrorMessage));
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("GroupAdmissionErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
             catch (GroupDoesNotExistException ex)
             {
-                AddToTempData("GroupAdmissionErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
-            blockModel.Messages = PopulateMessages();
+            blockModel.Messages = RetrieveMessages(MessageKey);
             //Remove existing values from input fields
             ModelState.Clear();
 
@@ -98,11 +97,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                AddMember(blockModel, blockModel.GroupId);
+                AddMember(blockModel);
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("GroupAdmissionErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
 
             return Redirect(UrlResolver.Current.GetUrl(blockModel.CurrentPageLink));
@@ -114,8 +113,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// If the group is not moderated the member is  added to the underlying membership repository
         /// </summary>
         /// <param name="blockModel">The viewmodel for the GroupAdmission view</param>
-        /// <param name="groupId">The id of the group that the member is being added to</param>
-        private void AddMember(GroupAdmissionBlockViewModel blockModel, string groupId)
+        private void AddMember(GroupAdmissionBlockViewModel blockModel)
         {
             var validatedInputs = ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail);
             if (validatedInputs)
@@ -123,95 +121,32 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 try
                 {
                     //Populated the SocialMember and extension data
-                    var member = new SocialMember(blockModel.MemberName, groupId);
-                    var extensionData = new MemberExtensionData(blockModel.MemberEmail, blockModel.MemberCompany);
-
+                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany);
                     if (blockModel.IsModerated)
                     {
                         //Adds request for membership into moderation workflow
-                        this.AddAModeratedMember(member, extensionData);
+                        this.moderationRepository.AddAModeratedMember(member);
                     }
                     else
                     {
                         //Add the new member with extension data and persist the group name in temp data to be used in the success message
-                        memberRepository.Add(member, extensionData);
-                        var successMessage = blockModel.MemberName + " was added successfully to the group.";
-                        AddToTempData("GroupAdmissionSuccessMessage", successMessage);
+                        memberRepository.Add(member);
+                        var message = blockModel.MemberName + " was added successfully to the group.";
+                        AddMessage(MessageKey, new MessageViewModel(message, SuccessMessage));
                     }
                 }
                 catch (SocialRepositoryException ex)
                 {
                     //Persist the exception message in temp data to be used in the error message
-                    AddToTempData("GroupAdmissionErrorMessage", ex.Message);
+                    AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
                 }
             }
             else
             {
                 //Persist the message in temp data to be used in the error message
-                var errorMessage = "The member name, email and company cannot be empty.";
-                AddToTempData("GroupAdmissionErrorMessage", errorMessage);
+                var message = "The member name, email and company cannot be empty.";
+                AddMessage(MessageKey, new MessageViewModel(message, ErrorMessage));
             }
-        }
-
-        /// <summary>
-        /// Submits a membership request to the specified group's
-        /// moderation workflow for approval.
-        /// </summary>
-        /// <param name="member">The member information for the membership request</param>
-        /// <param name="extensionData">The extension data for the membership request</param>
-        private void AddAModeratedMember(SocialMember member, MemberExtensionData extensionData)
-        {
-            // Define a unique reference representing the entity
-            // under moderation. Note that this entity may be
-            // transient or may not yet have been assigned a
-            // unique identifier. Defining an item reference allows
-            // you to bridge this gap.
-
-            // For example: "members:/{group-id}/{user-reference}"
-
-            var targetReference = moderationRepository.CreateUri(member.GroupId, member.UserReference);
-            
-            // Retrieve the workflow supporting moderation of
-            // membership for the group to which the user is
-            // being added.
-
-            var moderationWorkflow = this.moderationRepository.GetWorkflowFor(member.GroupId);
-
-            // The workflow defines the intial (or 'start') state
-            // for moderation.
-
-            var initialState = moderationWorkflow.InitialState;
-
-            // Prepare an instance of a data object describing the membership
-            // request. This will be captured as extension data associated with 
-            // our workflow item.
-
-            var membershipRequest = new AddMemberRequest(member, extensionData);
-
-            // Create a new workflow item...
-
-            var membershipRequestWorkflowRecord = new SocialWorkflowItem(
-                moderationWorkflow.Id,      // ...under the group's moderation workflow
-                initialState,               // ...in the workflow's initial state
-                targetReference             // ...identified with this reference
-            );
-
-            this.moderationRepository.Add(membershipRequestWorkflowRecord, membershipRequest);
-        }
-
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the group admission view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateMessages()
-        {
-            var successMessageBody = GetFromTempData<string>("GroupAdmissionSuccessMessage");
-            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
-
-            var errorMessageBody = GetFromTempData<string>("GroupAdmissionErrorMessage");
-            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
         /// <summary>

@@ -6,6 +6,17 @@
     public class MessageViewModel
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="body">The message body</param>
+        /// <param name="type">The message type</param>
+        public MessageViewModel(string body, string type)
+        {
+            Body = body;
+            Type = type;
+        }
+
+        /// <summary>
         /// The type of message that will be displayed to the user
         /// </summary>
         public string Type { get; set; }
@@ -24,9 +35,9 @@
         {
             switch(messageType)
             {
-                case "success":
+                case "Success":
                     return "green";
-                case "error":
+                case "Error":
                     return "red";
                 default:
                     return "black";

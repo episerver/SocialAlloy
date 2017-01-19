@@ -8,7 +8,6 @@ using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -28,7 +27,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly IPageRepository pageRepository;
         private string userId;
         private string pageId;
-
+        private const string MessageKey = "RatingBlock";
+        private const string ErrorMessage = "Error";
+        private const string SuccessMessage = "Success";
         /// <summary>
         /// Constructor
         /// </summary>
@@ -55,7 +56,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var blockModel = new RatingBlockViewModel(currentBlock, formModel);
 
             //get messages for view
-            blockModel.Messages = PopulateMessages();
+            blockModel.Messages = RetrieveMessages(MessageKey);
 
             // If user logged in, check if logged in user has already rated the page
             if (this.User.Identity.IsAuthenticated)
@@ -64,7 +65,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             //Conditionally retrieving ratingstatistics based on any errors that might have been encountered
-            if (blockModel.Messages.Any(x => x.Type == "error")) { GetRatingStatistics(target, blockModel); }
+            if ((blockModel.Messages.Count == 0)||(blockModel.Messages.Any(x => x.Type != ErrorMessage))) { GetRatingStatistics(target, blockModel); }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }
@@ -118,13 +119,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    var errorMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
-                    blockModel.Messages.Add(new MessageViewModel { Body = errorMessage, Type = "error" });
+                    var message = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
+                    blockModel.Messages.Add(new MessageViewModel(message, ErrorMessage));
                 }
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
+                blockModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
 
@@ -153,7 +154,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockModel.Messages.Add(new MessageViewModel { Body = ex.Message, Type = "error" });
+                blockModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
 
@@ -168,13 +169,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             try
             {
                 ratingRepository.AddRating(this.userId, this.pageId, value);
-                var successMessage = "Thank you for submitting your rating!";
-                AddToTempData("RatingAddSuccessMessage", successMessage);
+                var message = "Thank you for submitting your rating!";
+                AddMessage(MessageKey, new MessageViewModel(message, SuccessMessage));
                 return true;
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("RatingAddErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
             return false;
         }
@@ -194,7 +195,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                AddToTempData("RatingAddActivityErrorMessage", ex.Message);
+                AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
 
@@ -206,20 +207,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// populate with validation errors, if any</param>
         private void ValidateSubmitRatingForm(RatingFormViewModel ratingForm, RatingBlockViewModel blockModel)
         {
-            string errorMessage = string.Empty;
+            string message = string.Empty;
             // Validate user is logged in
             if (!this.User.Identity.IsAuthenticated)
             {
-                errorMessage = "Session timed out, you have to be logged in to submit your rating. Please login and try again.";
-                AddToTempData("RatingAddErrorMessage", errorMessage);
+                message = "Session timed out, you have to be logged in to submit your rating. Please login and try again.";
             }
             else
             {
                 // Validate a rating was submitted
                 if (!ratingForm.SubmittedRating.HasValue)
                 {
-                    errorMessage = "Please select a valid rating";
-                    AddToTempData("RatingAddErrorMessage", errorMessage);
+                    message = "Please select a valid rating";
                 }
                 else
                 {
@@ -227,8 +226,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     this.pageId = this.pageRepository.GetPageId(ratingForm.CurrentPageLink);
                     if (String.IsNullOrWhiteSpace(this.pageId))
                     {
-                        errorMessage = "The page id of this page could not be determined. Please try rating this page again.";
-                        AddToTempData("RatingAddErrorMessage", errorMessage);
+                        message = "The page id of this page could not be determined. Please try rating this page again.";
                     }
                     else
                     {
@@ -236,30 +234,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         this.userId = userRepository.GetUserId(this.User);
                         if (String.IsNullOrWhiteSpace(this.userId))
                         {
-                            errorMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
-                            AddToTempData("RatingAddErrorMessage", errorMessage);
+                            message = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
                         }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the group admission view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateMessages()
-        {
-            var ratingAddSuccessMessageBody = GetFromTempData<string>("RatingAddSuccessMessage");
-            var ratingAddSuccessMessage = new MessageViewModel { Body = ratingAddSuccessMessageBody, Type = "success" };
-
-            var ratingAddErrorMessageBody = GetFromTempData<string>("RatingAddErrorMessage");
-            var ratingAddErrorMessage = new MessageViewModel { Body = ratingAddErrorMessageBody, Type = "error" };
-
-            var ratingAddActivityErrorMessageBody = GetFromTempData<string>("RatingAddActivityErrorMessage");
-            var ratingAddActivityErrorMessage = new MessageViewModel { Body = ratingAddActivityErrorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { ratingAddSuccessMessage, ratingAddErrorMessage, ratingAddActivityErrorMessage };
+            AddMessage(MessageKey, new MessageViewModel(message, ErrorMessage));
         }
     }
 }

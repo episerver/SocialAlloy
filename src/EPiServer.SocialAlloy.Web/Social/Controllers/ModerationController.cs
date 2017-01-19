@@ -1,5 +1,4 @@
 ﻿using EPiServer.ServiceLocation;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System.Web.Mvc;
 
@@ -48,7 +47,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             var addMemberRequest = this.moderationRepository.Get(user, group);
        
-            this.moderationRepository.Moderate(workflow, addMemberRequest.Member, addMemberRequest.ExtensionData, workflowAction);
+            this.moderationRepository.Moderate(workflow, addMemberRequest, workflowAction);
 
             return RedirectToAction("Index");
         }

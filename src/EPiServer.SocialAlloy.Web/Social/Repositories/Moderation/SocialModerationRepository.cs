@@ -1,6 +1,8 @@
 ﻿using EPiServer.Social.Common;
 using EPiServer.Social.Groups.Core;
 using EPiServer.Social.Moderation.Core;
+using EPiServer.SocialAlloy.ExtensionData.Membership;
+using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 using EPiServer.SocialAlloy.Web.Social.Adapters.Moderation;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
@@ -19,9 +21,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
     {
         private readonly IWorkflowService workflowService;
         private readonly IWorkflowItemService workflowItemService;
-        private readonly IMemberService memberservice;
+        private readonly ISocialMemberRepository memberRepository;
         private WorkflowItemAdapter workflowItemAdapter;
-        private WorkflowAdapter workflowAdapter;
+        private SocialWorkflowAdapter workflowAdapter;
+        private SocialMemberAdapter memberAdapter;
 
         /// <summary>
         /// Constructor
@@ -29,20 +32,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="workflowService">Moderation workflow service supporting this application</param>
         /// <param name="workflowItemService">Moderation workflow item service supporting this application</param>
         /// <param name="memberService">Member service supporting this application</param>
-        public SocialModerationRepository(IWorkflowService workflowService, IWorkflowItemService workflowItemService, IMemberService memberservice)
+        public SocialModerationRepository(IWorkflowService workflowService, IWorkflowItemService workflowItemService, ISocialMemberRepository memberRepository)
         {
             this.workflowService = workflowService;
             this.workflowItemService = workflowItemService;
-            this.memberservice = memberservice;
+            this.memberRepository = memberRepository;
             this.workflowItemAdapter = new WorkflowItemAdapter();
-            this.workflowAdapter = new WorkflowAdapter();
+            this.workflowAdapter = new SocialWorkflowAdapter();
+            this.memberAdapter = new SocialMemberAdapter();
         }
 
         /// <summary>
         /// Adds a workflow to the underlying repository
         /// </summary>
         /// <param name="group">The group that will be associated with the workflow</param>
-        public void Add(SocialGroup group)
+        public void AddWorkflow(SocialGroup group)
         {
             // Define the transitions for workflow:            
             // Pending -> (Accept) -> Accepted
@@ -99,16 +103,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// Adds a workflowitem to the underlying repository
         /// </summary>
         /// <param name="socialWorkflowItem">The workflowitem to be added</param>
-        /// <param name="membershipRequest">Extension data containing member details that will be needed if member admission is approved</param>
-        public void Add(SocialWorkflowItem socialWorkflowItem, AddMemberRequest membershipRequest)
+        /// <param name="member">The member details that will be needed if member admission is approved</param>
+        public void Add(SocialWorkflowItem socialWorkflowItem)
         {
             var workflowItem = this.workflowItemAdapter.Adapt(socialWorkflowItem);
+            var memberRequest = memberAdapter.Adapt(socialWorkflowItem.Member);
 
             if (workflowItem != null)
             {
                 try
                 {
-                    this.workflowItemService.Add(workflowItem, membershipRequest);
+                    this.workflowItemService.Add(workflowItem, memberRequest);
                 }
                 catch (SocialAuthenticationException ex)
                 {
@@ -194,7 +199,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
 
                 var currentWorkflowItems = this.GetWorkflowItemsFor(selectedWorkflow);
 
-                var workflowAdapter = new WorkflowAdapter();
+                var workflowAdapter = new SocialWorkflowAdapter();
                 var workflowItemAdapter = new WorkflowItemAdapter(selectedWorkflow);
 
                 return new ModerationViewModel
@@ -223,25 +228,60 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         }
 
         /// <summary>
+        /// Submits a membership request to the specified group's
+        /// moderation workflow for approval.
+        /// </summary>
+        /// <param name="member">The member information for the membership request</param>
+        public void AddAModeratedMember(SocialMember member)
+        {
+            // Define a unique reference representing the entity
+            // under moderation. Note that this entity may be
+            // transient or may not yet have been assigned a
+            // unique identifier. Defining an item reference allows
+            // you to bridge this gap.
+
+            // For example: "members:/{group-id}/{user-reference}"
+
+            var targetReference = this.CreateUri(member.GroupId, member.UserReference);
+
+            // Retrieve the workflow supporting moderation of
+            // membership for the group to which the user is
+            // being added.
+
+            var moderationWorkflow = this.GetWorkflowFor(member.GroupId);
+
+            // The workflow defines the intial (or 'start') state
+            // for moderation.
+
+            var initialState = moderationWorkflow.InitialState;
+
+            // Create a new workflow item...
+
+            var membershipRequestWorkflowRecord = new SocialWorkflowItem(
+                moderationWorkflow.Id,      // ...under the group's moderation workflow
+                initialState,               // ...in the workflow's initial state
+                targetReference,              // ...identified with this reference
+                member                      //
+            );
+
+            this.Add(membershipRequestWorkflowRecord);
+        }
+
+        /// <summary>
         /// Takes action on the specified workflow item, representing a
         /// membership request.
         /// </summary>
         /// <param name="workflowId">The id of the workflow </param>
-        /// <param name="socialMember">The member that under moderation for group admission</param>
-        /// <param name="memberExtensionData">The extension data for a member under moderation  </param>
         /// <param name="action">The moderation action to be taken</param>
-        public void Moderate(string workflowId, SocialMember socialMember, MemberExtensionData memberExtensionData, string action)
+        public void Moderate(string workflowId, AddMemberRequest membershipRequest, string action)
         {
             var populatedWorkflowId = WorkflowId.Create(workflowId);
 
-            var requestReference = Reference.Create(CreateUri(socialMember.GroupId, socialMember.UserReference));
-
-            var membershipRequest = new AddMemberRequest(socialMember, memberExtensionData);
+            var requestReference = Reference.Create(CreateUri(membershipRequest.Group, membershipRequest.User));
 
             try
             {
                 var transitionToken = this.workflowService.BeginTransitionSession(populatedWorkflowId, requestReference);
-
                 try
                 {
                     // Retrieve the moderation workflow associated with
@@ -274,7 +314,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
 
                     if (this.IsApproved(subsequentWorkflowItem.State))
                     {
-                        memberservice.Add(new Member(Reference.Create(membershipRequest.Member.UserReference), GroupId.Create(membershipRequest.Member.GroupId)), membershipRequest.ExtensionData);
+                        memberRepository.Add(memberAdapter.Adapt(membershipRequest));
                     }
                 }
                 finally
@@ -305,7 +345,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// </summary>
         /// <param name="group">ID of the group</param>
         /// <returns>Moderation workflow supporting the specified group</returns>
-        public SocialWorkflow GetWorkflowFor(string group)
+        private SocialWorkflow GetWorkflowFor(string group)
         {
             SocialWorkflow expectedSocialWorkflow = null;
             IEnumerable<Composite<Workflow, MembershipModeration>> listOfWorkflow = Enumerable.Empty<Composite<Workflow, MembershipModeration>>();
@@ -366,7 +406,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="group">Id of the group that a member is trying to join</param>
         /// <param name="user">The name of the member that is trying to join a group</param>
         /// <returns></returns>
-        public string CreateUri(string group, string user)
+        private string CreateUri(string group, string user)
         {
             return
                string.Format(

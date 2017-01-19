@@ -1,9 +1,10 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
+using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.Web.Mvc;
 using EPiServer.Web.Routing;
-using System;
-using System.Web.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
 {
@@ -26,25 +27,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         }
 
         /// <summary>
-        /// Used to retrieve the TempData stored for a specific controller action
+        /// Used to retrieve the TempData stored for a specific controller
         /// </summary>
-        /// <typeparam name="Temp">The type of the TempData</typeparam>
         /// <param name="key">Sring value of the TempData key</param>
-        /// <returns>The TempData that was requested</returns>
-        public Temp GetFromTempData<Temp>(string key)
+        /// <returns>The list of MessageViewModels that was requested</returns>
+        public List<MessageViewModel> RetrieveMessages(string key)
         {
-            return (Temp)TempData[key];
+            var listOfMessages = (List<MessageViewModel>)TempData[key];
+
+            return (listOfMessages != null) && (listOfMessages.Any()) ? listOfMessages : new List<MessageViewModel>();
         }
 
         /// <summary>
         /// Stores a desired key / value in the TempData dictionary 
         /// </summary>
-        /// <typeparam name="Temp">The type of the value being stored</typeparam>
         /// <param name="key">The key used to reference the stored value upon retrieval</param>
         /// <param name="value">The value that is being stored in TempData</param>
-        public void AddToTempData<Temp>(string key, Temp value)
+        public void AddMessage(string key, MessageViewModel value)
         {
-            TempData[key] = value;
+            var listOfMessages = RetrieveMessages(key);
+            listOfMessages.Add(value);
+            TempData[key] = listOfMessages;
         }
     }
 }

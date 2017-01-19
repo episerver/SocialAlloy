@@ -1,9 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Moderation.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
 {
@@ -12,11 +7,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
     /// </summary>
     public class SocialWorkflowItem
     {
-        public SocialWorkflowItem(string id, string state, string target)
+        public SocialWorkflowItem(string id, string state, string target, SocialMember member)
         {
             Id = id;
             State = state;
             Target = target;
+            Member = member;
         }
 
         /// <summary>
@@ -33,5 +29,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// Gets or sets a reference to the member and group data for this workflow item
         /// </summary>
         public String Target { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SocialMember 
+        /// </summary>
+        public SocialMember Member { get; set; }
     }
 }

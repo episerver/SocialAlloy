@@ -1,13 +1,12 @@
 ﻿using EPiServer.Social.Moderation.Core;
 using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
-using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
 {
     /// <summary>
     /// Adapter used to easily translate SocialAlloy Workflow types with EPi.Social Workflow types
     /// </summary>
-    public class WorkflowAdapter
+    public class SocialWorkflowAdapter
     {
         /// <summary>
         /// Converts a Worflow into a SocialWorkflow

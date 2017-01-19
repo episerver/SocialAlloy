@@ -8,6 +8,7 @@
         <hr />
     }
 
+
     @foreach (var message in Model.Messages)
     {
         var messageStyle = message.ResolveStyle(message.Type);
@@ -24,8 +25,8 @@
                         @foreach (var member in Model.Members)
                         {
                             <tr>
-                                <td><strong>@member.Member.UserReference</strong></td>
-                                <td>@member.MemberExtension.Company</td>
+                                <td><strong>@member.UserReference</strong></td>
+                                <td>@member.Company</td>
                             </tr>
                         }
                     </table>

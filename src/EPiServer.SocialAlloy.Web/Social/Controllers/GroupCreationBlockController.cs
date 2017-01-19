@@ -1,15 +1,12 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
-using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -21,7 +18,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialModerationRepository moderationRepository;
-
+        private const string MessageKey = "GroupCreationBlock";
+        private const string ErrorMessage = "Error";
+        private const string SuccessMessage = "Success";
+       
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,7 +46,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 ShowHeading = currentBlock.ShowHeading,
                 CurrentBlockLink = currentBlockLink,
                 CurrentPageLink = pageRouteHelper.PageLink,
-                Messages = PopulateMessages(),
+                Messages = RetrieveMessages(MessageKey)
             };
 
             //Remove the existing values from the input fields
@@ -84,37 +84,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     var newGroup = this.groupRepository.Add(group);
                     if (model.IsModerated)
                     {
-                        this.moderationRepository.Add(newGroup);
+                        this.moderationRepository.AddWorkflow(newGroup);
                     }
-                    var successMessage = "Your group: " + model.Name + " was added successfully!";
-                    AddToTempData("GroupCreationSuccessMessage", successMessage);
+                    var message = "Your group: " + model.Name + " was added successfully!";
+                    AddMessage(MessageKey, new MessageViewModel(message, SuccessMessage));
                 }
                 catch (SocialRepositoryException ex)
                 {
                     //Persist the exception message in temp data to be used in the error message
-                    AddToTempData("GroupCreationErrorMessage", ex.Message);
+                    AddMessage(MessageKey, new MessageViewModel(ex.Message, ErrorMessage));
                 }
             }
             else
             {   //Persist the exception message in temp data to be used in the error message
-                var errorMessage = "Group name and description cannot be empty";
-                AddToTempData("GroupCreationErrorMessage", errorMessage);
+                var message = "Group name and description cannot be empty";
+                AddMessage(MessageKey, new MessageViewModel(message, ErrorMessage));
             }
-        }
-
-        /// <summary>
-        /// Populates the messages that will be displayed to the user in the group creation view.
-        /// </summary>
-        /// <returns>A list of messages used to convey statuses to the user</returns>
-        private List<MessageViewModel> PopulateMessages()
-        {
-            var successMessageBody = GetFromTempData<string>("GroupCreationSuccessMessage");
-            var successMessage = new MessageViewModel { Body = successMessageBody, Type = "success" };
-
-            var errorMessageBody = GetFromTempData<string>("GroupCreationErrorMessage");
-            var errorMessage = new MessageViewModel { Body = errorMessageBody, Type = "error" };
-
-            return new List<MessageViewModel> { successMessage, errorMessage };
         }
 
         /// <summary>

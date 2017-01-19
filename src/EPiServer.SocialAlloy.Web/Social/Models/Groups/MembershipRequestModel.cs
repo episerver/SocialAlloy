@@ -52,16 +52,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// </summary>
         public string Group { get; set; }
 
-        /// <summary>
-        /// Gets or sets SocialMember data for the user requesting
-        /// membership to the group.
-        /// </summary>
-        public SocialMember Member { get; set; }
-
-        /// <summary>
-        /// Gets or sets extension data for the user requesting
-        /// membership to the group.
-        /// </summary>
-        public MemberExtensionData ExtensionData { get; set; }
     }
 }
