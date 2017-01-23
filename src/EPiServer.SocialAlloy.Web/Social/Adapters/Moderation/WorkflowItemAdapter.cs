@@ -43,7 +43,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
                 User = item.Extension.User,
                 Group = item.Extension.Group,
                 WorkflowId = item.Data.Workflow.ToString(),
-                Created = item.Data.Created,
+                Created = item.Data.Created.ToLocalTime(),
                 State = item.Data.State.Name,
                 Actions = workflow.ActionsFor(item.Data.State).Select(a => a.Name)
             };

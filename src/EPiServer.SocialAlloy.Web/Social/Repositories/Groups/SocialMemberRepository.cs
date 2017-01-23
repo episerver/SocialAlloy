@@ -82,7 +82,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
                 var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
-                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>() { Filter = memberFilter, PageInfo = pageInfo };
+                var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
+
+                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>()
+                {
+                    Filter = memberFilter,
+                    PageInfo = pageInfo,
+                    OrderBy = orderBy
+                };
+
                 var compositeMember = this.memberService.Get(compositeFilter).Results;
                 returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(x.Data, x.Extension));
             }
