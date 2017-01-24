@@ -34,8 +34,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 var group = new Group(socialGroup.Name, socialGroup.Description);
                 addedGroup = this.groupService.Add(group);
-                if (addedGroup == null)
-                    throw new SocialRepositoryException("The new group could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
             {
