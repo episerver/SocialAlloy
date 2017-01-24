@@ -45,9 +45,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
                 addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
-
-                if (addedSocialMember == null)
-                    throw new SocialRepositoryException("The new member could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
             {
