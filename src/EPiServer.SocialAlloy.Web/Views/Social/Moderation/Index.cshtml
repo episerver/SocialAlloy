@@ -1,0 +1,101 @@
+﻿@model EPiServer.SocialAlloy.Web.Social.Models.Moderation.ModerationViewModel
+
+@{
+    Layout = "~/Views/Shared/Layouts/_DemoRoot.cshtml";
+}
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h3>Moderation <small>Moderate the members of your groups</small></h3>
+        </div>
+    </div>
+</div>
+
+@if (Model.Workflows.Count() > 0)
+{
+    <div class="row">
+        <div class="span12">
+            <div>
+                @using (Html.BeginForm("Index", "Moderation", FormMethod.Get))
+                {
+                    <div>Choose a group to moderate:</div>
+                    <div>
+                        @Html.DropDownListFor(
+                          x => x.SelectedWorkflow,
+                          new SelectList(
+                              Model.Workflows,
+                              "Id",
+                              "Name",
+                              Model.Workflows.First().Id
+                          )
+                      )
+                    </div>
+                    <div><input type="submit" value="View" /></div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <div>
+                <h4>Membership Requests</h4>
+                <p>
+                    There are membership requests which may be pending your approval.
+                </p>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>State</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            @item.User
+                        </td>
+                        <td>
+                            @item.State
+                        </td>
+                        <td>
+                            @item.Created
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("Index", "Moderation", FormMethod.Post))
+                            {
+                                <input type="hidden" name="user" value="@Html.AttributeEncode(item.User)" />
+                                <input type="hidden" name="group" value="@Html.AttributeEncode(item.Group)" />
+                                <input type="hidden" name="workflow" value="@Html.AttributeEncode(Model.SelectedWorkflow.Id)" />
+                                <input type="hidden" name="state" value="@Html.AttributeEncode(item.State)" />
+
+                                if (item.Actions.Count() == 0)
+                                {
+                                    <p class="muted">No actions available</p>
+                                }
+
+                                foreach (var action in item.Actions)
+                                {
+                                    <input type="submit" name="workflowAction" value="@action" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="span12">
+            <div>
+                There are currently no moderated groups.
+            </div>
+        </div>
+    </div>
+} 
