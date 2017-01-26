@@ -40,8 +40,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(FeedBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
             // Create a feed block view model to fill the frontend block view
             var blockViewModel = new FeedBlockViewModel(currentBlock);
             blockViewModel.Messages = new List<MessageViewModel>();

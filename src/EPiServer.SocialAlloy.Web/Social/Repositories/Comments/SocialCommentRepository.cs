@@ -73,6 +73,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             var comments = new List<Comment>();
             var visibility = AdaptVisibilityFilter(filter.Visibility);
+            var parent = Reference.Create(filter.Target);
 
             try
             {
@@ -85,7 +86,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                         },
                         Filter = new CommentFilter
                         {
-                            Visibility = visibility
+                            Visibility = visibility,
+                            Parent = parent
                         }
                         ,
                         OrderBy = { new SortInfo(CommentSortFields.Created, false) }

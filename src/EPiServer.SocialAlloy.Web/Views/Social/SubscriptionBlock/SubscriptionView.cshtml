@@ -25,9 +25,8 @@
             var actionName = Model.UserSubscribedToPage ? "Unsubscribe" : "Subscribe";
             using (Html.BeginForm(actionName, null))
             {
-                @Html.HiddenFor(m => m.CurrentBlockLink)
-                @Html.HiddenFor(m => m.CurrentPageLink)
                 @Html.Hidden("action", actionName)
+                @Html.HiddenFor(m => m.CurrentPageLink)
                 <div>
                     <input type="submit" name="submit" value="@actionName">
                 </div>

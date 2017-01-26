@@ -433,6 +433,8 @@
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
     <Compile Include="Social\Common\Models\MessageViewModel.cs" />
     <Compile Include="Social\Controllers\ModerationController.cs" />
+    <Compile Include="Social\Controllers\SocialCommunityPageController.cs" />
+    <Compile Include="Social\Models\ActivityStreams\SubscriptionFormViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
     <Compile Include="Social\Models\Groups\SocialCompositeMember.cs" />
@@ -443,6 +445,7 @@
     <Compile Include="Social\Models\Moderation\ModerationViewModel.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflowItem.cs" />
+    <Compile Include="Social\Pages\SocialCommunityPage.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />
@@ -524,7 +527,6 @@
     <Compile Include="Social\Blocks\Groups\GroupAdmissionBlock.cs" />
     <Compile Include="Social\Common\Controllers\SocialBlockController.cs" />
     <Compile Include="Social\Common\Exceptions\SocialRepositoryException.cs" />
-    <Compile Include="Social\Common\Models\SocialBlockViewModel.cs" />
     <Compile Include="Social\Controllers\GroupCreationBlockController.cs" />
     <Compile Include="Social\Controllers\CommentsBlockController.cs" />
     <Compile Include="Social\Controllers\RatingBlockController.cs" />
@@ -552,7 +554,6 @@
     <Compile Include="Social\Models\ActivityStreams\SocialSubscription.cs" />
     <Compile Include="Social\Models\ActivityStreams\SocialSubscriptionFilter.cs" />
     <Compile Include="Social\Models\ActivityStreams\SubscriptionBlockViewModel.cs" />
-    <Compile Include="Social\Models\ActivityStreams\SubscriptionFormViewModel.cs" />
     <Compile Include="Social\Repositories\Comments\ISocialCommentRepository.cs" />
     <Compile Include="Social\Repositories\Moderation\ISocialModerationRepository.cs" />
     <Compile Include="Social\Repositories\Moderation\SocialModerationRepository.cs" />
@@ -753,6 +754,7 @@
     <Content Include="Views\Social\MembershipDisplayBlock\Index.cshtml" />
     <Content Include="Views\Social\Moderation\Index.cshtml" />
     <Content Include="Views\Shared\Layouts\_DemoRoot.cshtml" />
+    <Content Include="Views\Social\SocialCommunityPage\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -760,6 +762,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
