@@ -1,4 +1,6 @@
-﻿namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿using EPiServer.Core;
+
+namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// The LikeButtonBlockViewModel class represents the model that will be used to
@@ -12,6 +14,11 @@
         public LikeButtonBlockViewModel()
         {
         }
+
+        /// <summary>
+        /// Gets or sets the current page link.
+        /// </summary>
+        public PageReference PageLink { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of Liked ratings found for the current page.
