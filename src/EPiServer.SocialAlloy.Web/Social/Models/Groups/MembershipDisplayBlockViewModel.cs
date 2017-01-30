@@ -1,5 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
+﻿using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
@@ -11,6 +10,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
     /// </summary>
     public class MembershipDisplayBlockViewModel 
     {
+        public MembershipDisplayBlockViewModel(MembershipDisplayBlock currentBlock)
+        {
+            Heading = currentBlock.Heading;
+            ShowHeading = currentBlock.ShowHeading;
+            GroupName = currentBlock.GroupName;
+            Messages = new List<MessageViewModel>();
+            Members = new List<SocialMember>();
+        }
         /// <summary>
         /// Gets or sets the heading for the membership display block.
         /// </summary>

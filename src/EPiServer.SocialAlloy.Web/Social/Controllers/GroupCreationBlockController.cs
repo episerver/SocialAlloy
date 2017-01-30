@@ -37,18 +37,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="currentBlock">The current block instance.</param>
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
+            var currentPageLink = pageRouteHelper.PageLink;
+            
             //Populate the model to pass to the block view
-            var groupCreationBlockModel = new GroupCreationBlockViewModel()
-            {
-                Heading = currentBlock.Heading,
-                ShowHeading = currentBlock.ShowHeading,
-                CurrentBlockLink = currentBlockLink,
-                CurrentPageLink = pageRouteHelper.PageLink,
-                Messages = RetrieveMessages(MessageKey)
-            };
-
+            var groupCreationBlockModel = new GroupCreationBlockViewModel(currentBlock, currentPageLink);
+            groupCreationBlockModel.Messages = RetrieveMessages(MessageKey);
+            
             //Remove the existing values from the input fields
             ModelState.Clear();
 

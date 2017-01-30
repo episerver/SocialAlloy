@@ -38,17 +38,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="currentBlock">The current block instance.</param>
         public override ActionResult Index(MembershipDisplayBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
             //Populate model to pass to the membership display view
-            var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel()
-            {
-                Heading = currentBlock.Heading,
-                ShowHeading = currentBlock.ShowHeading,
-                GroupName = currentBlock.GroupName,
-                Messages = new List<MessageViewModel>(),
-                Members = new List<SocialMember>()
-            };
+            var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel(currentBlock);
 
             //Retrieve the group id assigned to the block and populate the memberlist 
             try

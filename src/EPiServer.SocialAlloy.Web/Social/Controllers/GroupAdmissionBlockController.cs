@@ -42,16 +42,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns></returns>
         public override ActionResult Index(GroupAdmissionBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
+            var currentPageLink = pageRouteHelper.PageLink;
+            
             //Populate model to pass to block view
-            var blockModel = new GroupAdmissionBlockViewModel()
-            {
-                Heading = currentBlock.Heading,
-                ShowHeading = currentBlock.ShowHeading,
-                CurrentBlockLink = currentBlockLink,
-                CurrentPageLink = pageRouteHelper.PageLink,
-            };
+            var blockModel = new GroupAdmissionBlockViewModel(currentBlock, currentPageLink);
 
             //Retrieves moderation information for the model to display in the view
             try

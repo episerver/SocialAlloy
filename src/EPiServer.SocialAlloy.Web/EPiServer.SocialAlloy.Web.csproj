@@ -434,6 +434,8 @@
     <Compile Include="Social\Common\Models\MessageViewModel.cs" />
     <Compile Include="Social\Controllers\ModerationController.cs" />
     <Compile Include="Social\Controllers\SocialCommunityPageController.cs" />
+    <Compile Include="Social\Controllers\SocialProfilePageController.cs" />
+    <Compile Include="Social\Initialization\SocialContentSeeding.cs" />
     <Compile Include="Social\Models\ActivityStreams\SubscriptionFormViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
@@ -446,6 +448,7 @@
     <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflowItem.cs" />
     <Compile Include="Social\Pages\SocialCommunityPage.cs" />
+    <Compile Include="Social\Pages\SocialProfilePage.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\SocialActivityRepository.cs" />
     <Compile Include="Social\Repositories\Common\IPageRepository.cs" />
     <Compile Include="Social\Repositories\ActivityStreams\ISocialActivityRepository.cs" />
@@ -755,6 +758,7 @@
     <Content Include="Views\Social\Moderation\Index.cshtml" />
     <Content Include="Views\Shared\Layouts\_DemoRoot.cshtml" />
     <Content Include="Views\Social\SocialCommunityPage\Index.cshtml" />
+    <Content Include="Views\Social\SocialProfilePage\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
