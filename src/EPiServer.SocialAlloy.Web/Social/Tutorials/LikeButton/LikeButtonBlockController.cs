@@ -25,7 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private readonly IRatingService ratingService;
         private readonly IPageRouteHelper pageRouteHelper;
         private readonly IContentRepository contentRepository;
-        private const int LIKED_RATING = 1;
+        private const int Liked_Rating = 1;
 
         /// <summary>
         /// Constructor
@@ -67,14 +67,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     var raterUserRef = GetRaterRef();
                     var ratingPage = ratingService.Get(
-                        new Criteria<RatingFilter>()
+                        new Criteria<RatingFilter>
                         {
-                            Filter = new RatingFilter()
+                            Filter = new RatingFilter
                             {
                                 Rater = raterUserRef,
-                                Targets = new List<Reference> { targetPageRef }
+                                Targets = new List<Reference>
+                                {
+                                    targetPageRef
+                                }
                             },
-                            PageInfo = new PageInfo() { PageSize = 1 }
+                            PageInfo = new PageInfo
+                            {
+                                PageSize = 1
+                            }
                         }
                     );
 
@@ -91,13 +97,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
                 // Using the EPiServer Social Rating service, get the existing Like statistics for the page (target)
                 var ratingStatisticsPage = ratingService.Get(
-                    new Criteria<RatingStatisticsFilter>()
+                    new Criteria<RatingStatisticsFilter>
                     {
-                        Filter = new RatingStatisticsFilter()
+                        Filter = new RatingStatisticsFilter
                         {
-                            Targets = new List<Reference> { targetPageRef }
+                            Targets = new List<Reference>
+                            {
+                                targetPageRef
+                            }
                         },
-                        PageInfo = new PageInfo() { PageSize = 1 }
+                        PageInfo = new PageInfo
+                        {
+                            PageSize = 1
+                        }
                     }
                 );
 
@@ -139,7 +151,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     new Rating(
                         raterUserRef,
                         targetPageRef,
-                        new RatingValue(LIKED_RATING)
+                        new RatingValue(Liked_Rating)
                     )
                 );
             }
