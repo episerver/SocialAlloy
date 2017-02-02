@@ -425,11 +425,13 @@
     <Compile Include="Social\Adapters\Moderation\WorkflowItemAdapter.cs" />
     <Compile Include="Social\Blocks\Comments\CommentsBlock.cs" />
     <Compile Include="Social\Blocks\ActivityStreams\FeedBlock.cs" />
+    <Compile Include="Social\Blocks\Groups\MembershipAffiliationBlock.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingBlock.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingSetting.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingSettingProperty.cs" />
     <Compile Include="Social\Blocks\ActivityStreams\SubscriptionBlock.cs" />
     <Compile Include="Social\Controllers\FeedBlockController.cs" />
+    <Compile Include="Social\Controllers\MembershipAffiliationBlockController.cs" />
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
     <Compile Include="Social\Common\Models\MessageViewModel.cs" />
     <Compile Include="Social\Controllers\ModerationController.cs" />
@@ -437,6 +439,7 @@
     <Compile Include="Social\Controllers\SocialProfilePageController.cs" />
     <Compile Include="Social\Initialization\SocialContentSeeding.cs" />
     <Compile Include="Social\Models\ActivityStreams\SubscriptionFormViewModel.cs" />
+    <Compile Include="Social\Models\Groups\MembershipAffiliationBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
     <Compile Include="Social\Models\Groups\SocialCompositeMember.cs" />
@@ -759,6 +762,7 @@
     <Content Include="Views\Shared\Layouts\_DemoRoot.cshtml" />
     <Content Include="Views\Social\SocialCommunityPage\Index.cshtml" />
     <Content Include="Views\Social\SocialProfilePage\Index.cshtml" />
+    <Content Include="Views\Social\MembershipAffiliationBlock\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

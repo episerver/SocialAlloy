@@ -1,6 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {

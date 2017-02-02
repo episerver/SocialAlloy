@@ -27,12 +27,13 @@ namespace EPiServer.SocialAlloy.ExtensionData.Membership
         /// <param name="group">The group to which a member will be added</param>
         /// <param name="user">User which is pending approval for membership within the group</param>
         /// 
-        public AddMemberRequest(string group, string user, string email, string company)
+        public AddMemberRequest(string group, string user, string email, string company, string loggedInUserId)
         {
             Group = group;
             User = user;
             Company = company;
             Email = email;
+            LoggedInUserId = loggedInUserId;
         }
 
         /// <summary>

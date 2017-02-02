@@ -28,7 +28,14 @@
             @Html.HiddenFor(m => m.GroupId)
             @Html.HiddenFor(m => m.GroupName)
             <div>
-                @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
+                @if (string.IsNullOrEmpty(Model.LoggedInUserId))
+                {
+                    @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
+                }
+                else
+                {
+                    @Html.HiddenFor(m => m.LoggedInUserId)
+                }
                 @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
                 @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
             </div>

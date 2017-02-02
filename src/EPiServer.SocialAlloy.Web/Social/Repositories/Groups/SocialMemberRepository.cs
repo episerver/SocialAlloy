@@ -42,7 +42,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var userReference = Reference.Create(socialMember.UserReference);
                 var groupId = GroupId.Create(socialMember.GroupId);
                 var member = new Member(userReference, groupId);
-                var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company);
+                var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company, socialMember.LoggedInUserId);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
                 addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
 
@@ -80,16 +80,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
-                var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
-                var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
-
-                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>()
-                {
-                    Filter = memberFilter,
-                    PageInfo = pageInfo,
-                    OrderBy = orderBy
-                };
+                var compositeFilter = BuildCriteria(socialMemberFilter);
 
                 var compositeMember = this.memberService.Get(compositeFilter).Results;
                 returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(x.Data, x.Extension));
@@ -112,6 +103,34 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
 
             return returnedMembers;
+        }
+
+
+        private CompositeCriteria<MemberFilter, MemberExtensionData> BuildCriteria(SocialMemberFilter socialMemberFilter)
+        {
+            var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
+            var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
+            var compositeCriteria = new CompositeCriteria<MemberFilter, MemberExtensionData>()
+            {
+                PageInfo = pageInfo,
+                OrderBy = orderBy
+            };
+
+            if (!string.IsNullOrEmpty(socialMemberFilter.GroupId) && (string.IsNullOrEmpty(socialMemberFilter.LoggedInUserId)))
+            {
+                compositeCriteria.Filter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
+
+            }
+            else if ((!string.IsNullOrEmpty(socialMemberFilter.LoggedInUserId) && (string.IsNullOrEmpty(socialMemberFilter.GroupId))))
+            {
+                compositeCriteria.ExtensionFilter = FilterExpressionBuilder<MemberExtensionData>.EqualTo(td => td.LoggedInUserId, socialMemberFilter.LoggedInUserId);
+            }
+            else
+            {
+                throw new SocialException("SocialMemberFilter should only contain a GroupId or a UserReference.");
+            }
+
+            return compositeCriteria;
         }
     }
 }

@@ -47,6 +47,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets the name of the group that a member will be added to.
         /// </summary>
         public string MemberName { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the user id if the current user is logged in.
+        /// </summary>
+        public string LoggedInUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the member email to be added as member extension data.

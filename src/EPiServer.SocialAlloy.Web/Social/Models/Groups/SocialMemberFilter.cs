@@ -17,5 +17,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the number of members to retrieve.
         /// </summary>
         public int PageSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets the the Episerver users id to filter on.
+        /// </summary>
+        public string LoggedInUserId { get; set; }
     }
 }

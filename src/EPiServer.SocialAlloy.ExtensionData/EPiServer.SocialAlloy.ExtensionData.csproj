@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Group\GroupExtensionData.cs" />
     <Compile Include="Membership\AddMemberRequest.cs" />
     <Compile Include="Membership\MemberExtensionData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,6 +9,7 @@ using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.Web.Routing;
+using System;
 using System.Web.Mvc;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
@@ -18,6 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class GroupAdmissionBlockController : SocialBlockController<GroupAdmissionBlock>
     {
+        private readonly IUserRepository userRepository;
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialMemberRepository memberRepository;
         private readonly ISocialModerationRepository moderationRepository;
@@ -30,6 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public GroupAdmissionBlockController()
         {
+            userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
             groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
             memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
             moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
@@ -50,6 +53,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             //Retrieves moderation information for the model to display in the view
             try
             {
+                var userId = userRepository.GetUserId(this.User);
+                blockModel.LoggedInUserId = String.IsNullOrWhiteSpace(userId) ? "" : userId;
                 var group = groupRepository.Get(currentBlock.GroupName);
                 //Validate that the group exists 
                 if (group != null)
@@ -109,13 +114,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="blockModel">The viewmodel for the GroupAdmission view</param>
         private void AddMember(GroupAdmissionBlockViewModel blockModel)
         {
-            var validatedInputs = ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail);
-            if (validatedInputs)
+            if(!string.IsNullOrEmpty(blockModel.LoggedInUserId))
+            {
+                blockModel.MemberName = this.userRepository.GetUserName(blockModel.LoggedInUserId);
+            }
+             
+            if (ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail))
             {
                 try
                 {
                     //Populated the SocialMember and extension data
-                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany);
+                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany, blockModel.LoggedInUserId);
                     if (blockModel.IsModerated)
                     {
                         //Adds request for membership into moderation workflow

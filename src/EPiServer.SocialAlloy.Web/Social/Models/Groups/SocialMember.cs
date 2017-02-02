@@ -16,12 +16,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <param name="groupId">ID of the group to which the member is assigned</param>
         /// <param name="email">The email of the member</param>
         /// <param name="company">The company that a member is associated with</param>
-        public SocialMember( string userReference, string groupId, string email, string company)
+        public SocialMember( string userReference, string groupId, string email, string company, string loggedInUserId)
         {
             UserReference = userReference;
             GroupId = groupId;
             Email = email;
             Company = company;
+            LoggedInUserId = loggedInUserId;
         }
 
         /// <summary>
@@ -45,5 +46,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// Gets or sets the company the member works for.
         /// </summary>
         public string Company { get; set; }
+
+        /// <summary>
+        /// Gets or sets the logged in user id of the user. 
+        /// </summary>
+        public string LoggedInUserId { get; set; }
     }
 }

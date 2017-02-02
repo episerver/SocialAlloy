@@ -1,8 +1,5 @@
-﻿
-@using EPiServer.Web.Mvc.Html
+﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web
-
-
 @model PageViewModel<EPiServer.SocialAlloy.Web.Social.Pages.SocialProfilePage>
 
 @{ Layout = "~/Views/Shared/Layouts/_Root.cshtml"; }
@@ -16,9 +13,14 @@
                 @Html.DisplayFor(m => m.CurrentPage.MainBody)
             </div>
         </div>
-        <div class="span8">
-            @Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
-            @Html.PropertyFor(x => x.CurrentPage.Feed, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
+        <div class="row">
+            <div class="span8">
+                @Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
+                @Html.PropertyFor(x => x.CurrentPage.Feed, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
+            </div>
+            <div class="span4">
+                @Html.PropertyFor(x => x.CurrentPage.MembershipAffiliation, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
+            </div>
         </div>
     </div>
 </div>

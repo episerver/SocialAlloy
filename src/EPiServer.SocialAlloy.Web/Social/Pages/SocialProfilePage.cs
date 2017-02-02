@@ -1,11 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using EPiServer.SpecializedProperties;
 using EPiServer.SocialAlloy.Web.Models.Pages;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
+using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
+using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Pages
 {
@@ -31,5 +30,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
             GroupName = SystemTabNames.Content,
             Order = 2)]
         public virtual FeedBlock Feed { get; set; }
+
+        [Display(
+            Name = "Membership Affiliation Block",
+            Description = "The membership affiliation section of the profile page. Local MembershipAffiliation block will display the groups that the currently logged in user is a member of.",
+            GroupName = SystemTabNames.Content,
+            Order = 2)]
+        public virtual MembershipAffiliationBlock MembershipAffiliation { get; set; }
+        
     }
 }
