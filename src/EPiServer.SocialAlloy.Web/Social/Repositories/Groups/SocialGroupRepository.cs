@@ -197,7 +197,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var group = new Group(socialGroup.Name, socialGroup.Description);
+                var group = new Group(GroupId.Create(socialGroup.Id), socialGroup.Name, socialGroup.Description);
                 var extension = new GroupExtensionData(socialGroup.PageLink);
                 updatedGroup = this.groupService.Update<GroupExtensionData>(group, extension);
                 if (updatedGroup == null)

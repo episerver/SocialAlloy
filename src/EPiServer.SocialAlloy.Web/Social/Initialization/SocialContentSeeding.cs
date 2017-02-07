@@ -61,6 +61,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 myPage.Feed.FeedTitle = "Your Activity Feed";
                 myPage.Feed.ShowHeading = true;
                 myPage.Feed.Heading = "Profile Feed";
+                myPage.MembershipAffiliation.Heading = "Your Groups";
+                myPage.MembershipAffiliation.ShowHeading = true;
                 contentRepository.Save(myPage, DataAccess.SaveAction.Publish, AccessLevel.NoAccess);
             }
         }

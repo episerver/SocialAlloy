@@ -8,7 +8,7 @@
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
         <hr />
     }
-    
+
     @foreach (var message in Model.Messages)
     {
         var messageStyle = message.ResolveStyle(message.Type);
@@ -21,15 +21,15 @@
             <div class="span6">
                 <div>
                     <table class="table table-striped">
-                        
+
                         @foreach (var group in Model.Groups)
                         {
-                            <tr><th><u>Group Name</u></th></tr>
                             <tr>
-                                <td><a href=@group.PageLink><strong>@group.Name</strong></a></td>
-                            </tr>
-                            <tr>
-                                <th><u>Group Description</u></th>
+                                <td>
+                                    <a href=@HttpUtility.UrlDecode(group.PageLink)>
+                                        <strong>@group.Name</strong>
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td>@group.Description</td>
