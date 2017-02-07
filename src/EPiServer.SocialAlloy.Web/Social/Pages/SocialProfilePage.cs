@@ -46,6 +46,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
             GroupName = SystemTabNames.Content,
             Order = 2)]
         public virtual MembershipAffiliationBlock MembershipAffiliation { get; set; }
-
     }
 }

@@ -76,7 +76,5 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
             GroupName = SystemTabNames.Content,
             Order = 6)]
         public virtual GroupAdmissionBlock GroupAdmission { get; set; }
-
-        
     }
 }
