@@ -16,6 +16,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
     [ImageUrl(Global.StaticGraphicsFolderPath + "page-type-thumbnail-standard.png")]
     public class SocialProfilePage : StandardPage
     {
+        /// <summary>
+        /// The main body will be shown in the main content area of the page, using the XHTML-editor you can insert for example text, images and tables.
+        /// </summary>
         [CultureSpecific]
         [Display(
             Name = "Main body",
@@ -24,6 +27,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
             Order = 1)]
         public virtual XhtmlString MainBody { get; set; }
 
+        /// <summary>
+        /// The feed section of the profile page. Local feed block will display feed items for the pages a user has subscriped to.
+        /// </summary>
         [Display(
             Name = "Feed Block",
             Description = "The feed section of the profile page. Local feed block will display feed items for the pages a user has subscriped to.",
@@ -31,12 +37,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
             Order = 2)]
         public virtual FeedBlock Feed { get; set; }
 
+        /// <summary>
+        /// The membership affiliation section of the profile page. Local membership affiliation block will display the groups that the currently logged in user is a member of.
+        /// </summary>
         [Display(
             Name = "Membership Affiliation Block",
-            Description = "The membership affiliation section of the profile page. Local MembershipAffiliation block will display the groups that the currently logged in user is a member of.",
+            Description = "The membership affiliation section of the profile page. Local membership affiliation block will display the groups that the currently logged in user is a member of.",
             GroupName = SystemTabNames.Content,
             Order = 2)]
         public virtual MembershipAffiliationBlock MembershipAffiliation { get; set; }
-        
+
     }
 }

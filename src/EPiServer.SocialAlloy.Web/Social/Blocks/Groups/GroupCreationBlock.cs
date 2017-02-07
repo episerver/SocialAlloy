@@ -1,7 +1,6 @@
 ﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups

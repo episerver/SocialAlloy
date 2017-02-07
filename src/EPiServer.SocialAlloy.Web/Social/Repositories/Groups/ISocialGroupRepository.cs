@@ -1,6 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.SocialAlloy.ExtensionData.Group;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
+﻿using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories

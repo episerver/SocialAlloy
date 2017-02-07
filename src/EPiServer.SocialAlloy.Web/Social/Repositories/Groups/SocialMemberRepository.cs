@@ -4,7 +4,6 @@ using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,7 +104,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             return returnedMembers;
         }
 
-
+        /// <summary>
+        /// Build the appropriate CompositeCriteria based the provided SocialMemberFilter.
+        /// The member filter will either contain a group id or a logged in user id. If neitheris provided an exception is thrown.
+        /// </summary>
+        /// <param name="socialMemberFilter">The provided member filter</param>
+        /// <returns>A composite criteria of type MemberFilter and MemberExtensionData</returns>
         private CompositeCriteria<MemberFilter, MemberExtensionData> BuildCriteria(SocialMemberFilter socialMemberFilter)
         {
             var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
@@ -127,7 +131,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             else
             {
-                throw new SocialException("SocialMemberFilter should only contain a GroupId or a UserReference.");
+                throw new SocialException("This implementation of a SocialMemberFilter should only contain either a GroupId or a UserReference.");
             }
 
             return compositeCriteria;

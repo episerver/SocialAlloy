@@ -1,5 +1,4 @@
 ﻿using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories

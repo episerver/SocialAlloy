@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
@@ -46,7 +45,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupAdmissionBlock currentBlock)
         {
             var currentPageLink = pageRouteHelper.PageLink;
-            
+
             //Populate model to pass to block view
             var blockModel = new GroupAdmissionBlockViewModel(currentBlock, currentPageLink);
 
@@ -114,11 +113,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="blockModel">The viewmodel for the GroupAdmission view</param>
         private void AddMember(GroupAdmissionBlockViewModel blockModel)
         {
-            if(!string.IsNullOrEmpty(blockModel.LoggedInUserId))
+            if (!string.IsNullOrEmpty(blockModel.LoggedInUserId))
             {
                 blockModel.MemberName = this.userRepository.GetUserName(blockModel.LoggedInUserId);
             }
-             
+
             if (ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail))
             {
                 try

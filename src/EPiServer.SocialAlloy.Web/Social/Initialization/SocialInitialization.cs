@@ -80,21 +80,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         }
 
         /// <summary>
-        /// Returns absolute encoded url for a social group page. 
-        /// </summary>
-        /// <param name="pageData">The page data that is associated with a specific social group</param>
-        /// <returns>The absolute encoded url of a social group page </returns>
-        private string ExternalURL(PageData pageData)
-        {
-            UrlBuilder pageURLBuilder = new UrlBuilder(pageData.LinkURL);
-            EPiServer.Global.UrlRewriteProvider.ConvertToExternal(pageURLBuilder, pageData.PageLink, System.Text.Encoding.UTF8);
-            string pageURL = pageURLBuilder.ToString();
-            UriBuilder uriBuilder = new UriBuilder(UriSupport.SiteUrl);
-            uriBuilder.Path = pageURL;
-            return uriBuilder.Uri.AbsoluteUri; 
-        }
-
-        /// <summary>
         /// Community Event for the creation of any SocialCommunityPage
         /// </summary>
         /// <param name="sender"></param>
@@ -140,6 +125,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 communityPage.Memberships.ShowHeading = true;
                 communityPage.Memberships.Heading = groupName + " Member List";
             }
+        }
+
+        /// <summary>
+        /// Returns absolute encoded url for a social group page. 
+        /// </summary>
+        /// <param name="pageData">The page data that is associated with a specific social group</param>
+        /// <returns>The absolute encoded url of a social group page </returns>
+        private string ExternalURL(PageData pageData)
+        {
+            UrlBuilder pageURLBuilder = new UrlBuilder(pageData.LinkURL);
+            EPiServer.Global.UrlRewriteProvider.ConvertToExternal(pageURLBuilder, pageData.PageLink, System.Text.Encoding.UTF8);
+            string pageURL = pageURLBuilder.ToString();
+            UriBuilder uriBuilder = new UriBuilder(UriSupport.SiteUrl);
+            uriBuilder.Path = pageURL;
+            return uriBuilder.Uri.AbsoluteUri;
         }
 
         /// <summary>

@@ -23,42 +23,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             this.groupService = groupService;
         }
 
-        ///// <summary>
-        ///// Adds a group to the EPiServer Social group repository.
-        ///// </summary>
-        ///// <param name="group">The group to add.</param>
-        ///// <returns>The added group.</returns>
-        //public SocialGroup Add(SocialGroup socialGroup)
-        //{
-        //    Group addedGroup = null;
-            
-        //    try
-        //    {
-        //        var group = new Group(socialGroup.Name, socialGroup.Description);
-        //        addedGroup = this.groupService.Add(group);
-        //        if (addedGroup == null)
-        //            throw new SocialRepositoryException("The new group could not be added. Please try again");
-        //    }
-        //    catch (SocialAuthenticationException ex)
-        //    {
-        //        throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
-        //    }
-        //    catch (MaximumDataSizeExceededException ex)
-        //    {
-        //        throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
-        //    }
-        //    catch (SocialCommunicationException ex)
-        //    {
-        //        throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
-        //    }
-        //    catch (SocialException ex)
-        //    {
-        //        throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
-        //    }
-
-        //    return new SocialGroup(addedGroup.Id.Id, addedGroup.Name, addedGroup.Description);
-        //}
-
         /// <summary>
         /// Adds a group to the EPiServer Social group repository.
         /// </summary>

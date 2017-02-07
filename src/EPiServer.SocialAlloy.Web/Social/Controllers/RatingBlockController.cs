@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -65,7 +64,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             //Conditionally retrieving ratingstatistics based on any errors that might have been encountered
-            if ((blockModel.Messages.Count == 0)||(blockModel.Messages.Any(x => x.Type != ErrorMessage))) { GetRatingStatistics(target, blockModel); }
+            if ((blockModel.Messages.Count == 0) || (blockModel.Messages.Any(x => x.Type != ErrorMessage))) { GetRatingStatistics(target, blockModel); }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }

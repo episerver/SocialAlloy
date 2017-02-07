@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
 {
     /// <summary>
     /// The MembershipAffiliationBlock class defines the configuration used for the list of groups that a member is associated with.
     /// </summary>
-    [ContentType(DisplayName = "MembershipGroupAssociation", GUID = "d7f22a41-a26c-4e85-b4a5-15929d4222fc", Description = "")]
+    [ContentType(DisplayName = "Membership Affiliation Block", GUID = "d7f22a41-a26c-4e85-b4a5-15929d4222fc", Description = "Configures the properties of a membership affiliation block view")]
     public class MembershipAffiliationBlock : BlockData
     {
         /// <summary>
@@ -44,7 +43,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
         public override void SetDefaultValues(ContentType contentType)
         {
             base.SetDefaultValues(contentType);
-            Heading = "Membership Affiliation ";
+            Heading = "Membership Affiliation";
             ShowHeading = false;
             DisplayPageSize = 10;
         }

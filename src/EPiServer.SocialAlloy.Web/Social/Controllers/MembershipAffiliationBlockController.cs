@@ -43,9 +43,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             //Populate model to pass to the membership affiliation view
             var membershipAffiliationBlockModel = new MembershipAffiliationBlockViewModel(currentBlock);
 
-            //Retrieve the groups that are associated with the currently loogged in user.
             try
             {
+                //Retrieve the groups that are associated with the currently loogged in user.
                 var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
@@ -57,6 +57,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     var listOfSocialMembers = this.memberRepository.Get(memberFilter);
                     GetAffiliatedGroups(membershipAffiliationBlockModel, listOfSocialMembers);
                 }
+                //If the user is not logged in let them know they will need to log in to see the groups they are affiliated with
                 else
                 {
                     var message = "Login to see the list of groups you are affiliated with.";
@@ -77,7 +78,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Populated the viewmodel with the list of social groups that a user is assoicated with
         /// </summary>
         /// <param name="membershipAffiliationBlockModel"></param>
         /// <param name="listOfSocialMembers"></param>

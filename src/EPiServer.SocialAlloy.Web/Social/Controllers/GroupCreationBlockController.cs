@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -21,7 +20,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         private const string MessageKey = "GroupCreationBlock";
         private const string ErrorMessage = "Error";
         private const string SuccessMessage = "Success";
-       
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,11 +37,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
             var currentPageLink = pageRouteHelper.PageLink;
-            
+
             //Populate the model to pass to the block view
             var groupCreationBlockModel = new GroupCreationBlockViewModel(currentBlock, currentPageLink);
             groupCreationBlockModel.Messages = RetrieveMessages(MessageKey);
-            
+
             //Remove the existing values from the input fields
             ModelState.Clear();
 
