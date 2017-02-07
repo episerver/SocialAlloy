@@ -91,7 +91,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             string pageURL = pageURLBuilder.ToString();
             UriBuilder uriBuilder = new UriBuilder(UriSupport.SiteUrl);
             uriBuilder.Path = pageURL;
-            return uriBuilder.Uri.AbsoluteUri;
+            return uriBuilder.Uri.AbsoluteUri; 
         }
 
         /// <summary>
