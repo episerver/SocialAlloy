@@ -141,120 +141,120 @@
       <HintPath>..\packages\EPiServer.CMS.UI.Core.10.1.1\lib\net45\EPiServer.Shell.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.ActivityStreams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.dll</HintPath>
+    <Reference Include="EPiServer.Social.ActivityStreams, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.2.0\lib\EPiServer.Social.ActivityStreams.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.ActivityStreams.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Core.dll</HintPath>
+    <Reference Include="EPiServer.Social.ActivityStreams.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.2.0\lib\EPiServer.Social.ActivityStreams.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.ActivityStreams.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.ActivityStreams.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.2.0\lib\EPiServer.Social.ActivityStreams.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.ActivityStreams.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.0.0\lib\EPiServer.Social.ActivityStreams.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.ActivityStreams.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.1.2.0\lib\EPiServer.Social.ActivityStreams.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.ActivityStreams.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.ActivityStreams.Site.1.0.0\lib\EPiServer.Social.ActivityStreams.Site.dll</HintPath>
+    <Reference Include="EPiServer.Social.ActivityStreams.Site, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.ActivityStreams.Site.1.2.0\lib\EPiServer.Social.ActivityStreams.Site.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Comments, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.dll</HintPath>
+    <Reference Include="EPiServer.Social.Comments, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.2.0\lib\EPiServer.Social.Comments.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Comments.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Core.dll</HintPath>
+    <Reference Include="EPiServer.Social.Comments.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.2.0\lib\EPiServer.Social.Comments.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Comments.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.Comments.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.2.0\lib\EPiServer.Social.Comments.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Comments.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Comments.1.0.0\lib\EPiServer.Social.Comments.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.Comments.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.1.2.0\lib\EPiServer.Social.Comments.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Comments.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Comments.Site.1.0.0\lib\EPiServer.Social.Comments.Site.dll</HintPath>
+    <Reference Include="EPiServer.Social.Comments.Site, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Comments.Site.1.2.0\lib\EPiServer.Social.Comments.Site.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.1.0.0\lib\EPiServer.Social.Common.dll</HintPath>
+    <Reference Include="EPiServer.Social.Common, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.1.2.0\lib\EPiServer.Social.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Common.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.Common.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.2.0\lib\EPiServer.Social.Common.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Common.Rest.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Configuration.dll</HintPath>
+    <Reference Include="EPiServer.Social.Common.Rest.Configuration, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.2.0\lib\EPiServer.Social.Common.Rest.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Common.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.0.0\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.Common.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.1.2.0\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.dll</HintPath>
+    <Reference Include="EPiServer.Social.Groups, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.2.0\lib\EPiServer.Social.Groups.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Groups.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Core.dll</HintPath>
+    <Reference Include="EPiServer.Social.Groups.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.2.0\lib\EPiServer.Social.Groups.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Groups.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.Groups.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.2.0\lib\EPiServer.Social.Groups.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Groups.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.1.0.0\lib\EPiServer.Social.Groups.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.Groups.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.1.2.0\lib\EPiServer.Social.Groups.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Groups.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.Site.1.0.0\lib\EPiServer.Social.Groups.Site.dll</HintPath>
+    <Reference Include="EPiServer.Social.Groups.Site, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Groups.Site.1.2.0\lib\EPiServer.Social.Groups.Site.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Moderation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.dll</HintPath>
+    <Reference Include="EPiServer.Social.Moderation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.2.0\lib\EPiServer.Social.Moderation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Moderation.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Core.dll</HintPath>
+    <Reference Include="EPiServer.Social.Moderation.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.2.0\lib\EPiServer.Social.Moderation.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Moderation.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.Moderation.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.2.0\lib\EPiServer.Social.Moderation.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Moderation.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Moderation.1.0.0\lib\EPiServer.Social.Moderation.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.Moderation.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.1.2.0\lib\EPiServer.Social.Moderation.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Moderation.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Moderation.Site.1.0.0\lib\EPiServer.Social.Moderation.Site.dll</HintPath>
+    <Reference Include="EPiServer.Social.Moderation.Site, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Moderation.Site.1.2.0\lib\EPiServer.Social.Moderation.Site.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Ratings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.dll</HintPath>
+    <Reference Include="EPiServer.Social.Ratings, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.2.0\lib\EPiServer.Social.Ratings.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Ratings.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Core.dll</HintPath>
+    <Reference Include="EPiServer.Social.Ratings.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.2.0\lib\EPiServer.Social.Ratings.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Ratings.Rest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.dll</HintPath>
+    <Reference Include="EPiServer.Social.Ratings.Rest, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.2.0\lib\EPiServer.Social.Ratings.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Ratings.Rest.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Ratings.1.0.0\lib\EPiServer.Social.Ratings.Rest.Contracts.dll</HintPath>
+    <Reference Include="EPiServer.Social.Ratings.Rest.Contracts, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.1.2.0\lib\EPiServer.Social.Ratings.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Social.Ratings.Site, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Ratings.Site.1.0.0\lib\EPiServer.Social.Ratings.Site.dll</HintPath>
+    <Reference Include="EPiServer.Social.Ratings.Site, Version=1.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPiServer.Social.Ratings.Site.1.2.0\lib\EPiServer.Social.Ratings.Site.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.UI, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
@@ -449,7 +449,6 @@
     <Compile Include="Social\Models\Groups\SocialGroup.cs" />
     <Compile Include="Social\Models\Groups\SocialMember.cs" />
     <Compile Include="Social\Models\Groups\SocialMemberFilter.cs" />
-    <Compile Include="Social\Models\Moderation\MembershipModeration.cs" />
     <Compile Include="Social\Models\Moderation\ModerationViewModel.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflow.cs" />
     <Compile Include="Social\Models\Moderation\SocialWorkflowItem.cs" />

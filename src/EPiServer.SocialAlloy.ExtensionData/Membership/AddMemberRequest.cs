@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EPiServer.SocialAlloy.ExtensionData.Membership
+﻿namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// The AddMemberRequest is a serializable class representing 
@@ -46,4 +40,4 @@ namespace EPiServer.SocialAlloy.ExtensionData.Membership
         /// </summary>
         public string User { get; set; }
     }
-    }
+}

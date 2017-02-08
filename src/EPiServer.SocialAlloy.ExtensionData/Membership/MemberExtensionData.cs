@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EPiServer.SocialAlloy.ExtensionData.Membership
+﻿namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// Custom extension data used in saving of member details for members associated with groups.

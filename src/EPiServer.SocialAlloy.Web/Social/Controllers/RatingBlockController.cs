@@ -145,7 +145,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockModel.NoStatisticsFoundMessage = "This page not been rated, be the first one to rate this page!";
+                    var loggedInMessage = "This page has not been rated. Be the first!";
+                    var loggedOutMessage ="This page has not been rated. Log in and be the first!" ;
+                    blockModel.NoStatisticsFoundMessage = this.User.Identity.IsAuthenticated ? loggedInMessage : loggedOutMessage;
                 }
             }
             catch (SocialRepositoryException ex)

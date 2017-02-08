@@ -1,6 +1,6 @@
 ﻿using EPiServer.Social.Groups.Core;
 
-namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
+namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// The MembershipModeration class is intended to identify
