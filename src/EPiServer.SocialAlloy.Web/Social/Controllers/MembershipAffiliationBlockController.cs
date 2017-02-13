@@ -51,7 +51,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     var memberFilter = new SocialMemberFilter
                     {
-                        LoggedInUserId = userId,
+                        UserId = userId,
                         PageSize = currentBlock.DisplayPageSize
                     };
                     var listOfSocialMembers = this.memberRepository.Get(memberFilter);
@@ -68,20 +68,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 membershipAffiliationBlockModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
-            catch (GroupDoesNotExistException ex)
-            {
-                membershipAffiliationBlockModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
-            }
 
             //Return block view with populated model
             return PartialView("~/Views/Social/MembershipAffiliationBlock/Index.cshtml", membershipAffiliationBlockModel);
         }
 
         /// <summary>
-        /// Populated the viewmodel with the list of social groups that a user is assoicated with
+        /// Populate the viewmodel with the list of social groups that a user is assoicated with
         /// </summary>
-        /// <param name="membershipAffiliationBlockModel"></param>
-        /// <param name="listOfSocialMembers"></param>
+        /// <param name="membershipAffiliationBlockModel">The block viewmodel</param>
+        /// <param name="listOfSocialMembers">The list of social members</param>
         private void GetAffiliatedGroups(MembershipAffiliationBlockViewModel membershipAffiliationBlockModel, IEnumerable<SocialMember> listOfSocialMembers)
         {
             if (listOfSocialMembers != null && listOfSocialMembers.Any())

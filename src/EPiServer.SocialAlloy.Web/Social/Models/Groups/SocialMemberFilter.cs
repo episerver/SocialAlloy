@@ -21,6 +21,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the the Episerver users id to filter on.
         /// </summary>
-        public string LoggedInUserId { get; set; }
+        public string UserId { get; set; }
     }
 }

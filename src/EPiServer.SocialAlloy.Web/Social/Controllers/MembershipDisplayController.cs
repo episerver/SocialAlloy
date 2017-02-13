@@ -7,6 +7,7 @@ using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -17,6 +18,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class MembershipDisplayController : SocialBlockController<MembershipDisplayBlock>
     {
+        private readonly IUserRepository userRepository;
         private readonly ISocialGroupRepository groupRepository;
         private readonly ISocialMemberRepository memberRepository;
         private const string ErrorMessage = "Error";
@@ -28,6 +30,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
             memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
+            userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
         }
 
         /// <summary>
@@ -53,7 +56,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                         GroupId = groupId,
                         PageSize = currentBlock.DisplayPageSize
                     };
-                    membershipDisplayBlockModel.Members = memberRepository.Get(memberFilter).ToList();
+                    var socialMembers = memberRepository.Get(memberFilter).ToList();
+                    membershipDisplayBlockModel.Members = Adapt(socialMembers);
                 }
                 else
                 {
@@ -72,6 +76,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             //Return block view with populated model
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
+        }
+
+        public List<MemberDisplayModel> Adapt(List<SocialMember> socialMembers)
+        {
+            return socialMembers.Select(x => new MemberDisplayModel(x.Company, this.userRepository.ParseUserUri(x.User))).ToList();
         }
     }
 }

@@ -87,7 +87,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             }
 
             resellerTitlePage = contentRepository.GetBySegment(PageReference.StartPage, "reseller-community", CultureInfo.CurrentCulture);
-            //If the title page does there is a check if there are any child pages. If no child pages exist then create example reseller pages. 
+            //If the title reseller page exists there is a check if there are any child pages. If no child pages exist then create example reseller pages. 
             if (resellerTitlePage != null)
             {
                 var parentReference = resellerTitlePage.ContentLink;

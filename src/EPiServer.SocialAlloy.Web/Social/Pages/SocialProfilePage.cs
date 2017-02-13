@@ -9,9 +9,9 @@ using System.ComponentModel.DataAnnotations;
 namespace EPiServer.SocialAlloy.Web.Social.Pages
 {
     /// <summary>
-    /// Used for the pages that wish to contain Social community features
+    /// Used for the pages that wish to contain customized details for currently logged in users
     /// </summary>
-    [ContentType(DisplayName = "SocialProfilePage", GUID = "8b4c5048-2116-467d-9f04-9e7fd5648955", Description = "")]
+    [ContentType(DisplayName = "SocialProfilePage", GUID = "8b4c5048-2116-467d-9f04-9e7fd5648955", Description = "A profile page for the currently logged in user.")]
 
     [ImageUrl(Global.StaticGraphicsFolderPath + "page-type-thumbnail-standard.png")]
     public class SocialProfilePage : StandardPage

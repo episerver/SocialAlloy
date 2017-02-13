@@ -38,10 +38,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var userReference = Reference.Create(socialMember.UserReference);
+                var userReference = Reference.Create(socialMember.User);
                 var groupId = GroupId.Create(socialMember.GroupId);
                 var member = new Member(userReference, groupId);
-                var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company, socialMember.LoggedInUserId);
+                var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
                 addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
 
@@ -120,14 +120,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 OrderBy = orderBy
             };
 
-            if (!string.IsNullOrEmpty(socialMemberFilter.GroupId) && (string.IsNullOrEmpty(socialMemberFilter.LoggedInUserId)))
+            if (!string.IsNullOrEmpty(socialMemberFilter.GroupId) && (string.IsNullOrEmpty(socialMemberFilter.UserId)))
             {
                 compositeCriteria.Filter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
 
             }
-            else if ((!string.IsNullOrEmpty(socialMemberFilter.LoggedInUserId) && (string.IsNullOrEmpty(socialMemberFilter.GroupId))))
+            else if ((!string.IsNullOrEmpty(socialMemberFilter.UserId) && (string.IsNullOrEmpty(socialMemberFilter.GroupId))))
             {
-                compositeCriteria.ExtensionFilter = FilterExpressionBuilder<MemberExtensionData>.EqualTo(td => td.LoggedInUserId, socialMemberFilter.LoggedInUserId);
+                compositeCriteria.Filter = new MemberFilter { User = Reference.Create(socialMemberFilter.UserId) };
             }
             else
             {

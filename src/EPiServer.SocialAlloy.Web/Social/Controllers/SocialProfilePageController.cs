@@ -14,7 +14,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Renders the social profile page view
         /// </summary>
         /// <param name="currentPage">The current social profile page</param>
-        /// <returns></returns>
+        /// <returns>The corresponding action result</returns>
         public ActionResult Index(SocialProfilePage currentPage)
         {
             var pageViewModel = new PageViewModel<SocialProfilePage>(currentPage);

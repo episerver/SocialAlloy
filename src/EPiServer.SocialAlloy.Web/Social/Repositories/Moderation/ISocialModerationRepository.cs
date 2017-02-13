@@ -40,7 +40,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="user">The user reference for the member requesting group admission</param>
         /// <param name="group">The group id for the group the user is looking to gain admission</param>
         /// <returns>The workflowitem extension data</returns>
-        AddMemberRequest Get(string user, string group);
+        AddMemberRequest GetMemberRequest(string user, string group);
+
+        /// <summary>
+        /// Retrieves relevant workflow state of a member for admission to a specific group
+        /// </summary>
+        /// <param name="user">The user reference for the member requesting group admission</param>
+        /// <param name="group">The group id for the group the user is looking to gain admission</param>
+        /// <returns>The workflowitem state in moderation</returns>
+        string GetMemberWorkflowState(string user, string group);
 
         /// <summary>
         /// Takes action on the specified workflow item, representing a

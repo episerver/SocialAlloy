@@ -52,22 +52,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             //Retrieves moderation information for the model to display in the view
             try
             {
-                var userId = userRepository.GetUserId(this.User);
-                blockModel.LoggedInUserId = String.IsNullOrWhiteSpace(userId) ? "" : userId;
                 var group = groupRepository.Get(currentBlock.GroupName);
-                //Validate that the group exists 
-                if (group != null)
-                {
-                    var groupId = group.Id;
-                    blockModel.GroupName = currentBlock.GroupName;
-                    blockModel.GroupId = groupId.ToString();
-                    blockModel.IsModerated = moderationRepository.IsModerated(groupId);
-                }
-                else
-                {
-                    var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
-                    AddMessage(MessageKey, new MessageViewModel(errorMessage, ErrorMessage));
-                }
+                ValidateGroup(blockModel, group);
+                PopulateMemberDetails(blockModel);
             }
             catch (SocialRepositoryException ex)
             {
@@ -113,9 +100,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="blockModel">The viewmodel for the GroupAdmission view</param>
         private void AddMember(GroupAdmissionBlockViewModel blockModel)
         {
-            if (!string.IsNullOrEmpty(blockModel.LoggedInUserId))
+            //Construct friendly names for messaging
+            var userName = "";
+            if (blockModel.UserIsLoggedIn)
             {
-                blockModel.MemberName = this.userRepository.GetUserName(blockModel.LoggedInUserId);
+                var userId = userRepository.GetAuthenticatedId(blockModel.MemberName);
+                userName = userRepository.GetUserName(userId);
+            }
+            else
+            {
+                userName = blockModel.MemberName;
+                blockModel.MemberName = userRepository.CreateAnonymousUri(blockModel.MemberName);
             }
 
             if (ValidateMemberInputs(blockModel.MemberName, blockModel.MemberEmail))
@@ -123,7 +118,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 try
                 {
                     //Populated the SocialMember and extension data
-                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany, blockModel.LoggedInUserId);
+                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany);
                     if (blockModel.IsModerated)
                     {
                         //Adds request for membership into moderation workflow
@@ -131,9 +126,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     }
                     else
                     {
-                        //Add the new member with extension data and persist the group name in temp data to be used in the success message
+                        //Add the new member with extension data and persist the success message in temp data
                         memberRepository.Add(member);
-                        var message = blockModel.MemberName + " was added successfully to the group.";
+                        var message = userName + " was added successfully to the group.";
                         AddMessage(MessageKey, new MessageViewModel(message, SuccessMessage));
                     }
                 }
@@ -161,5 +156,40 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             return !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(userEmail);
         }
+
+        /// <summary>
+        /// Validates that the group returned exists
+        /// </summary>
+        /// <param name="blockModel">The view model for the GroupAdmissionBlock</param>
+        /// <param name="group">The group that was retrieved</param>
+        private void ValidateGroup(GroupAdmissionBlockViewModel blockModel, SocialGroup group)
+        {
+            if (group != null)
+            {
+                var groupId = group.Id;
+                blockModel.GroupName = group.Name;
+                blockModel.GroupId = groupId.ToString();
+                blockModel.IsModerated = moderationRepository.IsModerated(groupId);
+            }
+            else
+            {
+                var errorMessage = "The group configured for this block cannot be found. Please update the block to use an existing group.";
+                AddMessage(MessageKey, new MessageViewModel(errorMessage, ErrorMessage));
+            }
+        }
+
+        /// <summary>
+        /// Populates the member related properties on the viewmodel
+        /// </summary>
+        /// <param name="blockModel">The view model for the GroupAdmissionBlock</param>
+        private void PopulateMemberDetails(GroupAdmissionBlockViewModel blockModel)
+        {
+            var userId = userRepository.GetUserId(this.User);
+            var loggedIn = !String.IsNullOrWhiteSpace(userId);
+            blockModel.UserIsLoggedIn = loggedIn;
+            blockModel.MemberName = loggedIn ? userRepository.CreateAuthenticatedUri(userId): "";
+            blockModel.ModeratedUserAdmissionState = loggedIn ? moderationRepository.GetMemberWorkflowState(blockModel.MemberName, blockModel.GroupId) : "";
+        }
+
     }
 }

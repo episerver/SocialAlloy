@@ -47,11 +47,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets the name of the group that a member will be added to.
         /// </summary>
         public string MemberName { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the user id if the current user is logged in.
-        /// </summary>
-        public string LoggedInUserId { get; set; }
 
         /// <summary>
         /// Gets or sets the member email to be added as member extension data.
@@ -67,6 +62,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets or sets the value for whether the group has member admission moderation.
         /// </summary>
         public bool IsModerated { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value for whether the user is currently logged in.
+        /// </summary>
+        public bool UserIsLoggedIn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of the current state that a user is in while being moderated for admission to a group. 
+        /// </summary>
+        public string ModeratedUserAdmissionState { get; set; }
 
         /// <summary>
         /// Gets or sets the GroupId of the group that a member will be added to. 

@@ -16,7 +16,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <returns>AddMemberRequest</returns>
         public AddMemberRequest Adapt(SocialMember member)
         {
-            return new AddMemberRequest(member.GroupId, member.UserReference, member.Email, member.Company, member.LoggedInUserId);
+            return new AddMemberRequest(member.GroupId, member.User, member.Email, member.Company);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <returns>SocialMember</returns>
         public SocialMember Adapt(AddMemberRequest memberRequest)
         {
-            return new SocialMember(memberRequest.User, memberRequest.Group, memberRequest.Email, memberRequest.Company, memberRequest.LoggedInUserId);
+            return new SocialMember(memberRequest.User, memberRequest.Group, memberRequest.Email, memberRequest.Company);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <returns>SocialMember</returns>
         public SocialMember Adapt(Member member, MemberExtensionData extension)
         {
-            return new SocialMember(member.User.Id, member.Group.Id, extension.Email, extension.Company, extension.LoggedInUserId);
+            return new SocialMember(member.User.Id, member.Group.Id, extension.Email, extension.Company);
         }
     }
 }

@@ -27,21 +27,30 @@
             @Html.HiddenFor(m => m.IsModerated)
             @Html.HiddenFor(m => m.GroupId)
             @Html.HiddenFor(m => m.GroupName)
-            <div>
-                @if (string.IsNullOrEmpty(Model.LoggedInUserId))
-                {
-                    @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
-                }
-                else
-                {
-                    @Html.HiddenFor(m => m.LoggedInUserId)
-                }
-                @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
-                @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
-            </div>
-            <div>
-                <input type="submit" name="submit" value="Join">
-            </div>
+            @Html.HiddenFor(m => m.UserIsLoggedIn)
+            if (Model.IsModerated && Model.UserIsLoggedIn && !String.IsNullOrWhiteSpace(Model.ModeratedUserAdmissionState))
+            {
+                @Html.HiddenFor(m => m.MemberName)
+                <h3 style="color:black"> You have already requested admission to this group. Your admission state is: @Model.ModeratedUserAdmissionState</h3>
+            }
+            else
+            {
+                <div>
+                    @if (!Model.UserIsLoggedIn)
+                    {
+                        @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.MemberName)
+                    }
+                    @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
+                    @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
+                </div>
+                <div>
+                    <input type="submit" name="submit" value="Join">
+                </div>
+            }
         }
     }
     else

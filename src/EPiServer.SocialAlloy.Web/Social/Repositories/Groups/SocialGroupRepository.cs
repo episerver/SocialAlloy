@@ -146,6 +146,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
             }
+            catch (GroupDoesNotExistException ex)
+            {
+                throw new SocialRepositoryException("EPiServer Social could not find the group requested.", ex);
+            }
+
 
             return socialGroups;
         }

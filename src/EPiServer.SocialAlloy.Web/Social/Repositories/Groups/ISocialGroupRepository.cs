@@ -22,8 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="group">The updated group.</param>
         /// <returns>The updated group.</returns>
-        SocialGroup Update (SocialGroup group);
-
+        SocialGroup Update(SocialGroup group);
 
         /// <summary>
         /// Retrieves a group based on the name of the group provided.

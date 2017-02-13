@@ -13,7 +13,6 @@
         public GroupExtensionData(string pageLink)
         {
             PageLink = pageLink;
-
         }
 
         /// <summary>

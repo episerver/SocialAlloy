@@ -18,11 +18,10 @@
         /// </summary>
         /// <param name="email">The email address of the member</param>
         /// <param name="company">The company that the member is associated with</param>
-        public MemberExtensionData(string email, string company, string loggedInUserId)
+        public MemberExtensionData(string email, string company)
         {
             Email = email;
             Company = company;
-            LoggedInUserId = loggedInUserId;
         }
 
         /// <summary>
@@ -34,10 +33,5 @@
         /// Gets or sets the company the member is associated with
         /// </summary>
         public string Company { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Episerver user id
-        /// </summary>
-        public string LoggedInUserId { get; set; }
     }
 }

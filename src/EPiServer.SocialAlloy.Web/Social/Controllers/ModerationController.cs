@@ -45,7 +45,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Index(string user, string group, string workflow, string state, string workflowAction)
         {
-            var addMemberRequest = this.moderationRepository.Get(user, group);
+            var addMemberRequest = this.moderationRepository.GetMemberRequest(user, group);
        
             this.moderationRepository.Moderate(workflow, addMemberRequest, workflowAction);
 

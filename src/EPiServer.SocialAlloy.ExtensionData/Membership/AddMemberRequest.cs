@@ -20,14 +20,14 @@
         /// </summary>
         /// <param name="group">The group to which a member will be added</param>
         /// <param name="user">User which is pending approval for membership within the group</param>
-        /// 
-        public AddMemberRequest(string group, string user, string email, string company, string loggedInUserId)
+        /// <param name="email">The email address of the member</param>
+        /// <param name="company">The company that the member is associated with</param>
+        public AddMemberRequest(string group, string user, string email, string company)
         {
             Group = group;
             User = user;
             Company = company;
             Email = email;
-            LoggedInUserId = loggedInUserId;
         }
 
         /// <summary>

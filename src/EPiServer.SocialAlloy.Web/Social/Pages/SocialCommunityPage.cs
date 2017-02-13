@@ -12,7 +12,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Pages
     /// <summary>
     /// Used for the pages that wish to contain Social community features
     /// </summary>
-    [ContentType(DisplayName = "SocialCommunity", GUID = "56ba715e-3fb9-4050-a5e3-ab7fe1690742", Description = "")]
+    [ContentType(DisplayName = "SocialCommunity", GUID = "56ba715e-3fb9-4050-a5e3-ab7fe1690742", Description = "A reseller's community page using Episerver Social.")]
     [ImageUrl(Global.StaticGraphicsFolderPath + "page-type-thumbnail-standard.png")]
     public class SocialCommunityPage : StandardPage
     {

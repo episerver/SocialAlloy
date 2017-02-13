@@ -430,6 +430,8 @@
     <Compile Include="Social\Controllers\SocialCommunityPageController.cs" />
     <Compile Include="Social\Controllers\SocialProfilePageController.cs" />
     <Compile Include="Social\Initialization\SocialContentSeeding.cs" />
+    <Compile Include="Social\Initialization\SocialInitializationEvents.cs" />
+    <Compile Include="Social\Models\Groups\MemberDisplayModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipAffiliationBlockViewModel.cs" />
     <Compile Include="Social\Pages\SocialCommunityPage.cs" />
     <Compile Include="Social\Pages\SocialProfilePage.cs" />
