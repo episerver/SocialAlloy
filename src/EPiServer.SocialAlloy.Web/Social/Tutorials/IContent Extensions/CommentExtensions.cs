@@ -14,12 +14,12 @@ namespace epiAlloySite
     /// </summary>
     public static class CommentExtensions
     {
+        private static ICommentService service;
         // Format specifiers for building target content and author strings used to form 
         // references in Episerver Social. 
         private const string userReferenceFormat = "user://{0}";
         private const string resourceReferenceFormat = "resource://{0}";
-        private static ICommentService service;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
