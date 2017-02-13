@@ -18,16 +18,14 @@ namespace epiAlloySite
         // references in Episerver Social. 
         private const string userReferenceFormat = "user://{0}";
         private const string resourceReferenceFormat = "resource://{0}";
-        
+        private static ICommentService service;
+
         /// <summary>
-        /// Returns the Episerver Social Comment service used for managing comments.
+        /// Constructor
         /// </summary>
-        private static ICommentService CommentService
+        static CommentExtensions()
         {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<ICommentService>();
-            }
+            service = ServiceLocator.Current.GetInstance<ICommentService>();
         }
 
         /// <summary> 
@@ -66,7 +64,7 @@ namespace epiAlloySite
             };
 
 
-            return CommentService.Get(criteria);
+            return service.Get(criteria);
         }
 
         /// <summary>
@@ -80,15 +78,13 @@ namespace epiAlloySite
         public static Comment PublishComment(this IContent content, string authorId, string body, bool isVisible)
         {
             var authorReference = String.IsNullOrWhiteSpace(authorId) ?
-                                  Reference.Empty :  
+                                  Reference.Empty :
                                   Reference.Create(String.Format(userReferenceFormat, authorId));
             var targetReference = Reference.Create(String.Format(resourceReferenceFormat, content.ContentGuid.ToString()));
 
             var newComment = new Comment(targetReference, authorReference, body, isVisible);
 
-            var service = (new DefaultCommentServiceFactory()).Create();
-            service = ServiceLocator.Current.GetInstance<ICommentService>();
-            return CommentService.Add(newComment);
+            return service.Add(newComment);
         }
     }
 }
