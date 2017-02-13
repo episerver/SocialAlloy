@@ -51,7 +51,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     var memberFilter = new SocialMemberFilter
                     {
-                        UserId = userId,
+                        UserId = userRepository.CreateAuthenticatedUri(userId),
                         PageSize = currentBlock.DisplayPageSize
                     };
                     var listOfSocialMembers = this.memberRepository.Get(memberFilter);
