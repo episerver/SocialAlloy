@@ -1,6 +1,7 @@
 ﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
@@ -49,7 +50,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
        
             this.moderationRepository.Moderate(workflow, addMemberRequest, workflowAction);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new RouteValueDictionary(new { SelectedWorkflow = workflow}));
         }
     }
 }
