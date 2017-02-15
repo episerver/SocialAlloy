@@ -129,7 +129,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 // should handle each one accordingly -- see rating service documentation
             }
 
-            return PartialView("~/Views/Social/LikeButtonBlock/LikeButtonView.cshtml", blockModel);
+            return PartialView("~/Views/Social/LikeButtonBlock/Index.cshtml", blockModel);
         }
 
         /// <summary>

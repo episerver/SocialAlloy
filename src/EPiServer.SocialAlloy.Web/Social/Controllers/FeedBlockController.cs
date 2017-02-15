@@ -49,7 +49,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetSocialActivityFeed(currentBlock, blockViewModel);
             }
 
-            return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/FeedBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>
