@@ -1,7 +1,7 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
 @model MembershipDisplayBlockViewModel
-<div>
+<div class="border">
     @if (Model.ShowHeading)
     {
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
@@ -25,7 +25,7 @@
                         @foreach (var member in Model.Members)
                         {
                             <tr>
-                                <td><strong>@member.UserReference</strong></td>
+                                <td><strong>@member.Name</strong></td>
                                 <td>@member.Company</td>
                             </tr>
                         }

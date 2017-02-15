@@ -22,6 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         private readonly IWorkflowService workflowService;
         private readonly IWorkflowItemService workflowItemService;
         private readonly ISocialMemberRepository memberRepository;
+        private readonly IUserRepository userRepository;
         private WorkflowItemAdapter workflowItemAdapter;
         private SocialWorkflowAdapter workflowAdapter;
         private SocialMemberAdapter memberAdapter;
@@ -32,12 +33,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="workflowService">Moderation workflow service supporting this application</param>
         /// <param name="workflowItemService">Moderation workflow item service supporting this application</param>
         /// <param name="memberService">Member service supporting this application</param>
-        public SocialModerationRepository(IWorkflowService workflowService, IWorkflowItemService workflowItemService, ISocialMemberRepository memberRepository)
+        public SocialModerationRepository(IWorkflowService workflowService, IWorkflowItemService workflowItemService, ISocialMemberRepository memberRepository, IUserRepository userRepository)
         {
             this.workflowService = workflowService;
             this.workflowItemService = workflowItemService;
             this.memberRepository = memberRepository;
-            this.workflowItemAdapter = new WorkflowItemAdapter();
+            this.userRepository = userRepository;
+            this.workflowItemAdapter = new WorkflowItemAdapter(this.userRepository);
             this.workflowAdapter = new SocialWorkflowAdapter();
             this.memberAdapter = new SocialMemberAdapter();
         }
@@ -71,7 +73,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                 new WorkflowState("Pending")
             );
 
-            var workflowExtension = new MembershipModeration { Group = GroupId.Create(group.Id) };
+            var workflowExtension = new MembershipModeration { Group = group.Id };
 
 
             if (membershipWorkflow != null)
@@ -140,9 +142,33 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="user">The user under moderation</param>
         /// <param name="group">The group that membership is being moderated</param>
         /// <returns>AddMemberRequest: the workflowItem extension data</returns>
-        public AddMemberRequest Get(string user, string group)
+        public string GetMemberWorkflowState(string user, string group)
         {
-            AddMemberRequest memberRequest = null;
+            var compositeMember = GetComposite(user, group);
+            return compositeMember == null ? null : compositeMember.Data.State.Name;
+        }
+
+        /// <summary>
+        /// Retrieves specific workflowitem extension data from the underlying repository
+        /// </summary>
+        /// <param name="user">The user under moderation</param>
+        /// <param name="group">The group that membership is being moderated</param>
+        /// <returns>AddMemberRequest: the workflowItem extension data</returns>
+        public AddMemberRequest GetMemberRequest(string user, string group)
+        {
+            var compositeMember = GetComposite(user, group);
+            return compositeMember == null ? null : compositeMember.Extension;
+        }
+
+        /// <summary>
+        /// Retrieves specific workflowitem and extension data from the underlying repository
+        /// </summary>
+        /// <param name="user">The user under moderation</param>
+        /// <param name="group">The group that membership is being moderated</param>
+        /// <returns>composite of WorkflowItem and AddMemberRequest</returns>
+        private Composite<WorkflowItem, AddMemberRequest> GetComposite(string user, string group)
+        {
+            Composite<WorkflowItem, AddMemberRequest> memberRequest = null;
 
             //Construct a filter to return the desired target under moderation
             var filter = new CompositeCriteria<WorkflowItemFilter, AddMemberRequest>();
@@ -151,8 +177,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             try
             {
                 //retrieve the first workflow that matches the target filter 
-                var workflowItem = this.workflowItemService.Get(filter).Results.FirstOrDefault();
-                memberRequest = workflowItem.Extension;
+                memberRequest =  this.workflowItemService.Get(filter).Results.LastOrDefault();
             }
             catch (SocialAuthenticationException ex)
             {
@@ -200,7 +225,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                 var currentWorkflowItems = this.GetWorkflowItemsFor(selectedWorkflow);
 
                 var workflowAdapter = new SocialWorkflowAdapter();
-                var workflowItemAdapter = new WorkflowItemAdapter(selectedWorkflow);
+                var workflowItemAdapter = new WorkflowItemAdapter(selectedWorkflow, this.userRepository);
 
                 return new ModerationViewModel
                 {
@@ -242,7 +267,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
 
             // For example: "members:/{group-id}/{user-reference}"
 
-            var targetReference = this.CreateUri(member.GroupId, member.UserReference);
+            var targetReference = this.CreateUri(member.GroupId, member.User);
 
             // Retrieve the workflow supporting moderation of
             // membership for the group to which the user is
@@ -351,7 +376,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             IEnumerable<Composite<Workflow, MembershipModeration>> listOfWorkflow = Enumerable.Empty<Composite<Workflow, MembershipModeration>>();
 
             var filterWorkflowsByGroup =
-                FilterExpressionBuilder<MembershipModeration>.Field(m => m.Group.Id)
+                FilterExpressionBuilder<MembershipModeration>.Field(m => m.Group)
                                                              .EqualTo(group);
 
             var criteria = new CompositeCriteria<WorkflowFilter, MembershipModeration>

@@ -1,8 +1,10 @@
-﻿using EPiServer.Social.Common;
+﻿using EPiServer.ServiceLocation;
+using EPiServer.Social.Common;
 using EPiServer.Social.Moderation.Core;
 using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using EPiServer.SocialAlloy.Web.Social.Models.Moderation;
+using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
@@ -13,22 +15,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
     public class WorkflowItemAdapter
     {
         private Workflow workflow;
+        private readonly IUserRepository userRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="workflow">The workflow that will be adapted</param>
-        public WorkflowItemAdapter(Workflow workflow)
+        public WorkflowItemAdapter(Workflow workflow, IUserRepository userRepository )
         {
             this.workflow = workflow;
+            this.userRepository = userRepository;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WorkflowItemAdapter()
+        public WorkflowItemAdapter(IUserRepository userRepository)
         {
-
+            this.userRepository = userRepository;
         }
 
         /// <summary>
@@ -38,14 +42,18 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
         /// <returns>MembershipRequestModel</returns>
         public MembershipRequestModel Adapt(Composite<WorkflowItem, AddMemberRequest> item)
         {
+            var user = item.Extension.User;
+            var userName = userRepository.ParseUserUri(user);
+
             return new MembershipRequestModel
             {
-                User = item.Extension.User,
+                User = user,
                 Group = item.Extension.Group,
                 WorkflowId = item.Data.Workflow.ToString(),
                 Created = item.Data.Created.ToLocalTime(),
                 State = item.Data.State.Name,
-                Actions = workflow.ActionsFor(item.Data.State).Select(a => a.Name)
+                Actions = workflow.ActionsFor(item.Data.State).Select(a => a.Name),
+                UserName = userName
             };
         }
 
@@ -64,7 +72,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Moderation
                 var state = new WorkflowState(socialWorkflowItem.State);
                 var target = Reference.Create(socialWorkflowItem.Target);
 
-                workflowItem =  new WorkflowItem(id, state, target);
+                workflowItem = new WorkflowItem(id, state, target);
             }
 
             return workflowItem;

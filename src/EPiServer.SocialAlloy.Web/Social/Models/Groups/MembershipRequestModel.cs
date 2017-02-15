@@ -52,5 +52,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// </summary>
         public string Group { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the user
+        /// </summary>
+        public string UserName { get; set; }
     }
 }

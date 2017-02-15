@@ -4,7 +4,6 @@ using EPiServer.SocialAlloy.ExtensionData.Membership;
 using EPiServer.SocialAlloy.Web.Social.Adapters.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.SocialAlloy.Web.Social.Models.Groups;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,12 +38,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var userReference = Reference.Create(socialMember.UserReference);
+                var userReference = Reference.Create(socialMember.User);
                 var groupId = GroupId.Create(socialMember.GroupId);
                 var member = new Member(userReference, groupId);
                 var extensionData = new MemberExtensionData(socialMember.Email, socialMember.Company);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
                 addedSocialMember = socialMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
+
+                if (addedSocialMember == null)
+                    throw new SocialRepositoryException("The new member could not be added. Please try again");
             }
             catch (SocialAuthenticationException ex)
             {
@@ -77,16 +79,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
-                var memberFilter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
-                var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
-
-                var compositeFilter = new CompositeCriteria<MemberFilter, MemberExtensionData>()
-                {
-                    Filter = memberFilter,
-                    PageInfo = pageInfo,
-                    OrderBy = orderBy
-                };
+                var compositeFilter = BuildCriteria(socialMemberFilter);
 
                 var compositeMember = this.memberService.Get(compositeFilter).Results;
                 returnedMembers = compositeMember.Select(x => socialMemberAdapter.Adapt(x.Data, x.Extension));
@@ -109,6 +102,39 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
 
             return returnedMembers;
+        }
+
+        /// <summary>
+        /// Build the appropriate CompositeCriteria based the provided SocialMemberFilter.
+        /// The member filter will either contain a group id or a logged in user id. If neitheris provided an exception is thrown.
+        /// </summary>
+        /// <param name="socialMemberFilter">The provided member filter</param>
+        /// <returns>A composite criteria of type MemberFilter and MemberExtensionData</returns>
+        private CompositeCriteria<MemberFilter, MemberExtensionData> BuildCriteria(SocialMemberFilter socialMemberFilter)
+        {
+            var pageInfo = new PageInfo { PageSize = socialMemberFilter.PageSize };
+            var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
+            var compositeCriteria = new CompositeCriteria<MemberFilter, MemberExtensionData>()
+            {
+                PageInfo = pageInfo,
+                OrderBy = orderBy
+            };
+
+            if (!string.IsNullOrEmpty(socialMemberFilter.GroupId) && (string.IsNullOrEmpty(socialMemberFilter.UserId)))
+            {
+                compositeCriteria.Filter = new MemberFilter { Group = GroupId.Create(socialMemberFilter.GroupId) };
+
+            }
+            else if ((!string.IsNullOrEmpty(socialMemberFilter.UserId) && (string.IsNullOrEmpty(socialMemberFilter.GroupId))))
+            {
+                compositeCriteria.Filter = new MemberFilter { User = Reference.Create(socialMemberFilter.UserId) };
+            }
+            else
+            {
+                throw new SocialException("This implementation of a SocialMemberFilter should only contain either a GroupId or a UserReference.");
+            }
+
+            return compositeCriteria;
         }
     }
 }

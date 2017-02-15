@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -48,12 +47,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The index action result.</returns>
         public override ActionResult Index(RatingBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
             var target = pageRouteHelper.Page.ContentGuid.ToString();
 
+            var currentPageLink = pageRouteHelper.PageLink;
+
             // Create a rating block view model to fill the frontend block view
-            var formModel = new RatingFormViewModel(pageRouteHelper.PageLink, currentBlockLink);
-            var blockModel = new RatingBlockViewModel(currentBlock, formModel);
+            var blockModel = new RatingBlockViewModel(currentBlock, currentPageLink);
 
             //get messages for view
             blockModel.Messages = RetrieveMessages(MessageKey);
@@ -65,7 +64,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             //Conditionally retrieving ratingstatistics based on any errors that might have been encountered
-            if ((blockModel.Messages.Count == 0)||(blockModel.Messages.Any(x => x.Type != ErrorMessage))) { GetRatingStatistics(target, blockModel); }
+            var noMessages = blockModel.Messages.Count == 0;
+            var noErrors = blockModel.Messages.Any(x => x.Type != ErrorMessage);
+            if (noMessages || noErrors)
+            {
+                GetRatingStatistics(target, blockModel);
+            }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }
@@ -79,18 +83,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(RatingFormViewModel ratingForm)
         {
-            var currentBlock = this.contentRepository.Get<IContentData>(ratingForm.CurrentBlockLink) as RatingBlock;
-            var blockModel = new RatingBlockViewModel(currentBlock, ratingForm);
-
-            ValidateSubmitRatingForm(ratingForm, blockModel);
+            ValidateSubmitRatingForm(ratingForm);
 
             // Add the rating and verify success
-            var addRatingSuccess = AddRating(ratingForm.SubmittedRating.Value, blockModel);
+            var addRatingSuccess = AddRating(ratingForm.SubmittedRating.Value);
 
-            if (addRatingSuccess && currentBlock.SendActivity)
+            if (addRatingSuccess && ratingForm.SendActivity)
             {
                 // Add a rating activity
-                AddActivity(ratingForm.SubmittedRating.Value, blockModel);
+                AddActivity(ratingForm.SubmittedRating.Value);
             }
             return Redirect(UrlResolver.Current.GetUrl(ratingForm.CurrentPageLink));
         }
@@ -149,7 +150,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
                 else
                 {
-                    blockModel.NoStatisticsFoundMessage = "This page not been rated, be the first one to rate this page!";
+                    var loggedInMessage = "This page has not been rated. Be the first!";
+                    var loggedOutMessage ="This page has not been rated. Log in and be the first!" ;
+                    blockModel.NoStatisticsFoundMessage = this.User.Identity.IsAuthenticated ? loggedInMessage : loggedOutMessage;
                 }
             }
             catch (SocialRepositoryException ex)
@@ -162,9 +165,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Adds the rating submitted by the logged in user
         /// </summary>
         /// <param name="value">The value of the submitted rating</param>
-        /// <param name="blockModel">a reference to the RatingBlockViewModel to 
-        /// populate with errors, if any</param>
-        private bool AddRating(int value, RatingBlockViewModel blockModel)
+        private bool AddRating(int value)
         {
             try
             {
@@ -184,9 +185,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Adds an activity corresponding to the rating submitted action by the logged in user
         /// </summary>
         /// <param name="value">The value of the submitted rating</param>
-        /// <param name="blockModel">a reference to the RatingBlockViewModel to 
-        /// populate with errors, if any</param>
-        private void AddActivity(int value, RatingBlockViewModel blockModel)
+        private void AddActivity(int value)
         {
             try
             {
@@ -203,9 +202,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Validates the rating that was submitted.
         /// </summary>
         /// <param name="ratingForm">The rating form that was submitted.</param>
-        /// <param name="blockModel">a reference to the RatingBlockViewModel to 
-        /// populate with validation errors, if any</param>
-        private void ValidateSubmitRatingForm(RatingFormViewModel ratingForm, RatingBlockViewModel blockModel)
+        private void ValidateSubmitRatingForm(RatingFormViewModel ratingForm)
         {
             string message = string.Empty;
             // Validate user is logged in

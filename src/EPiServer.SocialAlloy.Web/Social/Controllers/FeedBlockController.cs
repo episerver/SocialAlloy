@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -40,8 +39,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(FeedBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
             // Create a feed block view model to fill the frontend block view
             var blockViewModel = new FeedBlockViewModel(currentBlock);
             blockViewModel.Messages = new List<MessageViewModel>();
@@ -82,7 +79,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.Messages.Add(new MessageViewModel( ex.Message, ErrorMessage));
+                blockViewModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
     }

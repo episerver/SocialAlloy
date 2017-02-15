@@ -1,6 +1,6 @@
 ﻿using EPiServer.Social.Groups.Core;
 
-namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
+namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// The MembershipModeration class is intended to identify
@@ -19,6 +19,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Moderation
         /// Gets or sets the ID of the group which a moderation
         /// workflow is intended to support.
         /// </summary>
-        public GroupId Group { get; set; }
+        public string Group { get; set; }
     }
 }

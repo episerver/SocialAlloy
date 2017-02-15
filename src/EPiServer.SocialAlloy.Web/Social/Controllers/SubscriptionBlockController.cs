@@ -44,13 +44,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(SubscriptionBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
-            // Create a subscription form view model to fill the frontend form view
-            var formViewModel = new SubscriptionFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
-
             // Create a subscription block view model to fill the frontend block view
-            var blockViewModel = new SubscriptionBlockViewModel(currentBlock, formViewModel);
+            var blockViewModel = new SubscriptionBlockViewModel(currentBlock, pageRouteHelper.PageLink);
 
             //get messages for view
             blockViewModel.Messages = RetrieveMessages(MessageKey);
@@ -94,11 +89,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action result.</returns>
         private ActionResult HandleAction(string actionName, SubscriptionFormViewModel formViewModel)
         {
-            var data = this.contentRepository.Get<IContentData>(formViewModel.CurrentBlockLink);
+            var subscription = new SocialSubscription
+            {
+                Subscriber = this.userRepository.GetUserId(this.User),
+                Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
+                Type = SocialSubscription.PageSubscription
+            }; 
 
-            var blockViewModel = new SubscriptionBlockViewModel(data as SubscriptionBlock, formViewModel);
-
-            var subscription = this.AdaptSubscriptionFormViewModelToSocialSubscription(formViewModel);
             try
             {
                 if (actionName == Action_Subscribe)
@@ -117,21 +114,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             return Redirect(UrlResolver.Current.GetUrl(formViewModel.CurrentPageLink));
-        }
-
-        /// <summary>
-        /// Adapts the SubscriptionFormViewModel to a social SocialSubscription model.
-        /// </summary>
-        /// <param name="formViewModel">The subscription form view model.</param>
-        /// <returns>A social subscription.</returns>
-        private SocialSubscription AdaptSubscriptionFormViewModelToSocialSubscription(SubscriptionFormViewModel formViewModel)
-        {
-            return new SocialSubscription
-            {
-                Subscriber = this.userRepository.GetUserId(this.User),
-                Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
-                Type = SocialSubscription.PageSubscription
-            };
         }
 
         /// <summary>

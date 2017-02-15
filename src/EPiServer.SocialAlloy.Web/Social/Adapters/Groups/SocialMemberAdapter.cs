@@ -16,7 +16,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters.Groups
         /// <returns>AddMemberRequest</returns>
         public AddMemberRequest Adapt(SocialMember member)
         {
-            return new AddMemberRequest(member.GroupId, member.UserReference, member.Email, member.Company);
+            return new AddMemberRequest(member.GroupId, member.User, member.Email, member.Company);
         }
 
         /// <summary>

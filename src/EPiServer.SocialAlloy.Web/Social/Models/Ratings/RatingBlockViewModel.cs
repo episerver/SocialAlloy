@@ -1,4 +1,5 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
+﻿using EPiServer.Core;
+using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +10,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// The RatingBlockViewModel class represents the model that will be used to
     /// feed data to the rating block frontend view.
     /// </summary>
-    public class RatingBlockViewModel : SocialBlockViewModel
+    public class RatingBlockViewModel 
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="block">A block reference to use as a key under which to save the model state.</param>
         /// <param name="form">A rating form view model to get current form values for the block view model</param>
-        public RatingBlockViewModel(RatingBlock block, RatingFormViewModel form)
-            : base(form.CurrentPageLink, form.CurrentBlockLink)
+        public RatingBlockViewModel(RatingBlock block, PageReference currentPageLink)
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
-
+            SendActivity = block.SendActivity;
+            CurrentPageLink = currentPageLink;
             LoadRatingSettings(block);
-
-            if (form.SubmittedRating.HasValue)
-            {
-                SubmittedRating = form.SubmittedRating.Value;
-            }
         }
+
+        /// <summary>
+        /// Gets or sets the reference link of the page containing the rating form.
+        /// </summary>
+        public PageReference CurrentPageLink { get; set; }
 
         /// <summary>
         /// Gets the heading for the frontend rating block display.
@@ -76,6 +77,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// to prompt user to submit a rating for this page.
         /// </summary>
         public string NoStatisticsFoundMessage { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the whether the block is configured to send an activity when a new rating is added. 
+        /// </summary>
+        public bool SendActivity { get; private set; }
+
 
         private void LoadRatingSettings(RatingBlock block)
         {
