@@ -74,10 +74,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var criteria = new Criteria<GroupFilter>
                 {
                     Filter = new GroupFilter { Name = groupName },
-                    PageInfo = new PageInfo {  PageSize = 1, PageOffset = 0}
+                    PageInfo = new PageInfo { PageSize = 1, PageOffset = 0 }
                 };
                 var group = this.groupService.Get(criteria).Results.FirstOrDefault();
-                if(group != null)
+                if (group != null)
                 {
                     socialGroup = new SocialGroup(group.Id.Id, group.Name, group.Description);
                 }
@@ -85,7 +85,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 {
                     throw new GroupDoesNotExistException("The group that has been specified for this block does not exist");
                 }
-                
+
             }
             catch (SocialAuthenticationException ex)
             {
@@ -122,13 +122,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var criteria = new CompositeCriteria<GroupFilter, GroupExtensionData>
                 {
                     Filter = new GroupFilter { GroupIds = groupIdList },
-                    PageInfo = new PageInfo { PageSize= groupCount, CalculateTotalCount= true }
+                    PageInfo = new PageInfo { PageSize = groupCount }
                 };
                 var returnedGroups = this.groupService.Get(criteria);
-                if (returnedGroups.TotalCount > 0)
-                {
-                    socialGroups = returnedGroups.Results.Select(x => new SocialGroup(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();
-                }
+                socialGroups = returnedGroups.Results.Select(x => new SocialGroup(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();
             }
             catch (SocialAuthenticationException ex)
             {

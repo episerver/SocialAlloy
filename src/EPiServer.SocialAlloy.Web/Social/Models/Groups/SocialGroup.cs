@@ -6,7 +6,7 @@ using System.Web;
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {
     /// <summary>
-    /// The SocialGroup describes the a group model used by the SocialAlloy site.
+    /// The SocialGroup describes the group model used by the SocialAlloy site.
     /// </summary>
     public class SocialGroup
     {

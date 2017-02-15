@@ -19,6 +19,6 @@ namespace EPiServer.SocialAlloy.ExtensionData.Membership
         /// Gets or sets the ID of the group which a moderation
         /// workflow is intended to support.
         /// </summary>
-        public GroupId Group { get; set; }
+        public string Group { get; set; }
     }
 }

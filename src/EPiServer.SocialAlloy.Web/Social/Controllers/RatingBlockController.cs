@@ -64,7 +64,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             //Conditionally retrieving ratingstatistics based on any errors that might have been encountered
-            if ((blockModel.Messages.Count == 0) || (blockModel.Messages.Any(x => x.Type != ErrorMessage))) { GetRatingStatistics(target, blockModel); }
+            var noMessages = blockModel.Messages.Count == 0;
+            var noErrors = blockModel.Messages.Any(x => x.Type != ErrorMessage);
+            if (noMessages || noErrors)
+            {
+                GetRatingStatistics(target, blockModel);
+            }
 
             return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
         }

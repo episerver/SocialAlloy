@@ -28,13 +28,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         /// <param name="context">The instance context.</param>
         public void Initialize(InitializationEngine context)
         {
-            ContentSeeding();
+            SeedContent();
         }
 
         /// <summary>
         /// Seeding the site with reseller community and profile page.
         /// </summary>
-        private void ContentSeeding()
+        private void SeedContent()
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var urlSegmentCreator = ServiceLocator.Current.GetInstance<IUrlSegmentCreator>();

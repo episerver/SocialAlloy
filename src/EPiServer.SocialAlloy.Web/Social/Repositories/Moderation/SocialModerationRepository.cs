@@ -73,7 +73,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                 new WorkflowState("Pending")
             );
 
-            var workflowExtension = new MembershipModeration { Group = GroupId.Create(group.Id) };
+            var workflowExtension = new MembershipModeration { Group = group.Id };
 
 
             if (membershipWorkflow != null)
@@ -376,7 +376,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             IEnumerable<Composite<Workflow, MembershipModeration>> listOfWorkflow = Enumerable.Empty<Composite<Workflow, MembershipModeration>>();
 
             var filterWorkflowsByGroup =
-                FilterExpressionBuilder<MembershipModeration>.Field(m => m.Group.Id)
+                FilterExpressionBuilder<MembershipModeration>.Field(m => m.Group)
                                                              .EqualTo(group);
 
             var criteria = new CompositeCriteria<WorkflowFilter, MembershipModeration>
