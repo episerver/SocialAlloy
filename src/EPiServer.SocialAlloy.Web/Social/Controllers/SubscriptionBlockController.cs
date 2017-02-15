@@ -54,7 +54,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SetBlockViewModelProperties(blockViewModel);
 
             // Render the frontend block view
-            return PartialView("~/Views/Social/SubscriptionBlock/SubscriptionView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/SubscriptionBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>

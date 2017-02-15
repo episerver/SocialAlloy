@@ -1,12 +1,11 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Comments;
 using EPiServer.Social.Comments.Core;
 using EPiServer.Social.Common;
 using System;
 using System.Collections.Generic;
 
-namespace epiAlloySite
+namespace EPiServer.SocialAlloy.Web.Social.Extensions
 {
     /// <summary>
     /// This class implements extension methods on an instance of Episerver IContent to support

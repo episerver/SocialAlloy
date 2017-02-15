@@ -71,7 +71,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetRatingStatistics(target, blockModel);
             }
 
-            return PartialView("~/Views/Social/RatingBlock/RatingView.cshtml", blockModel);
+            return PartialView("~/Views/Social/RatingBlock/Index.cshtml", blockModel);
         }
 
         /// <summary>

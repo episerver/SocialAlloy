@@ -435,7 +435,8 @@
     <Compile Include="Social\Models\Groups\MembershipAffiliationBlockViewModel.cs" />
     <Compile Include="Social\Pages\SocialCommunityPage.cs" />
     <Compile Include="Social\Pages\SocialProfilePage.cs" />
-    <Compile Include="Social\Tutorials\LikeButton\LikeButtonBlock.cs" />
+    <Compile Include="Social\Extensions\CommentExtensions.cs" />
+    <Compile Include="Social\Blocks\Ratings\LikeButtonBlock.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingBlock.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingSetting.cs" />
     <Compile Include="Social\Blocks\Ratings\RatingSettingProperty.cs" />
@@ -444,7 +445,7 @@
     <Compile Include="Social\Controllers\MembershipDisplayController.cs" />
     <Compile Include="Social\Common\Models\MessageViewModel.cs" />
     <Compile Include="Social\Controllers\ModerationController.cs" />
-    <Compile Include="Social\Tutorials\LikeButton\LikeButtonBlockController.cs" />
+    <Compile Include="Social\Controllers\LikeButtonBlockController.cs" />
     <Compile Include="Social\Models\Groups\MembershipDisplayBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipRequestModel.cs" />
     <Compile Include="Social\Models\Groups\SocialCompositeMember.cs" />
@@ -578,7 +579,7 @@
     <Compile Include="Social\Repositories\ActivityStreams\SocialSubscriptionRepository.cs" />
     <Compile Include="Social\Repositories\Common\UserRepository.cs" />
     <Compile Include="Social\Repositories\Groups\SocialGroupRepository.cs" />
-    <Compile Include="Social\Tutorials\LikeButton\LikeButtonBlockViewModel.cs" />
+    <Compile Include="Social\Models\Ratings\LikeButtonBlockViewModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -755,17 +756,16 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Social\CommentsBlock\CommentsView.cshtml" />
-    <Content Include="Views\Social\RatingBlock\RatingView.cshtml" />
-    <Content Include="Views\Social\SubscriptionBlock\SubscriptionView.cshtml" />
-    <Content Include="Views\Social\FeedBlock\FeedView.cshtml" />
+    <Content Include="Views\Social\CommentsBlock\Index.cshtml" />
+    <Content Include="Views\Social\RatingBlock\Index.cshtml" />
+    <Content Include="Views\Social\SubscriptionBlock\Index.cshtml" />
+    <Content Include="Views\Social\FeedBlock\Index.cshtml" />
     <Content Include="Views\Social\GroupCreationBlock\Index.cshtml" />
     <Content Include="Views\Social\GroupAdmissionBlock\Index.cshtml" />
     <Content Include="Views\Social\MembershipDisplayBlock\Index.cshtml" />
     <Content Include="Views\Social\Moderation\Index.cshtml" />
     <Content Include="Views\Shared\Layouts\_DemoRoot.cshtml" />
-    <Content Include="Social\Tutorials\README.md" />
-    <Content Include="Views\Social\LikeButtonBlock\LikeButtonView.cshtml" />
+    <Content Include="Views\Social\LikeButtonBlock\Index.cshtml" />
     <Content Include="Views\Social\SocialCommunityPage\Index.cshtml" />
     <Content Include="Views\Social\MembershipAffiliationBlock\Index.cshtml" />
     <Content Include="Views\Social\SocialProfilePage\Index.cshtml" />

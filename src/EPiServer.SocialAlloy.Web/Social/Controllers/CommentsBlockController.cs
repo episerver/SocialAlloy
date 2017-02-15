@@ -71,7 +71,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 blockViewModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
 
-            return PartialView("~/Views/Social/CommentsBlock/CommentsView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/CommentsBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>
