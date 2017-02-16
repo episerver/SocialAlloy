@@ -56,7 +56,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 SocialProfilePage myPage = contentRepository.GetDefault<SocialProfilePage>(PageReference.StartPage);
                 myPage.PageName = "My Profile";
                 myPage.URLSegment = urlSegmentCreator.Create(myPage);
-                myPage.MainBody = new XhtmlString("<p>This is page is your personal profile page!</p>");
+                myPage.MainBody = new XhtmlString("<p>This is your personal profile page!</p>");
                 myPage.VisibleInMenu = true;
                 myPage.Feed.FeedTitle = "Your Activity Feed";
                 myPage.Feed.ShowHeading = true;
