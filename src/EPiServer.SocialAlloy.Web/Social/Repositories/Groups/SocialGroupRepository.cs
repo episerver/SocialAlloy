@@ -122,7 +122,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var criteria = new CompositeCriteria<GroupFilter, GroupExtensionData>
                 {
                     Filter = new GroupFilter { GroupIds = groupIdList },
-                    PageInfo = new PageInfo { PageSize = groupCount }
+                    PageInfo = new PageInfo { PageSize = groupCount },
+                    OrderBy = new List<SortInfo> { new SortInfo(GroupSortFields.Name, true) }
                 };
                 var returnedGroups = this.groupService.Get(criteria);
                 socialGroups = returnedGroups.Results.Select(x => new SocialGroup(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();

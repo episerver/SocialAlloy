@@ -80,7 +80,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
 
                 //Build a new group 
                 var groupName = communityPage.Name;
-                communityPage.MetaDescription = String.IsNullOrEmpty(communityPage.MetaDescription) ? "The is the home page for \"" + groupName + "\"" : communityPage.MetaDescription;
+                communityPage.MetaDescription = String.IsNullOrEmpty(communityPage.MetaDescription) ? "This is the home page for \"" + groupName + "\"" : communityPage.MetaDescription;
                 var groupDescription = communityPage.MetaDescription;
                 var socialGroup = new SocialGroup(groupName, groupDescription);
 
@@ -93,6 +93,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 //Configure CommentBlock
                 communityPage.Comments.Heading = groupName + " Comments";
                 communityPage.Comments.ShowHeading = true;
+                communityPage.Comments.SendActivity = true;
 
                 //Configure SubscriptionBlock
                 communityPage.Subscriptions.ShowHeading = false;
@@ -100,6 +101,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 //Configure RatingsBlock
                 communityPage.Ratings.Heading = groupName + " Page Rating";
                 communityPage.Ratings.ShowHeading = true;
+                communityPage.Ratings.SendActivity = true;
 
                 //Configure GroupAdmissionBlock
                 communityPage.GroupAdmission.GroupName = groupName;
