@@ -21,7 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             ShowHeading = block.ShowHeading;
             FeedDisplayMax = block.FeedDisplayMax;
             FeedTitle = block.FeedTitle;
-            Feed = new List<SocialFeedItemViewModel>();
+            Feed = new List<CommunityFeedItemViewModel>();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the feed items to display in the feed block.
         /// </summary>
-        public IEnumerable<SocialFeedItemViewModel> Feed { get; set; }
+        public IEnumerable<CommunityFeedItemViewModel> Feed { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user

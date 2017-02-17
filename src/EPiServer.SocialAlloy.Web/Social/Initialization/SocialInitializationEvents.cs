@@ -19,8 +19,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
     [ModuleDependency(typeof(SocialInitialization))]
     public class SocialInitializationEvents : IInitializableModule
     {
-        private SocialGroupRepository groupRepository;
-        private SocialModerationRepository moderationRepository;
+        private CommunityRepository groupRepository;
+        private CommunityMembershipModerationRepository moderationRepository;
 
         /// <summary>
         /// Initializes this instance.
@@ -30,8 +30,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             var contentEvents = context.Locate.ContentEvents();
 
-            groupRepository = ServiceLocator.Current.GetInstance<SocialGroupRepository>();
-            moderationRepository = ServiceLocator.Current.GetInstance<SocialModerationRepository>();
+            groupRepository = ServiceLocator.Current.GetInstance<CommunityRepository>();
+            moderationRepository = ServiceLocator.Current.GetInstance<CommunityMembershipModerationRepository>();
 
             contentEvents.CreatingContent += SociaCommunityPage_CreationEvent;
             contentEvents.SavedContent += SociaCommunityPage_PublishedEvent;
@@ -49,15 +49,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         }
 
         /// <summary>
-        /// Community Event for when a SocialCommunityPage is published
+        /// Community Event for when a CommunityPage is published
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void SociaCommunityPage_PublishedEvent(object sender, EPiServer.ContentEventArgs e)
         {
-            if (e.Content is SocialCommunityPage)
+            if (e.Content is CommunityPage)
             {
-                var communityPage = e.Content as SocialCommunityPage;
+                var communityPage = e.Content as CommunityPage;
                 var groupName = communityPage.Name;
                 var group = groupRepository.Get(groupName);
                 var url = ExternalURL(communityPage);
@@ -67,22 +67,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         }
 
         /// <summary>
-        /// Community Event for the creation of any SocialCommunityPage
+        /// Community Event for the creation of any CommunityPage
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void SociaCommunityPage_CreationEvent(object sender, EPiServer.ContentEventArgs e)
 
         {
-            if (e.Content is SocialCommunityPage)
+            if (e.Content is CommunityPage)
             {
-                var communityPage = e.Content as SocialCommunityPage;
+                var communityPage = e.Content as CommunityPage;
 
                 //Build a new group 
                 var groupName = communityPage.Name;
                 communityPage.MetaDescription = String.IsNullOrEmpty(communityPage.MetaDescription) ? "This is the home page for \"" + groupName + "\"" : communityPage.MetaDescription;
                 var groupDescription = communityPage.MetaDescription;
-                var socialGroup = new SocialGroup(groupName, groupDescription);
+                var socialGroup = new Community(groupName, groupDescription);
 
                 //Add group to Social
                 socialGroup = groupRepository.Add(socialGroup);

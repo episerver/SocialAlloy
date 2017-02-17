@@ -1,4 +1,4 @@
-﻿@model EPiServer.SocialAlloy.Web.Social.Models.Moderation.ModerationViewModel
+﻿@model EPiServer.SocialAlloy.Web.Social.Models.Moderation.CommunityModerationViewModel
 
 @{
     Layout = "~/Views/Shared/Layouts/_DemoRoot.cshtml";
@@ -32,7 +32,7 @@
                                               new SelectList(
                                                   Model.Workflows,
                                                   "Id",
-                                                  "Name",
+                                                  "Name", 
                                                   Model.Workflows.First().Id), new { @class = "MakeWide" })
                     </div>
                     <div><input type="submit" value="View" /></div>
@@ -72,8 +72,8 @@
                         <td>
                             @using (Html.BeginForm("Index", "Moderation", FormMethod.Post))
                             {
-                                <input type="hidden" name="user" value="@Html.AttributeEncode(item.User)" />
-                                <input type="hidden" name="group" value="@Html.AttributeEncode(item.Group)" />
+                                <input type="hidden" name="userId" value="@Html.AttributeEncode(item.User)" />
+                                <input type="hidden" name="communityId" value="@Html.AttributeEncode(item.Group)" />
                                 <input type="hidden" name="workflow" value="@Html.AttributeEncode(Model.SelectedWorkflow.Id)" />
                                 <input type="hidden" name="state" value="@Html.AttributeEncode(item.State)" />
 

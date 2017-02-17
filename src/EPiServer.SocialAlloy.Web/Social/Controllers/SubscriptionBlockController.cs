@@ -18,7 +18,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class SubscriptionBlockController : SocialBlockController<SubscriptionBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialSubscriptionRepository subscriptionRepository;
+        private readonly IPageSubscriptionRepository subscriptionRepository;
         private readonly IPageRepository pageRepository;
 
         private const string Action_Subscribe = "Subscribe";
@@ -33,7 +33,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public SubscriptionBlockController()
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            this.subscriptionRepository = ServiceLocator.Current.GetInstance<ISocialSubscriptionRepository>();
+            this.subscriptionRepository = ServiceLocator.Current.GetInstance<IPageSubscriptionRepository>();
             this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
@@ -89,11 +89,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action result.</returns>
         private ActionResult HandleAction(string actionName, SubscriptionFormViewModel formViewModel)
         {
-            var subscription = new SocialSubscription
+            var subscription = new PageSubscription
             {
                 Subscriber = this.userRepository.GetUserId(this.User),
                 Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
-                Type = SocialSubscription.PageSubscription
             }; 
 
             try
@@ -137,11 +136,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                var filter = new SocialSubscriptionFilter
+                var filter = new PageSubscriptionFilter
                 {
                     Subscriber = this.userRepository.GetUserId(this.User),
                     Target = this.pageRepository.GetPageId(blockViewModel.CurrentPageLink),
-                    Type = SocialSubscription.PageSubscription
                 };
 
                 if (this.subscriptionRepository.Exist(filter))

@@ -19,9 +19,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class GroupAdmissionBlockController : SocialBlockController<GroupAdmissionBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialGroupRepository groupRepository;
-        private readonly ISocialMemberRepository memberRepository;
-        private readonly ISocialModerationRepository moderationRepository;
+        private readonly ICommunityRepository communityRepository;
+        private readonly ICommunityMemberRepository memberRepository;
+        private readonly ICommunityMembershipModerationRepository moderationRepository;
         private const string MessageKey = "GroupAdmissionBlock";
         private const string ErrorMessage = "Error";
         private const string SuccessMessage = "Success";
@@ -32,9 +32,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public GroupAdmissionBlockController()
         {
             userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
-            memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
-            moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
+            communityRepository = ServiceLocator.Current.GetInstance<ICommunityRepository>();
+            memberRepository = ServiceLocator.Current.GetInstance<ICommunityMemberRepository>();
+            moderationRepository = ServiceLocator.Current.GetInstance<ICommunityMembershipModerationRepository>();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             //Retrieves moderation information for the model to display in the view
             try
             {
-                var group = groupRepository.Get(currentBlock.GroupName);
+                var group = communityRepository.Get(currentBlock.GroupName);
                 ValidateGroup(blockModel, group);
                 PopulateMemberDetails(blockModel);
             }
@@ -117,8 +117,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             {
                 try
                 {
-                    //Populated the SocialMember and extension data
-                    var member = new SocialMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany);
+                    //Populated the CommunityMember and extension data
+                    var member = new CommunityMember(blockModel.MemberName, blockModel.GroupId, blockModel.MemberEmail, blockModel.MemberCompany);
                     if (blockModel.IsModerated)
                     {
                         //Adds request for membership into moderation workflow
@@ -162,7 +162,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="blockModel">The view model for the GroupAdmissionBlock</param>
         /// <param name="group">The group that was retrieved</param>
-        private void ValidateGroup(GroupAdmissionBlockViewModel blockModel, SocialGroup group)
+        private void ValidateGroup(GroupAdmissionBlockViewModel blockModel, Community group)
         {
             if (group != null)
             {
@@ -188,8 +188,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             var loggedIn = !String.IsNullOrWhiteSpace(userId);
             blockModel.UserIsLoggedIn = loggedIn;
             blockModel.MemberName = loggedIn ? userRepository.CreateAuthenticatedUri(userId): "";
-            blockModel.ModeratedUserAdmissionState = loggedIn ? moderationRepository.GetMemberWorkflowState(blockModel.MemberName, blockModel.GroupId) : "";
+            blockModel.ModeratedUserAdmissionState = loggedIn ? moderationRepository.GetMembershipRequestState(blockModel.MemberName, blockModel.GroupId) : "";
         }
-
     }
 }

@@ -20,8 +20,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class MembershipAffiliationBlockController : SocialBlockController<MembershipAffiliationBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialGroupRepository groupRepository;
-        private readonly ISocialMemberRepository memberRepository;
+        private readonly ICommunityRepository communityRepository;
+        private readonly ICommunityMemberRepository memberRepository;
         private const string ErrorMessage = "Error";
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public MembershipAffiliationBlockController()
         {
             userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
-            memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
+            communityRepository = ServiceLocator.Current.GetInstance<ICommunityRepository>();
+            memberRepository = ServiceLocator.Current.GetInstance<ICommunityMemberRepository>();
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 var userId = userRepository.GetUserId(this.User);
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
-                    var memberFilter = new SocialMemberFilter
+                    var memberFilter = new CommunityMemberFilter
                     {
                         UserId = userRepository.CreateAuthenticatedUri(userId),
                         PageSize = currentBlock.DisplayPageSize
@@ -78,11 +78,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         /// <param name="membershipAffiliationBlockModel">The block viewmodel</param>
         /// <param name="listOfSocialMembers">The list of social members</param>
-        private void GetAffiliatedGroups(MembershipAffiliationBlockViewModel membershipAffiliationBlockModel, IEnumerable<SocialMember> listOfSocialMembers)
+        private void GetAffiliatedGroups(MembershipAffiliationBlockViewModel membershipAffiliationBlockModel, IEnumerable<CommunityMember> listOfSocialMembers)
         {
             if (listOfSocialMembers != null && listOfSocialMembers.Any())
             {
-                var listOfSocialGroups = this.groupRepository.Get(listOfSocialMembers.Select(x => x.GroupId).ToList());
+                var listOfSocialGroups = this.communityRepository.Get(listOfSocialMembers.Select(x => x.GroupId).ToList());
                 if (listOfSocialGroups != null && listOfSocialGroups.Any())
                 {
                     membershipAffiliationBlockModel.Groups = listOfSocialGroups;

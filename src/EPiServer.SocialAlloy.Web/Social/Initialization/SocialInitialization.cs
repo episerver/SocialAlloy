@@ -53,15 +53,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<IPageRepository>().Use<PageRepository>();
-            configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
-            configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
-            configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
-            configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
-            configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
-            configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
-            configuration.For<ISocialGroupRepository>().Use<SocialGroupRepository>();
-            configuration.For<ISocialMemberRepository>().Use<SocialMemberRepository>();
-            configuration.For<ISocialModerationRepository>().Use<SocialModerationRepository>();
+            configuration.For<IPageCommentRepository>().Use<PageCommentRepository>();
+            configuration.For<IPageRatingRepository>().Use<PageRatingRepository>();
+            configuration.For<IPageSubscriptionRepository>().Use<PageSubscriptionRepository>();
+            configuration.For<ICommunityActivityAdapter>().Use<CommunityActivityAdapter>();
+            configuration.For<ICommunityFeedRepository>().Use<CommunityFeedRepository>();
+            configuration.For<ICommunityActivityRepository>().Use<CommunityActivityRepository>();
+            configuration.For<ICommunityRepository>().Use<CommunityRepository>();
+            configuration.For<ICommunityMemberRepository>().Use<CommunityMemberRepository>();
+            configuration.For<ICommunityMembershipModerationRepository>().Use<CommunityMembershipModerationRepository>();
         }
 
         /// <summary>

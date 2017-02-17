@@ -22,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
             Heading = currentBlock.Heading;
             ShowHeading = currentBlock.ShowHeading;
             Messages = new List<MessageViewModel>();
-            Groups = new List<SocialGroup>();
+            Groups = new List<Community>();
         }
         /// <summary>
         /// Gets or sets the heading for the membership display block.
@@ -37,7 +37,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// <summary>
         /// List of the groups that the current user is associated with.
         /// </summary>
-        public List<SocialGroup> Groups { get; set; }
+        public List<Community> Groups { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user.

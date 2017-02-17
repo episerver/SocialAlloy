@@ -74,7 +74,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         public string ModeratedUserAdmissionState { get; set; }
 
         /// <summary>
-        /// Gets or sets the GroupId of the group that a member will be added to. 
+        /// Gets or sets the CommunityId of the group that a member will be added to. 
         /// </summary>
         public string GroupId { get; set; }
 
