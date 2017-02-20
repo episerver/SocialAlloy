@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
@@ -19,8 +18,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class MembershipDisplayController : SocialBlockController<MembershipDisplayBlock>
     {
-        private readonly ISocialGroupRepository groupRepository;
-        private readonly ISocialMemberRepository memberRepository;
+        private readonly IUserRepository userRepository;
+        private readonly ICommunityRepository communityRepository;
+        private readonly ICommunityMemberRepository memberRepository;
         private const string ErrorMessage = "Error";
 
         /// <summary>
@@ -28,8 +28,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public MembershipDisplayController()
         {
-            groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
-            memberRepository = ServiceLocator.Current.GetInstance<ISocialMemberRepository>();
+            communityRepository = ServiceLocator.Current.GetInstance<ICommunityRepository>();
+            memberRepository = ServiceLocator.Current.GetInstance<ICommunityMemberRepository>();
+            userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
         }
 
         /// <summary>
@@ -38,33 +39,25 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="currentBlock">The current block instance.</param>
         public override ActionResult Index(MembershipDisplayBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
             //Populate model to pass to the membership display view
-            var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel()
-            {
-                Heading = currentBlock.Heading,
-                ShowHeading = currentBlock.ShowHeading,
-                GroupName = currentBlock.GroupName,
-                Messages = new List<MessageViewModel>(),
-                Members = new List<SocialMember>()
-            };
+            var membershipDisplayBlockModel = new MembershipDisplayBlockViewModel(currentBlock);
 
             //Retrieve the group id assigned to the block and populate the memberlist 
             try
             {
-                var group = groupRepository.Get(currentBlock.GroupName);
+                var group = communityRepository.Get(currentBlock.GroupName);
 
                 //Validate that the group exists 
                 if (group != null)
                 {
                     var groupId = group.Id;
-                    var memberFilter = new SocialMemberFilter
+                    var memberFilter = new CommunityMemberFilter
                     {
-                        GroupId = groupId,
+                        CommunityId = groupId,
                         PageSize = currentBlock.DisplayPageSize
                     };
-                    membershipDisplayBlockModel.Members = memberRepository.Get(memberFilter).ToList();
+                    var socialMembers = memberRepository.Get(memberFilter).ToList();
+                    membershipDisplayBlockModel.Members = Adapt(socialMembers);
                 }
                 else
                 {
@@ -83,6 +76,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             //Return block view with populated model
             return PartialView("~/Views/Social/MembershipDisplayBlock/Index.cshtml", membershipDisplayBlockModel);
+        }
+
+        public List<CommunityMemberViewModel> Adapt(List<CommunityMember> socialMembers)
+        {
+            return socialMembers.Select(x => new CommunityMemberViewModel(x.Company, this.userRepository.ParseUserUri(x.User))).ToList();
         }
     }
 }

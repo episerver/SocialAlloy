@@ -1,4 +1,5 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Blocks;
+﻿using EPiServer.Core;
+using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
@@ -8,25 +9,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// The CommentsBlockViewModel class represents the model that will be used to
     /// feed data to the comments block frontend view.
     /// </summary>
-    public class CommentsBlockViewModel : SocialBlockViewModel
+    public class CommentsBlockViewModel
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="block">A block reference to use as a key under which to save the model state.</param>
         /// <param name="form">A comment form view model to get current form values for the block view model</param>
-        public CommentsBlockViewModel(CommentsBlock block, CommentFormViewModel form)
-            : base(form.CurrentPageLink, form.CurrentBlockLink)
+        public CommentsBlockViewModel(CommentsBlock block, PageReference pageReference)
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             CommentBoxRows = block.CommentBoxRows;
             CommentMaxLength = block.CommentMaxLength; 
             CommentsDisplayMax = block.CommentsDisplayMax;
-            CommentAuthor = form.Author;
-            CommentBody = form.Body;
-            Comments = new List<SocialComment>();
+            Comments = new List<PageComment>();
+            SendActivity = block.SendActivity;
+            CurrentPageLink = pageReference;
         }
+        /// <summary>
+        /// Gets or sets the reference link of the page containing the comment form.
+        /// </summary>
+        public PageReference CurrentPageLink { get; set; }
 
         /// <summary>
         /// Gets or sets the heading for the frontend comments block display.
@@ -56,7 +60,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the comments to show.
         /// </summary>
-        public IEnumerable<SocialComment> Comments { get; set; }
+        public IEnumerable<PageComment> Comments { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user
@@ -64,13 +68,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         public List<MessageViewModel> Messages { get; set; }
 
         /// <summary>
-        /// Gets or sets the username for the user who may currently submit comments.
+        /// Gets or sets the whether the block is configured to send an activity when a new comment is added. 
         /// </summary>
-        public string CommentAuthor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the last submitted comment body.
-        /// </summary>
-        public string CommentBody { get; set; }
+        public bool SendActivity { get; private set; }
     }
 }

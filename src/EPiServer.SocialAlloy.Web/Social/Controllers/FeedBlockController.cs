@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -20,7 +19,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class FeedBlockController : SocialBlockController<FeedBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialFeedRepository feedRepository;
+        private readonly ICommunityFeedRepository feedRepository;
         private const string ErrorMessage = "Error";
         private const string ErrorGettingUserIdMessage = "There was an error identifying the logged in user. Please make sure you are logged in and try again.";
 
@@ -30,7 +29,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public FeedBlockController()
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            this.feedRepository = ServiceLocator.Current.GetInstance<ISocialFeedRepository>();
+            this.feedRepository = ServiceLocator.Current.GetInstance<ICommunityFeedRepository>();
         }
 
         /// <summary>
@@ -40,8 +39,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(FeedBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
             // Create a feed block view model to fill the frontend block view
             var blockViewModel = new FeedBlockViewModel(currentBlock);
             blockViewModel.Messages = new List<MessageViewModel>();
@@ -52,7 +49,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 GetSocialActivityFeed(currentBlock, blockViewModel);
             }
 
-            return PartialView("~/Views/Social/FeedBlock/FeedView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/FeedBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>
@@ -69,7 +66,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
                     blockViewModel.Feed =
-                        this.feedRepository.Get(new SocialFeedFilter
+                        this.feedRepository.Get(new CommunityFeedFilter
                         {
                             Subscriber = userId,
                             PageSize = currentBlock.FeedDisplayMax
@@ -82,7 +79,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.Messages.Add(new MessageViewModel( ex.Message, ErrorMessage));
+                blockViewModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
         }
     }

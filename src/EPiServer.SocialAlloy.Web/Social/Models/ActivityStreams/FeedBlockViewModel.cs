@@ -9,19 +9,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     /// display a feed of activities in the feed block frontend view. The feed of activities 
     /// displayed depends on the logged in user and pages that the user has subscribed to.
     /// </summary>
-    public class FeedBlockViewModel : SocialBlockViewModel   
+    public class FeedBlockViewModel 
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="block">A block reference to use as a key under which to save the model state.</param>
-        public FeedBlockViewModel(FeedBlock block) : base()
+        public FeedBlockViewModel(FeedBlock block) 
         {
             Heading = block.Heading;
             ShowHeading = block.ShowHeading;
             FeedDisplayMax = block.FeedDisplayMax;
             FeedTitle = block.FeedTitle;
-            Feed = new List<SocialFeedItemViewModel>();
+            Feed = new List<CommunityFeedItemViewModel>();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the feed items to display in the feed block.
         /// </summary>
-        public IEnumerable<SocialFeedItemViewModel> Feed { get; set; }
+        public IEnumerable<CommunityFeedItemViewModel> Feed { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user

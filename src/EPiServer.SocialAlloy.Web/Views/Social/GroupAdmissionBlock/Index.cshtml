@@ -1,43 +1,56 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @using EPiServer.SocialAlloy.Web.Social.Models.Groups
 @model GroupAdmissionBlockViewModel
-<div>
+
+<div class="border">
     @if (Model.ShowHeading)
     {
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
         <hr />
     }
-
     @foreach (var message in Model.Messages)
     {
         var messageStyle = message.ResolveStyle(message.Type);
         <div style="color:@messageStyle">@message.Body</div>
     }
-
     @if (Model.IsModerated)
             {
         <div class="alert">
             <strong>This is a moderated group.</strong> New members must be approved before they are added to the group.
         </div>
     }
-
     @if (!String.IsNullOrWhiteSpace(Model.GroupId))
     {
         using (Html.BeginForm("Submit", "GroupAdmissionBlock", FormMethod.Post))
         {
-            @Html.HiddenFor(m => m.CurrentBlockLink)
             @Html.HiddenFor(m => m.CurrentPageLink)
             @Html.HiddenFor(m => m.IsModerated)
             @Html.HiddenFor(m => m.GroupId)
             @Html.HiddenFor(m => m.GroupName)
-            <div>
-                @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
-                @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
-                @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
-            </div>
-            <div>
-                <input type="submit" name="submit" value="Join @Model.GroupName">
-            </div>
+            @Html.HiddenFor(m => m.UserIsLoggedIn) 
+            if (Model.IsModerated && Model.UserIsLoggedIn && !String.IsNullOrWhiteSpace(Model.ModeratedUserAdmissionState))
+            {
+                @Html.HiddenFor(m => m.MemberName)
+                <h3 style="color:black"> You have already requested admission to this group. Your admission state is: @Model.ModeratedUserAdmissionState</h3>
+            }
+            else
+            {
+                <div>
+                    @if (!Model.UserIsLoggedIn)
+                    {
+                        @Html.TextBoxFor(m => m.MemberName, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Name" })
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.MemberName)
+                    }
+                    @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
+                    @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
+                </div>
+                <div>
+                    <input type="submit" name="submit" value="Join">
+                </div>
+            }
         }
     }
     else

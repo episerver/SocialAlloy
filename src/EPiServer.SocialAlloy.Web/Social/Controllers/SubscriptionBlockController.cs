@@ -18,7 +18,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class SubscriptionBlockController : SocialBlockController<SubscriptionBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialSubscriptionRepository subscriptionRepository;
+        private readonly IPageSubscriptionRepository subscriptionRepository;
         private readonly IPageRepository pageRepository;
 
         private const string Action_Subscribe = "Subscribe";
@@ -33,7 +33,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public SubscriptionBlockController()
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            this.subscriptionRepository = ServiceLocator.Current.GetInstance<ISocialSubscriptionRepository>();
+            this.subscriptionRepository = ServiceLocator.Current.GetInstance<IPageSubscriptionRepository>();
             this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
         }
 
@@ -44,13 +44,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(SubscriptionBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-
-            // Create a subscription form view model to fill the frontend form view
-            var formViewModel = new SubscriptionFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
-
             // Create a subscription block view model to fill the frontend block view
-            var blockViewModel = new SubscriptionBlockViewModel(currentBlock, formViewModel);
+            var blockViewModel = new SubscriptionBlockViewModel(currentBlock, pageRouteHelper.PageLink);
 
             //get messages for view
             blockViewModel.Messages = RetrieveMessages(MessageKey);
@@ -59,7 +54,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             SetBlockViewModelProperties(blockViewModel);
 
             // Render the frontend block view
-            return PartialView("~/Views/Social/SubscriptionBlock/SubscriptionView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/SubscriptionBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>
@@ -94,11 +89,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action result.</returns>
         private ActionResult HandleAction(string actionName, SubscriptionFormViewModel formViewModel)
         {
-            var data = this.contentRepository.Get<IContentData>(formViewModel.CurrentBlockLink);
+            var subscription = new PageSubscription
+            {
+                Subscriber = this.userRepository.GetUserId(this.User),
+                Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
+            }; 
 
-            var blockViewModel = new SubscriptionBlockViewModel(data as SubscriptionBlock, formViewModel);
-
-            var subscription = this.AdaptSubscriptionFormViewModelToSocialSubscription(formViewModel);
             try
             {
                 if (actionName == Action_Subscribe)
@@ -117,21 +113,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
 
             return Redirect(UrlResolver.Current.GetUrl(formViewModel.CurrentPageLink));
-        }
-
-        /// <summary>
-        /// Adapts the SubscriptionFormViewModel to a social SocialSubscription model.
-        /// </summary>
-        /// <param name="formViewModel">The subscription form view model.</param>
-        /// <returns>A social subscription.</returns>
-        private SocialSubscription AdaptSubscriptionFormViewModelToSocialSubscription(SubscriptionFormViewModel formViewModel)
-        {
-            return new SocialSubscription
-            {
-                Subscriber = this.userRepository.GetUserId(this.User),
-                Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
-                Type = SocialSubscription.PageSubscription
-            };
         }
 
         /// <summary>
@@ -155,11 +136,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                var filter = new SocialSubscriptionFilter
+                var filter = new PageSubscriptionFilter
                 {
                     Subscriber = this.userRepository.GetUserId(this.User),
                     Target = this.pageRepository.GetPageId(blockViewModel.CurrentPageLink),
-                    Type = SocialSubscription.PageSubscription
                 };
 
                 if (this.subscriptionRepository.Exist(filter))

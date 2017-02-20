@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -20,9 +19,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class CommentsBlockController : SocialBlockController<CommentsBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialCommentRepository commentRepository;
+        private readonly IPageCommentRepository commentRepository;
         private readonly IPageRepository pageRepository;
-        private readonly ISocialActivityRepository activityRepository;
+        private readonly ICommunityActivityRepository activityRepository;
         private const string MessageKey = "CommentBlock";
         private const string SubmitSuccessMessage = "Your comment was submitted successfully!";
         private const string BodyValidationErrorMessage = "Cannot add an empty comment.";
@@ -35,9 +34,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public CommentsBlockController()
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            this.commentRepository = ServiceLocator.Current.GetInstance<ISocialCommentRepository>();
+            this.commentRepository = ServiceLocator.Current.GetInstance<IPageCommentRepository>();
             this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
-            this.activityRepository = ServiceLocator.Current.GetInstance<ISocialActivityRepository>();
+            this.activityRepository = ServiceLocator.Current.GetInstance<ICommunityActivityRepository>();
         }
 
         /// <summary>
@@ -47,19 +46,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action's result.</returns>
         public override ActionResult Index(CommentsBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
-            var formViewModel = new CommentFormViewModel(this.pageRouteHelper.PageLink, currentBlockLink);
+            var pageReference = this.pageRouteHelper.PageLink;
+            var pageId = this.pageRepository.GetPageId(pageReference);
 
             // Create a comments block view model to fill the frontend block view
-            var blockViewModel = new CommentsBlockViewModel(currentBlock, formViewModel);
+            var blockViewModel = new CommentsBlockViewModel(currentBlock, pageReference);
             blockViewModel.Messages = RetrieveMessages(MessageKey);
 
             // Try to get recent comments
             try
             {
                 var socialComments = this.commentRepository.Get(
-                    new SocialCommentFilter
+                    new PageCommentFilter
                     {
+                        Target = pageId.ToString(),
                         PageSize = currentBlock.CommentsDisplayMax
                     }
                 );
@@ -68,10 +68,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             }
             catch (SocialRepositoryException ex)
             {
-                blockViewModel.Messages.Add(new MessageViewModel( ex.Message, ErrorMessage));
+                blockViewModel.Messages.Add(new MessageViewModel(ex.Message, ErrorMessage));
             }
 
-            return PartialView("~/Views/Social/CommentsBlock/CommentsView.cshtml", blockViewModel);
+            return PartialView("~/Views/Social/CommentsBlock/Index.cshtml", blockViewModel);
         }
 
         /// <summary>
@@ -84,18 +84,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         [HttpPost]
         public ActionResult Submit(CommentFormViewModel formViewModel)
         {
-            var currentBlock = this.contentRepository.Get<IContentData>(formViewModel.CurrentBlockLink) as CommentsBlock;
-
-            var blockViewModel = new CommentsBlockViewModel(currentBlock, formViewModel);
-
             var errors = ValidateCommentForm(formViewModel);
 
             if (errors.Count() == 0)
             {
-                var addedComment = AddComment(formViewModel, blockViewModel);
-                if (addedComment != null && currentBlock.SendActivity)
+                var addedComment = AddComment(formViewModel);
+                if (addedComment != null && formViewModel.SendActivity)
                 {
-                    AddCommentActivity(addedComment, blockViewModel);
+                    AddCommentActivity(addedComment);
                 }
             }
             else
@@ -111,12 +107,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Adds the comment in the CommentFormViewModel to the Episerver Social repository.
         /// </summary>
         /// <param name="formViewModel">The submitted comment form view model.</param>
-        /// <param name="blockViewModel">The comments block view model.</param>
-        /// <returns>The added SocialComment</returns>
-        private SocialComment AddComment(CommentFormViewModel formViewModel, CommentsBlockViewModel blockViewModel)
+        /// <returns>The added PageComment</returns>
+        private PageComment AddComment(CommentFormViewModel formViewModel)
         {
             var newComment = this.AdaptCommentFormViewModelToSocialComment(formViewModel);
-            SocialComment addedComment = null;
+            PageComment addedComment = null;
 
             try
             {
@@ -135,11 +130,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// Add an activity for the newly added comment.
         /// </summary>
         /// <param name="comment">The added comment.</param>
-        private void AddCommentActivity(SocialComment comment, CommentsBlockViewModel blockViewModel)
+        private void AddCommentActivity(PageComment comment)
         {
             try
             {
-                var commentActivity = new SocialCommentActivity { Body = comment.Body };
+                var commentActivity = new PageCommentActivity { Body = comment.Body };
 
                 this.activityRepository.Add(comment.AuthorId, comment.Target, commentActivity);
             }
@@ -150,13 +145,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         }
 
         /// <summary>
-        /// Adapts the comment form to a social comment model.
+        /// Adapts a CommentFormViewModel to a PageComment.
         /// </summary>
         /// <param name="formViewModel">The comment form view model.</param>
-        /// <returns>A social comment.</returns>
-        private SocialComment AdaptCommentFormViewModelToSocialComment(CommentFormViewModel formViewModel)
+        /// <returns>PageComment</returns>
+        private PageComment AdaptCommentFormViewModelToSocialComment(CommentFormViewModel formViewModel)
         {
-            return new SocialComment
+            return new PageComment
             {
                 Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),
                 Body = formViewModel.Body,

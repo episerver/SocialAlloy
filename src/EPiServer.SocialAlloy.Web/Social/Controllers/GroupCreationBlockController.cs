@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
@@ -16,19 +15,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
-        private readonly ISocialGroupRepository groupRepository;
-        private readonly ISocialModerationRepository moderationRepository;
+        private readonly ICommunityRepository communityRepository;
+        private readonly ICommunityMembershipModerationRepository moderationRepository;
         private const string MessageKey = "GroupCreationBlock";
         private const string ErrorMessage = "Error";
         private const string SuccessMessage = "Success";
-       
+
         /// <summary>
         /// Constructor
         /// </summary>
         public GroupCreationBlockController()
         {
-            this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
-            this.moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
+            this.communityRepository = ServiceLocator.Current.GetInstance<ICommunityRepository>();
+            this.moderationRepository = ServiceLocator.Current.GetInstance<ICommunityMembershipModerationRepository>();
         }
 
         /// <summary>
@@ -37,17 +36,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="currentBlock">The current block instance.</param>
         public override ActionResult Index(GroupCreationBlock currentBlock)
         {
-            var currentBlockLink = ((IContent)currentBlock).ContentLink;
+            var currentPageLink = pageRouteHelper.PageLink;
 
             //Populate the model to pass to the block view
-            var groupCreationBlockModel = new GroupCreationBlockViewModel()
-            {
-                Heading = currentBlock.Heading,
-                ShowHeading = currentBlock.ShowHeading,
-                CurrentBlockLink = currentBlockLink,
-                CurrentPageLink = pageRouteHelper.PageLink,
-                Messages = RetrieveMessages(MessageKey)
-            };
+            var groupCreationBlockModel = new GroupCreationBlockViewModel(currentBlock, currentPageLink);
+            groupCreationBlockModel.Messages = RetrieveMessages(MessageKey);
 
             //Remove the existing values from the input fields
             ModelState.Clear();
@@ -80,8 +73,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 try
                 {
                     //Add the group and persist the group name in temp data to be used in the success message
-                    var group = new SocialGroup(model.Name, model.Description);
-                    var newGroup = this.groupRepository.Add(group);
+                    var group = new Community(model.Name, model.Description);
+                    var newGroup = this.communityRepository.Add(group);
                     if (model.IsModerated)
                     {
                         this.moderationRepository.AddWorkflow(newGroup);
