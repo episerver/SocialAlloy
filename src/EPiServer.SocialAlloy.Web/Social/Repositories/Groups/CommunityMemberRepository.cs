@@ -69,7 +69,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Retrieves a page of members from the EPiServer Social member repository.
+        /// Retrieves a page of community members from the EPiServer Social Framework.
         /// </summary>
         /// <param name="communityMemberFilter">The filter by which to retrieve members by</param>
         /// <returns>The list of members that are part of the specified group.</returns>

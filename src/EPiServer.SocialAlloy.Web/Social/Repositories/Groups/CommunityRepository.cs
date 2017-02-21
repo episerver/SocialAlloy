@@ -81,11 +81,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 {
                     community = new Community(group.Id.Id, group.Name, group.Description);
                 }
-                else
-                {
-                    throw new GroupDoesNotExistException("The community that has been specified for this block does not exist");
-                }
-
             }
             catch (SocialAuthenticationException ex)
             {

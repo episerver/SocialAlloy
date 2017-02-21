@@ -5,8 +5,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// The ICommunityMemberRepository interface describes a component capable
-    /// of persisting, and retrieving social member data from
-    /// an underlying data store.
+    /// of persisting, and retrieving community member data
     /// </summary>
     public interface ICommunityMemberRepository
     {
