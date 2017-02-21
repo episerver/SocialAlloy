@@ -53,7 +53,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             var profilePage = contentRepository.GetBySegment(PageReference.StartPage, "my-profile", CultureInfo.CurrentCulture);
             if (profilePage == null)
             {
-                SocialProfilePage myPage = contentRepository.GetDefault<SocialProfilePage>(PageReference.StartPage);
+                ProfilePage myPage = contentRepository.GetDefault<ProfilePage>(PageReference.StartPage);
                 myPage.PageName = "My Profile";
                 myPage.URLSegment = urlSegmentCreator.Create(myPage);
                 myPage.MainBody = new XhtmlString("<p>This is your personal profile page!</p>");
@@ -91,13 +91,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             if (resellerTitlePage != null)
             {
                 var parentReference = resellerTitlePage.ContentLink;
-                var resellerTitlePageChildren = contentRepository.GetChildren<SocialCommunityPage>(parentReference);
+                var resellerTitlePageChildren = contentRepository.GetChildren<CommunityPage>(parentReference);
                 if (resellerTitlePageChildren != null && resellerTitlePageChildren.Any() != true)
                 {
                     var listOfGroups = new List<string> { "Platinum Reseller Group", "Gold Reseller Group", "Silver Reseller Group" };
                     foreach (var group in listOfGroups)
                     {
-                        SocialCommunityPage resellerGroupPage = contentRepository.GetDefault<SocialCommunityPage>(parentReference);
+                        CommunityPage resellerGroupPage = contentRepository.GetDefault<CommunityPage>(parentReference);
                         resellerGroupPage.PageName = group;
                         resellerGroupPage.URLSegment = urlSegmentCreator.Create(resellerGroupPage);
                         resellerGroupPage.VisibleInMenu = true;

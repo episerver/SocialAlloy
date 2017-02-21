@@ -3,7 +3,7 @@
 namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
-    /// The CommentFormViewModel class represents the model of a social comment form view.
+    /// A view model for submitting a PageComment.
     /// </summary>
     public class CommentFormViewModel
     {
@@ -29,5 +29,4 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
     }
-
 }

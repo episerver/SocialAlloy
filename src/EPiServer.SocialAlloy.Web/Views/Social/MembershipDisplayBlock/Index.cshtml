@@ -5,9 +5,7 @@
     @if (Model.ShowHeading)
     {
         <h2 @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
-        <hr />
     }
-
 
     @foreach (var message in Model.Messages)
     {
@@ -15,18 +13,32 @@
         <div style="color:@messageStyle">@message.Body</div>
     }
 
+    <style>
+        /*These styles ensure that there will be no overflow of member content outside of the MemberDisplayBlock*/
+        .MemberTable {
+            width: 375px;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+        .MemberTD {
+            white-space: nowrap;
+            overflow: hidden; 
+            text-overflow: ellipsis;
+        }
+    </style>
     @if (Model.Members != null && Model.Members.Any())
     {
         <div class="row">
-            <div class="span6">
+            <div class="span4">
                 <div>
-                    <table class="table table-striped">
+                    <table class="table table-striped MemberTable">
                         <tr><th><u>Member</u></th><th><u>Company</u></th></tr>
                         @foreach (var member in Model.Members)
                         {
                             <tr>
-                                <td><strong>@member.Name</strong></td>
-                                <td>@member.Company</td>
+                                <td class="MemberTD"><strong>@member.Name</strong></td>
+                                <td class="MemberTD">@member.Company</td>
                             </tr>
                         }
                     </table>

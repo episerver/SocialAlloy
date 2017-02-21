@@ -27,7 +27,7 @@
             @Html.HiddenFor(m => m.IsModerated)
             @Html.HiddenFor(m => m.GroupId)
             @Html.HiddenFor(m => m.GroupName)
-            @Html.HiddenFor(m => m.UserIsLoggedIn)
+            @Html.HiddenFor(m => m.UserIsLoggedIn) 
             if (Model.IsModerated && Model.UserIsLoggedIn && !String.IsNullOrWhiteSpace(Model.ModeratedUserAdmissionState))
             {
                 @Html.HiddenFor(m => m.MemberName)

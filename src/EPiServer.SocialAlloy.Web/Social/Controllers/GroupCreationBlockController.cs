@@ -15,8 +15,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class GroupCreationBlockController : SocialBlockController<GroupCreationBlock>
     {
-        private readonly ISocialGroupRepository groupRepository;
-        private readonly ISocialModerationRepository moderationRepository;
+        private readonly ICommunityRepository communityRepository;
+        private readonly ICommunityMembershipModerationRepository moderationRepository;
         private const string MessageKey = "GroupCreationBlock";
         private const string ErrorMessage = "Error";
         private const string SuccessMessage = "Success";
@@ -26,8 +26,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// </summary>
         public GroupCreationBlockController()
         {
-            this.groupRepository = ServiceLocator.Current.GetInstance<ISocialGroupRepository>();
-            this.moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
+            this.communityRepository = ServiceLocator.Current.GetInstance<ICommunityRepository>();
+            this.moderationRepository = ServiceLocator.Current.GetInstance<ICommunityMembershipModerationRepository>();
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 try
                 {
                     //Add the group and persist the group name in temp data to be used in the success message
-                    var group = new SocialGroup(model.Name, model.Description);
-                    var newGroup = this.groupRepository.Add(group);
+                    var group = new Community(model.Name, model.Description);
+                    var newGroup = this.communityRepository.Add(group);
                     if (model.IsModerated)
                     {
                         this.moderationRepository.AddWorkflow(newGroup);

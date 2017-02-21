@@ -23,7 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             CommentBoxRows = block.CommentBoxRows;
             CommentMaxLength = block.CommentMaxLength; 
             CommentsDisplayMax = block.CommentsDisplayMax;
-            Comments = new List<SocialComment>();
+            Comments = new List<PageComment>();
             SendActivity = block.SendActivity;
             CurrentPageLink = pageReference;
         }
@@ -60,7 +60,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the comments to show.
         /// </summary>
-        public IEnumerable<SocialComment> Comments { get; set; }
+        public IEnumerable<PageComment> Comments { get; set; }
 
         /// <summary>
         /// Gets and sets message details to be displayed to the user

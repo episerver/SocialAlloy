@@ -21,8 +21,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class RatingBlockController : SocialBlockController<RatingBlock>
     {
         private readonly IUserRepository userRepository;
-        private readonly ISocialRatingRepository ratingRepository;
-        private readonly ISocialActivityRepository activityRepository;
+        private readonly IPageRatingRepository ratingRepository;
+        private readonly ICommunityActivityRepository activityRepository;
         private readonly IPageRepository pageRepository;
         private string userId;
         private string pageId;
@@ -35,9 +35,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         public RatingBlockController()
         {
             this.userRepository = ServiceLocator.Current.GetInstance<IUserRepository>();
-            this.ratingRepository = ServiceLocator.Current.GetInstance<ISocialRatingRepository>();
+            this.ratingRepository = ServiceLocator.Current.GetInstance<IPageRatingRepository>();
             this.pageRepository = ServiceLocator.Current.GetInstance<IPageRepository>();
-            this.activityRepository = ServiceLocator.Current.GetInstance<ISocialActivityRepository>();
+            this.activityRepository = ServiceLocator.Current.GetInstance<ICommunityActivityRepository>();
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 if (!String.IsNullOrWhiteSpace(userId))
                 {
                     blockModel.CurrentRating =
-                        this.ratingRepository.GetRating(new SocialRatingFilter
+                        this.ratingRepository.GetRating(new PageRatingFilter
                         {
                             Rater = userId,
                             Target = target
@@ -189,7 +189,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             try
             {
-                var activity = new SocialRatingActivity { Value = value };
+                var activity = new PageRatingActivity { Value = value };
                 activityRepository.Add(this.userId, this.pageId, activity);
             }
             catch (SocialRepositoryException ex)
