@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
     public class LikeButtonBlockViewModel
     {
         /// <summary>
-        /// Parameterless constructor -- required by the EPiServer CMS framework.
+        /// Parameterless constructor
         /// </summary>
         public LikeButtonBlockViewModel()
         {

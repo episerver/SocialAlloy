@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// The PageRatingRepository class defines the operations that can be issued
-    /// against the EPiServer Social RatingService.
+    /// against the Episerver Social RatingService.
     /// </summary>
     public class PageRatingRepository : IPageRatingRepository
     {
@@ -24,7 +24,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adds a rating with the EPiServer Social Framework for the 
+        /// Adds a rating with the Episerver Social Framework for the 
         /// target and user reference specified.
         /// </summary>
         /// <param name="user">the reference of rater who submitted the rating.</param>
@@ -47,24 +47,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
         }
 
         /// <summary>
-        /// Gets the value of the submitted rating, if any, from the EPiServer Social Framework based on the target and user reference specified in the filter.
+        /// Gets the value of the submitted rating, if any, from the Episerver Social Framework based on the target and user reference specified in the filter.
         /// </summary>
         /// <param name="filter">Criteria containing the target and user reference by 
         /// which to filter ratings</param>
@@ -95,26 +95,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return result;
         }
 
         /// <summary>
-        /// Gets the rating statistics, if any, from the EPiServer Social rating 
+        /// Gets the rating statistics, if any, from the Episerver Social rating 
         /// repository for the specified target reference.
         /// </summary>
         /// <param name="target">The target reference by which to filter ratings statistics</param>
@@ -151,19 +151,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return result;

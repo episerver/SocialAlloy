@@ -10,7 +10,7 @@ using System.Linq;
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
-    /// CommunityMemberRepository persists and retrieves community member data to and from the Episever Social Framework
+    /// CommunityMemberRepository persists and retrieves community member data to and from the Episerver Social Framework
     /// </summary>
     public class CommunityMemberRepository : ICommunityMemberRepository
     {
@@ -50,26 +50,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return addedSocialMember;
         }
 
         /// <summary>
-        /// Retrieves a page of community members from the EPiServer Social Framework.
+        /// Retrieves a page of community members from the Episerver Social Framework.
         /// </summary>
         /// <param name="communityMemberFilter">The filter by which to retrieve members by</param>
         /// <returns>The list of members that are part of the specified group.</returns>
@@ -86,19 +86,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return returnedMembers;
