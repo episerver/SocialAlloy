@@ -75,7 +75,6 @@
                                 <input type="hidden" name="userId" value="@Html.AttributeEncode(item.User)" />
                                 <input type="hidden" name="communityId" value="@Html.AttributeEncode(item.Group)" />
                                 <input type="hidden" name="workflow" value="@Html.AttributeEncode(Model.SelectedWorkflow.Id)" />
-                                <input type="hidden" name="state" value="@Html.AttributeEncode(item.State)" />
 
                                 if (item.Actions.Count() == 0)
                                 {

@@ -40,11 +40,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <param name="userId">User associated with the membership request</param>
         /// <param name="communityId">Community associated with the membership request</param>
         /// <param name="workflow">Workflow associated with the membership request</param>
-        /// <param name="state">State of the membership request</param>
         /// <param name="workflowAction">Action to be taken on the membership request</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        public ActionResult Index(string userId, string communityId, string workflow, string state, string workflowAction)
+        public ActionResult Index(string userId, string communityId, string workflow, string workflowAction)
         {
             this.moderationRepository.Moderate(workflow, workflowAction, userId, communityId);
 

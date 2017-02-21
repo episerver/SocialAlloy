@@ -22,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adds an activity to the EPiServer Social Activity Streams system.
+        /// Adds an activity to the Episerver Social Activity Streams system.
         /// </summary>
         /// <param name="actor">the actor who initiated the activity</param>
         /// <param name="target">the target of the activity</param>
@@ -40,19 +40,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
         }
     }

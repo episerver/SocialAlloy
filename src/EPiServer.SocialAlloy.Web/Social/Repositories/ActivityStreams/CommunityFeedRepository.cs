@@ -63,19 +63,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return AdaptFeedItems(feedItems);

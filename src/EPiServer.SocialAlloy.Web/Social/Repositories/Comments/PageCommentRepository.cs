@@ -9,7 +9,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
     /// <summary>
     /// The PageCommentRepository class defines the operations that can be issued
-    /// against the EPiServer Social CommentService.
+    /// against the Episerver Social CommentService.
     /// </summary>
     public class PageCommentRepository : IPageCommentRepository
     {
@@ -26,7 +26,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adds a comment with the EPiServer Social Framework. 
+        /// Adds a comment with the Episerver Social Framework. 
         /// </summary>
         /// <param name="comment">The comment to add.</param>
         /// <returns>The added comment.</returns>
@@ -45,26 +45,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return AdaptComment(addedComment);
         }
 
         /// <summary>
-        /// Gets comments from the EPiServer Social Framework.
+        /// Gets comments from the Episerver Social Framework.
         /// </summary>
         /// <param name="filter">The application comment filtering specification.</param>
         /// <returns>A list of comments.</returns>
@@ -92,29 +92,29 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             }
             catch (SocialAuthenticationException ex)
             {
-                throw new SocialRepositoryException("The application failed to authenticate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
             }
             catch (MaximumDataSizeExceededException ex)
             {
-                throw new SocialRepositoryException("The application request was deemed too large for EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
             }
             catch (SocialCommunicationException ex)
             {
-                throw new SocialRepositoryException("The application failed to communicate with EPiServer Social.", ex);
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
             }
             catch (SocialException ex)
             {
-                throw new SocialRepositoryException("EPiServer Social failed to process the application request.", ex);
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
 
             return AdaptComment(comments);
         }
 
         /// <summary>
-        /// Adapt the application PageComment to the EPiServer Social Comment 
+        /// Adapt the application PageComment to the Episerver Social Comment 
         /// </summary>
         /// <param name="comment">The application's PageComment.</param>
-        /// <returns>The EPiServer Social Comment.</returns>
+        /// <returns>The Episerver Social Comment.</returns>
         private Comment AdaptPageComment(PageComment comment)
         {
             return new Comment(Reference.Create(comment.Target), Reference.Create(comment.AuthorId), comment.Body, true);
@@ -138,9 +138,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adapt a list of EPiServer Social Comment to application's PageComment.
+        /// Adapt a list of Episerver Social Comment to application's PageComment.
         /// </summary>
-        /// <param name="comments">The list of EPiServer Social Comment.</param>
+        /// <param name="comments">The list of Episerver Social Comment.</param>
         /// <returns>The list of application PageComment.</returns>
         private IEnumerable<PageComment> AdaptComment(List<Comment> comments)
         {
