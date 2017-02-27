@@ -1,6 +1,7 @@
 ﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
@@ -11,14 +12,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     /// </summary>
     public class ModerationController : Controller
     {
-        private readonly ISocialModerationRepository moderationRepository;
+        private readonly ICommunityMembershipModerationRepository moderationRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ModerationController()
         {
-            moderationRepository = ServiceLocator.Current.GetInstance<ISocialModerationRepository>();
+            moderationRepository = ServiceLocator.Current.GetInstance<ICommunityMembershipModerationRepository>();
         }
 
         /// <summary>
@@ -36,20 +37,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <summary>
         /// Retrieves relevant membership information and takes the specified action on a membership request under moderation.
         /// </summary>
-        /// <param name="user">User associated with the membership request</param>
-        /// <param name="group">Group associated with the membership request</param>
+        /// <param name="userId">User associated with the membership request</param>
+        /// <param name="communityId">Community associated with the membership request</param>
         /// <param name="workflow">Workflow associated with the membership request</param>
-        /// <param name="state">State of the membership request</param>
         /// <param name="workflowAction">Action to be taken on the membership request</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        public ActionResult Index(string user, string group, string workflow, string state, string workflowAction)
+        public ActionResult Index(string userId, string communityId, string workflow, string workflowAction)
         {
-            var addMemberRequest = this.moderationRepository.Get(user, group);
-       
-            this.moderationRepository.Moderate(workflow, addMemberRequest, workflowAction);
+            this.moderationRepository.Moderate(workflow, workflowAction, userId, communityId);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new RouteValueDictionary(new { SelectedWorkflow = workflow}));
         }
     }
 }

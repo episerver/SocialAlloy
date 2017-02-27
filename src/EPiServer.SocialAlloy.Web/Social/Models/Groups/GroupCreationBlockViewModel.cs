@@ -1,4 +1,5 @@
 ﻿using EPiServer.Core;
+using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
 using System.Collections.Generic;
 
@@ -10,6 +11,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
     /// </summary>
     public class GroupCreationBlockViewModel
     {
+        public GroupCreationBlockViewModel(GroupCreationBlock block, PageReference currentPageLink)
+        {
+            Heading = block.Heading;
+            ShowHeading = block.ShowHeading;
+            CurrentPageLink = currentPageLink;
+        }
+
         /// <summary>
         /// Gets or sets the heading for the Group Creation block.
         /// </summary>
@@ -45,11 +53,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
         /// Gets or sets the reference link of the page containing the group creation form.
         /// </summary>
         public PageReference CurrentPageLink { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference link of the block containing the group creation form.
-        /// </summary>
-        public ContentReference CurrentBlockLink { get; set; }
     }
 }
 

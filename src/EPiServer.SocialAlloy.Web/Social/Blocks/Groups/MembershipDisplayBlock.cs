@@ -8,7 +8,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
     /// <summary>
     /// The MembershipDisplayBlock class defines the configuration used for rendering group creation views.
     /// </summary>
-    [ContentType(DisplayName = "Social Membership Display", GUID = "0d5075ad-31ea-40cb-ae8f-a88b519db35f", Description = "Configures the properties of a membership display block view")]
+    [ContentType(DisplayName = "Membership Display Block", GUID = "0d5075ad-31ea-40cb-ae8f-a88b519db35f", Description = "Configures the properties of a membership display block view")]
     public class MembershipDisplayBlock : BlockData
     {
         /// <summary>

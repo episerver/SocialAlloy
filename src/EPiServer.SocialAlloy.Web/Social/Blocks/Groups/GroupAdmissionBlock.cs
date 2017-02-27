@@ -1,13 +1,7 @@
 ﻿using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
-using EPiServer.ServiceLocation;
-using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Blocks.Groups
 {

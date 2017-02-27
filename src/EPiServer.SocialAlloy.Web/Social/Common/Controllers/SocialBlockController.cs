@@ -14,7 +14,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
     /// <typeparam name="T">The social block type.</typeparam>
     public abstract class SocialBlockController<T> : BlockController<T> where T : BlockData
     {
-        protected readonly IContentRepository contentRepository;
         protected readonly IPageRouteHelper pageRouteHelper;
 
         /// <summary>
@@ -22,7 +21,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Common.Controllers
         /// </summary>
         public SocialBlockController()
         {
-            this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
         }
 

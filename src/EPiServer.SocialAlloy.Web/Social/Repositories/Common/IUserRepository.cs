@@ -1,6 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using System.Security.Principal;
+﻿using System.Security.Principal;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
@@ -24,5 +22,33 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="id">User Id to search by</param>
         /// <returns>The user name.</returns>
         string GetUserName(string id);
+
+        /// <summary>
+        /// Determines if the user is anonymous and then retrieves the last section of the uri
+        /// </summary>
+        /// <param name="user">The unique uri of the user</param>
+        /// <returns>Substring of original uri</returns>
+        string ParseUserUri(string user);
+
+        /// <summary>
+        /// Creates a unique uri to be associated with any authenticated user looking to gain admission to a group 
+        /// </summary>
+        /// <param name="user">The id of the user that is trying to join a group</param>
+        /// <returns></returns>
+        string CreateAuthenticatedUri(string user);
+
+        /// <summary>
+        /// Creates a unique uri to be associated with any anonymous user looking to gain admission to a group 
+        /// </summary>
+        /// <param name="user">The name of the user that is trying to join a group</param>
+        /// <returns></returns>
+        string CreateAnonymousUri(string user);
+
+        /// <summary>
+        /// Returns only user id that was originally retrieved from the identity
+        /// </summary>
+        /// <param name="user">The unique uri of the user</param>
+        /// <returns>Substring of original uri</returns>
+        string GetAuthenticatedId(string user);
     }
 }

@@ -2,15 +2,13 @@
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.Social.Comments.Core;
+using EPiServer.SocialAlloy.Web.Business.Initialization;
 using EPiServer.SocialAlloy.Web.Social.Adapters;
-using EPiServer.SocialAlloy.Web.Social.Models;
-using EPiServer.Social.Groups.Core;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
+using EPiServer.SocialAlloy.Web.Social.Repositories.Moderation;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using StructureMap;
-using EPiServer.SocialAlloy.Web.Social.Repositories.Moderation;
 
 namespace EPiServer.SocialAlloy.Web.Social.Initialization
 {
@@ -19,7 +17,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
     /// interfaces to their implementations.
     /// </summary>
     [InitializableModule]
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    [ModuleDependency(typeof(DependencyResolverInitialization))]
     public class SocialInitialization : IConfigurableModule
     {
         /// <summary>
@@ -55,15 +53,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         {
             configuration.For<IUserRepository>().Use(() => CreateUserRepository());
             configuration.For<IPageRepository>().Use<PageRepository>();
-            configuration.For<ISocialCommentRepository>().Use<SocialCommentRepository>();
-            configuration.For<ISocialRatingRepository>().Use<SocialRatingRepository>();
-            configuration.For<ISocialSubscriptionRepository>().Use<SocialSubscriptionRepository>();
-            configuration.For<ISocialActivityAdapter>().Use<SocialActivityAdapter>();
-            configuration.For<ISocialFeedRepository>().Use<SocialFeedRepository>();
-            configuration.For<ISocialActivityRepository>().Use<SocialActivityRepository>();
-            configuration.For<ISocialGroupRepository>().Use<SocialGroupRepository>();
-            configuration.For<ISocialMemberRepository>().Use<SocialMemberRepository>();
-            configuration.For<ISocialModerationRepository>().Use<SocialModerationRepository>();
+            configuration.For<IPageCommentRepository>().Use<PageCommentRepository>();
+            configuration.For<IPageRatingRepository>().Use<PageRatingRepository>();
+            configuration.For<IPageSubscriptionRepository>().Use<PageSubscriptionRepository>();
+            configuration.For<ICommunityActivityAdapter>().Use<CommunityActivityAdapter>();
+            configuration.For<ICommunityFeedRepository>().Use<CommunityFeedRepository>();
+            configuration.For<ICommunityActivityRepository>().Use<CommunityActivityRepository>();
+            configuration.For<ICommunityRepository>().Use<CommunityRepository>();
+            configuration.For<ICommunityMemberRepository>().Use<CommunityMemberRepository>();
+            configuration.For<ICommunityMembershipModerationRepository>().Use<CommunityMembershipModerationRepository>();
         }
 
         /// <summary>
@@ -73,7 +71,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
         private static IUserRepository CreateUserRepository()
         {
             return new UserRepository(new UserManager<IdentityUser>(
-                    new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>()))
+                    new UserStore<IdentityUser>(new ApplicationDbContext<IdentityUser>("EPiServerDB")))
             );
         }
     }
