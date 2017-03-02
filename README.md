@@ -79,7 +79,7 @@ For implementation details of each of the Episerver Social blocks see the [sourc
 The **CommunityPage** represents a digital community which can be created for resellers of the Alloy platform. The page allows members of the reseller team to join the community. Site visitors can also comment on and rate the community page. Site users may subscribe to their favorite reseller communities and monitor a feed of activities from their personal profile.
 
 ## Developer Reference
-Developers looking to get started with Episerver Social will find the [repository implementations](https://github.com/episerver/SocialAlloy/tree/master/src/EPiServer.SocialAlloy.Web/Social/Repositories). as the primary point of interaction between the application and the Episerver Social framework.
+Developers looking to get started with Episerver Social will find the [repository implementations](https://github.com/episerver/SocialAlloy/tree/master/src/EPiServer.SocialAlloy.Web/Social/Repositories) as the primary point of interaction between the application and the Episerver Social framework.
 
 ## Disclaimer
 This website was assembled to serve as a demonstration and has not been tested for production use.
