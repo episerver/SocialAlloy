@@ -78,20 +78,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             {
                 var communityPage = e.Content as CommunityPage;
 
-                //Build a new group 
-                var groupName = communityPage.Name;
-                communityPage.MetaDescription = String.IsNullOrEmpty(communityPage.MetaDescription) ? "This is the home page for \"" + groupName + "\"" : communityPage.MetaDescription;
-                var groupDescription = communityPage.MetaDescription;
-                var socialGroup = new Community(groupName, groupDescription);
+                var communityName = communityPage.Name;
+                Community community;
 
-                //Add group to Social
-                socialGroup = groupRepository.Add(socialGroup);
+                //Check if the community name exists in Social
+                //If it does, the page will use the existing Social group and workflow details
+                community = groupRepository.Get(communityName);
+                if (community == null)
+                {
+                    //Build a new group 
+                    communityPage.MetaDescription = String.IsNullOrEmpty(communityPage.MetaDescription) ? "This is the home page for \"" + communityName + "\"" : communityPage.MetaDescription;
+                    var groupDescription = communityPage.MetaDescription;
+                    var socialGroup = new Community(communityName, groupDescription);
 
-                //Add a workflow for the new group
-                this.moderationRepository.AddWorkflow(socialGroup);
+                    //Add group to Social
+                    socialGroup = groupRepository.Add(socialGroup);
+
+                    //Add a workflow for the new group
+                    this.moderationRepository.AddWorkflow(socialGroup);
+                }
 
                 //Configure CommentBlock
-                communityPage.Comments.Heading = groupName + " Comments";
+                communityPage.Comments.Heading = communityName + " Comments";
                 communityPage.Comments.ShowHeading = true;
                 communityPage.Comments.SendActivity = true;
 
@@ -99,27 +107,27 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
                 communityPage.Subscriptions.ShowHeading = false;
 
                 //Configure RatingsBlock
-                communityPage.Ratings.Heading = groupName + " Page Rating";
+                communityPage.Ratings.Heading = communityName + " Page Rating";
                 communityPage.Ratings.ShowHeading = true;
                 communityPage.Ratings.SendActivity = true;
 
                 //Configure GroupAdmissionBlock
-                communityPage.GroupAdmission.GroupName = groupName;
+                communityPage.GroupAdmission.GroupName = communityName;
                 communityPage.GroupAdmission.ShowHeading = true;
-                communityPage.GroupAdmission.Heading = groupName + " Admission Form";
+                communityPage.GroupAdmission.Heading = communityName + " Admission Form";
 
                 //Configure MembershipBlock
-                communityPage.Memberships.GroupName = groupName;
+                communityPage.Memberships.GroupName = communityName;
                 communityPage.Memberships.ShowHeading = true;
-                communityPage.Memberships.Heading = groupName + " Member List";
+                communityPage.Memberships.Heading = communityName + " Member List";
             }
         }
 
         /// <summary>
-        /// Returns absolute encoded url for a social group page. 
+        /// Returns absolute encoded url for a community page. 
         /// </summary>
-        /// <param name="pageData">The page data that is associated with a specific social group</param>
-        /// <returns>The absolute encoded url of a social group page </returns>
+        /// <param name="pageData">The page data that is associated with a specific community</param>
+        /// <returns>The absolute encoded url of a community page </returns>
         private string ExternalURL(PageData pageData)
         {
             UrlBuilder pageURLBuilder = new UrlBuilder(pageData.LinkURL);

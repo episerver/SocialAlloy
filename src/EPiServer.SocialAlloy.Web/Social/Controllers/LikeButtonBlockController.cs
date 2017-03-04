@@ -16,7 +16,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 {
     /// <summary>
     /// The LikeButtonBlockController is a simple implementation of a Like button using
-    /// the EPiServer Social Ratings service API. In this implementation we assume that
+    /// the Episerver Social Ratings service API. In this implementation we assume that
     /// if the user is not logged in (anonymous), they can "like" the page as many times
     /// as they choose.
     /// </summary>
@@ -35,7 +35,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // This is all wired up by the installation of the EPiServer.Social.Ratings.Site package
             this.ratingService = ServiceLocator.Current.GetInstance<IRatingService>();
 
-            // This is wired up by EPiServer Core/Framework
+            // This is wired up by Episerver Core/Framework
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
         }
@@ -59,7 +59,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                // Using the EPiServer Social Rating service, get the existing rating for the current 
+                // Using the Episerver Social Rating service, get the existing rating for the current 
                 // user (rater) and page (target). This is done only if there's a user identity. Anonymous
                 // users will never match a previously submitted anonymous Like rating as they are always 
                 // uniquely generated.
@@ -95,7 +95,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     }
                 }
 
-                // Using the EPiServer Social Rating service, get the existing Like statistics for the page (target)
+                // Using the Episerver Social Rating service, get the existing Like statistics for the page (target)
                 var ratingStatisticsPage = ratingService.Get(
                     new Criteria<RatingStatisticsFilter>
                     {
@@ -146,7 +146,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
             try
             {
-                // Add the rating using the EPiServer Social Rating service
+                // Add the rating using the Episerver Social Rating service
                 var addedRating = ratingService.Add(
                     new Rating(
                         raterUserRef,
