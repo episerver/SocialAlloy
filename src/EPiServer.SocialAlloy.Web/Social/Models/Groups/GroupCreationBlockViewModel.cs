@@ -11,6 +11,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
     /// </summary>
     public class GroupCreationBlockViewModel
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GroupCreationBlockViewModel()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="block">The block instance</param>
+        /// <param name="currentPageLink">The current page reference</param>
         public GroupCreationBlockViewModel(GroupCreationBlock block, PageReference currentPageLink)
         {
             Heading = block.Heading;
