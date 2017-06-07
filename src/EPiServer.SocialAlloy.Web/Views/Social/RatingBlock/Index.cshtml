@@ -3,7 +3,9 @@
 @model RatingBlockViewModel
 <script type="text/javascript">
     function EnableRatingSubmitButton() {
-        $("button[name='submitsocialrating']").removeAttr("disabled");
+        $("input[name='submitsocialrating']").removeAttr("disabled");
+        $("input[name='submitsocialrating']").removeClass("btn disabled");
+        $("input[name='submitsocialrating']").addClass("btn");
     }
 </script>
 
@@ -29,7 +31,7 @@
             }
             else 
             {
-                using (Html.BeginForm("Submit", null))
+                using (Html.BeginForm("Submit", "RatingBlock", FormMethod.Post))
                 {
                     @Html.HiddenFor(m => m.SendActivity)
                     @Html.HiddenFor(m => m.CurrentPageLink)
@@ -44,7 +46,7 @@
                             }
                         </div>
                         <div>
-                            <input type="submit" name="submitsocialrating" style="width:20%" value="Submit">
+                            <input type="submit" name="submitsocialrating" style="width:20%" value="Submit" disabled="disabled"  class="btn disabled">
                         </div>
                     </div>
                 }

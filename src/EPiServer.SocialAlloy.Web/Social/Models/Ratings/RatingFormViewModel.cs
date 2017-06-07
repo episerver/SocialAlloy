@@ -22,7 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
         /// <summary>
         /// Gets or sets the whether the block is configured to send an activity when a new rating is added. 
         /// </summary>
-        public bool SendActivity { get; private set; }
+        public bool SendActivity { get; set; }
 
         /// <summary>
         /// Gets or sets the reference link of the page containing the comment form.

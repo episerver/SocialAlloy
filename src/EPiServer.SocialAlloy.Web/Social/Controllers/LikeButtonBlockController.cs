@@ -23,7 +23,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     public class LikeButtonBlockController : BlockController<LikeButtonBlock>
     {
         private readonly IRatingService ratingService;
-        private readonly IRatingStatisticsService ratingStatisticsService;
         private readonly IPageRouteHelper pageRouteHelper;
         private readonly IContentRepository contentRepository;
         private const int Liked_Rating = 1;
@@ -35,7 +34,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         {
             // This is all wired up by the installation of the EPiServer.Social.Ratings.Site package
             this.ratingService = ServiceLocator.Current.GetInstance<IRatingService>();
-            this.ratingStatisticsService = ServiceLocator.Current.GetInstance<IRatingStatisticsService>();
 
             // This is wired up by Episerver Core/Framework
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -98,7 +96,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 }
 
                 // Using the Episerver Social Rating service, get the existing Like statistics for the page (target)
-                var ratingStatisticsPage = ratingStatisticsService.Get(
+                var ratingStatisticsPage = ratingService.Get(
                     new Criteria<RatingStatisticsFilter>
                     {
                         Filter = new RatingStatisticsFilter
@@ -125,7 +123,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 // The rating service may throw a number of possible exceptions
                 // should handle each one accordingly -- see rating service documentation
@@ -157,7 +155,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                     )
                 );
             }
-            catch
+            catch (Exception ex)
             {
                 // The rating service may throw a number of possible exceptions
                 // should handle each one accordingly -- see rating service documentation
