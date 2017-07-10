@@ -12,20 +12,18 @@
         <div class="row">
             <div class="span4">
                 @{Html.RenderPartial("SubNavigation", Model);}
-                @Html.PropertyFor(x => x.CurrentPage.Ratings, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
-                @Html.PropertyFor(x => x.CurrentPage.Subscriptions, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
-                @Html.PropertyFor(x => x.CurrentPage.Memberships, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
-                @Html.PropertyFor(x => x.CurrentPage.GroupAdmission, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
+                @Html.PropertyFor(x => x.CurrentPage.Ratings)
+                @Html.PropertyFor(x => x.CurrentPage.Subscriptions)
+                @Html.PropertyFor(x => x.CurrentPage.Memberships)
+                @Html.PropertyFor(x => x.CurrentPage.GroupAdmission)
             </div>
             <div class="span8">
                 <h1 style="margin-top: 0;" @Html.EditAttributes(x => x.CurrentPage.PageName)>@Model.CurrentPage.PageName</h1>
                 <p class="introduction" @Html.EditAttributes(x => x.CurrentPage.MetaDescription)>@Model.CurrentPage.MetaDescription</p>
 
-                <div class="span8 clearfix" @Html.EditAttributes(x => x.CurrentPage.MainBody)>
-                    @Html.DisplayFor(m => m.CurrentPage.MainBody)
-                </div>
-                @Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
-                @Html.PropertyFor(x => x.CurrentPage.Comments, new { CssClass = "row", Tag = Global.ContentAreaTags.FullWidth })
+                @Html.PropertyFor(x => x.CurrentPage.MainBody)
+                @Html.PropertyFor(x => x.CurrentPage.MainContentArea, new { CssClass = "row", Tag = Global.ContentAreaTags.TwoThirdsWidth })
+                @Html.PropertyFor(x => x.CurrentPage.Comments)
             </div>
         </div>
     </div>
