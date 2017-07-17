@@ -45,7 +45,7 @@
                         @Html.HiddenFor(m => m.MemberName)
                     }
                     @Html.TextBoxFor(m => m.MemberCompany, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Company" })
-                    @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email" })
+                    @Html.TextBoxFor(m => m.MemberEmail, new { @required = "require", @style = "width:75%;", @class = "form-control", placeholder = "User Email", @type = "email" })
                 </div>
                 <div>
                     <input type="submit" name="submit" value="Join">

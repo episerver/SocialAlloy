@@ -14,13 +14,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public class PageRatingRepository : IPageRatingRepository
     {
         private readonly IRatingService ratingService;
+        private readonly IRatingStatisticsService ratingStatisticsService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PageRatingRepository(IRatingService ratingService)
+        public PageRatingRepository(IRatingService ratingService, IRatingStatisticsService ratingStatisticsService)
         {
             this.ratingService = ratingService;
+            this.ratingStatisticsService = ratingStatisticsService;
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             try
             {
-                var ratingStatisticsPage = ratingService.Get(new Criteria<RatingStatisticsFilter>()
+                var ratingStatisticsPage = ratingStatisticsService.Get(new Criteria<RatingStatisticsFilter>()
                 {
                     Filter = new RatingStatisticsFilter()
                     {

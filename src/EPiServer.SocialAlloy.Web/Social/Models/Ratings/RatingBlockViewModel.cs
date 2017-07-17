@@ -87,8 +87,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
 
         private void LoadRatingSettings(RatingBlock block)
         {
-            RatingSettings = new List<int>();
-            RatingSettings.AddRange(block.RatingSettings.Cast<RatingSetting>().Select(r => r.Value).ToList());
+            // Use previously set value, if exists.
+            RatingSettings = RatingSettings ?? new List<int>();
+
+            // Return if ratings is not null and has value.
+            if (block.RatingSettings?.Any() == true) return;
+
+
+            RatingSettings.AddRange(block.RatingSettings.Select(r => r.Value));
             RatingSettings.Sort();
         }
     }
