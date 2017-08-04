@@ -4,31 +4,22 @@ This repository contains a clone of the Episerver Alloy sample application, whic
 * To provide a simple application demonstrating Episerver Social features and capabilities
 * To provide developers looking to get started with Episerver Social with a helpful point of reference
 
-## Release Notes
-* Version 2.0.0
- * This release introduces a "Community" page type, which applies the various Social blocks to demonstrate the creation of community pages for Alloy resellers.
- * Adds a demonstration implementation of a "Like" button using Episerver Social's Ratings feature.
- * Adds a demonstration implementation of IContent extension methods for publishing and retrieving comments.
- * (It is recommended to setup a fresh database for your site when getting started with release. See: Setup)
-* Version 1.0.0
- * This release introduces several block types, which demonstrate simple implementations of various Episerver Social features.
-
 ## Getting Started
 An Episerver Social account is required to run this application. If you do not have an Episerver Social account, please contact your Episerver account manager.
 
 ### Setup
 * Run the setup script with Powershell: `.\src\Scripts\Setup.ps1`
- * This script will copy the site's database and assets into the appropriate locations.
+  * This script will copy the site's database and assets into the appropriate locations.
 * Open the SocialAlloy.sln in Visual Studio
 * Open the web.config and update the `episerver.social` configuration section with your account information.
- * For more information on how to configure Episerver Social, [please visit our Getting Connected guide](http://world.episerver.com/documentation/developer-guides/social/social_platform-overview/Installing-Episerver-Social/#GettingConnected).
+  * For more information on how to configure Episerver Social, [please visit our Getting Connected guide](http://world.episerver.com/documentation/developer-guides/social/social_platform-overview/Installing-Episerver-Social/#GettingConnected).
 
 ### Running the Application
 * Build the application in Visual Studio 2015
- * This operation will restore the necessary NuGet packages dependencies.
+  * This operation will restore the necessary NuGet packages dependencies.
 * Launch the application from Visual Studio 2015
- * With debugging (F5)
- * Without debugging (CTRL+F5)
+  * With debugging (F5)
+  * Without debugging (CTRL+F5)
 
 ## What's Inside?
 ### Blocks

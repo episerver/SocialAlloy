@@ -1,12 +1,12 @@
 We welcome support and ideas from the developer community!
 
-If you would like to contribute a change, please use the following guidelines:
-
-1. Create a branch from the latest release/* branch
-2. Commit your changes
-3. When complete, open a pull request for the latest release/* branch.
+1. If you would like to contribute a change, please issue a pull request.
   a. In the description of your pull request please indicate how your change 
      enhances the demonstration of Episerver Social.
+2. A member of the Episerver Social development team will review the changes
+   and offer any follow-up recommendations.
+3. Once approved, the pull request may be merged.
+
 
 Please remember that the goals of this project are to:
  - Provide a simple application demonstrating Episerver Social features and 
@@ -16,6 +16,4 @@ Please remember that the goals of this project are to:
 
 Contributions should be focused on furthering those goals.
 
-
-
-
+Thanks for contributing!
