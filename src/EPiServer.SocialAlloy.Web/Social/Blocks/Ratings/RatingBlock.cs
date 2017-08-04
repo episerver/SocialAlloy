@@ -45,7 +45,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
         /// </summary>
         [Editable(false)]
         [ScaffoldColumn(false)]
-        public virtual IList<RatingSetting> RatingSettings { get; set; }
+        public virtual IList<RatingSetting> RatingSettings
+        {
+            get
+            {
+                // For the sake of the simplicity of this sample we allow items 
+                // to be rated on a scale of 1 through 5 by initializing this
+                // non-editable property list.
+                return new List<RatingSetting>()
+                {
+                    new RatingSetting { Value = 1 },
+                    new RatingSetting { Value = 2 },
+                    new RatingSetting { Value = 3 },
+                    new RatingSetting { Value = 4 },
+                    new RatingSetting { Value = 5 }
+                };
+            }
+        }
 
         /// <summary>
         /// Sets the default property values on the content data.
@@ -62,16 +78,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Blocks
             // By default send a rating activity to the Episerver Social 
             // Activity Streams system when a rating a submitted.
             SendActivity = true;
-
-            // For the sake of the simplicity of this sample we allow items 
-            // to be rated on a scale of 1 through 5 by initializing this
-            // non-editable property list.
-            RatingSettings = new List<RatingSetting>();
-            RatingSettings.Add(new RatingSetting { Value = 1 });
-            RatingSettings.Add(new RatingSetting { Value = 2 });
-            RatingSettings.Add(new RatingSetting { Value = 3 });
-            RatingSettings.Add(new RatingSetting { Value = 4 });
-            RatingSettings.Add(new RatingSetting { Value = 5 });
         }
     }
 }
