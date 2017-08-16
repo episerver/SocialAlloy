@@ -24,6 +24,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
     {
         private readonly IRatingService ratingService;
         private readonly IRatingStatisticsService ratingStatisticsService;
+        private readonly RatingFilters ratingFilters;
+        private readonly RatingStatisticsFilters ratingStatisticsFilters;
         private readonly IPageRouteHelper pageRouteHelper;
         private readonly IContentRepository contentRepository;
         private const int Liked_Rating = 1;
@@ -40,6 +42,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
             // This is wired up by Episerver Core/Framework
             this.contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             this.pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+
+            this.ratingFilters = new RatingFilters();
+            this.ratingStatisticsFilters = new RatingStatisticsFilters();
         }
 
         /// <summary>
@@ -69,16 +74,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
                 {
                     var raterUserRef = GetRaterRef();
                     var ratingPage = ratingService.Get(
-                        new Criteria<RatingFilter>
+                        new Criteria
                         {
-                            Filter = new RatingFilter
-                            {
-                                Rater = raterUserRef,
-                                Targets = new List<Reference>
-                                {
-                                    targetPageRef
-                                }
-                            },
+                            Filter = this.ratingFilters.Rater.EqualTo(raterUserRef).And(
+                                     this.ratingFilters.Target.EqualTo(targetPageRef)),
                             PageInfo = new PageInfo
                             {
                                 PageSize = 1
@@ -99,15 +98,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
 
                 // Using the Episerver Social Rating service, get the existing Like statistics for the page (target)
                 var ratingStatisticsPage = ratingStatisticsService.Get(
-                    new Criteria<RatingStatisticsFilter>
+                    new Criteria
                     {
-                        Filter = new RatingStatisticsFilter
-                        {
-                            Targets = new List<Reference>
-                            {
-                                targetPageRef
-                            }
-                        },
+                        Filter = this.ratingStatisticsFilters.Target.EqualTo(targetPageRef),
                         PageInfo = new PageInfo
                         {
                             PageSize = 1

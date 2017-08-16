@@ -91,11 +91,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             RatingSettings = RatingSettings ?? new List<int>();
 
             // Return if ratings is not null and has value.
-            if (block.RatingSettings?.Any() == true) return;
-
-
-            RatingSettings.AddRange(block.RatingSettings.Select(r => r.Value));
-            RatingSettings.Sort();
+            if (block.RatingSettings?.Any() == true)
+            {
+                RatingSettings.AddRange(block.RatingSettings.Select(r => r.Value));
+                RatingSettings.Sort();
+            }
         }
     }
 }

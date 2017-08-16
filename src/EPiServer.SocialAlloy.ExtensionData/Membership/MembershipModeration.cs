@@ -1,4 +1,4 @@
-﻿using EPiServer.Social.Groups.Core;
+﻿using EPiServer.Social.Common;
 
 namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
@@ -8,6 +8,7 @@ namespace EPiServer.SocialAlloy.ExtensionData.Membership
     /// the group which is supports for moderating membership
     /// requests. This serves as an extension data added to workflows
     /// </summary>
+    [ExtensionData("12c0f517-091f-4d8c-bace-a9b7116a0a38")]
     public class MembershipModeration
     {
         /// <summary>

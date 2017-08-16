@@ -2,7 +2,6 @@
 using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
@@ -15,6 +14,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     {
         private readonly IRatingService ratingService;
         private readonly IRatingStatisticsService ratingStatisticsService;
+        private readonly RatingFilters ratingFilters;
+        private readonly RatingStatisticsFilters ratingStatisticsFilters;
 
         /// <summary>
         /// Constructor
@@ -23,6 +24,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             this.ratingService = ratingService;
             this.ratingStatisticsService = ratingStatisticsService;
+            this.ratingFilters = new RatingFilters();
+            this.ratingStatisticsFilters = new RatingStatisticsFilters();
         }
 
         /// <summary>
@@ -76,24 +79,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// the Social cloud services.</exception>
         public int? GetRating(PageRatingFilter filter)
         {
-            int? result = null;
-
             try
             {
-                var ratingPage = ratingService.Get(new Criteria<RatingFilter>()
-                {
-                    Filter = new RatingFilter()
+                var ratingPage = ratingService.Get(
+                    new Criteria
                     {
-                        Rater = Reference.Create(filter.Rater),
-                        Targets = new List<Reference> { Reference.Create(filter.Target) }
-                    },
-                    PageInfo = new PageInfo() { PageSize = 1 }
-                });
+                        Filter = this.ratingFilters.Rater.EqualTo(Reference.Create(filter.Rater)).And(
+                                 this.ratingFilters.Target.EqualTo(Reference.Create(filter.Target))),
+                        PageInfo = new PageInfo() { PageSize = 1 }
+                    }
+                );
 
+                int? result = null;
                 if (ratingPage.Results.Count() > 0)
                 {
                     result = ratingPage.Results.ToList().FirstOrDefault().Value.Value;
                 }
+
+                return result;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -111,8 +114,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return result;
         }
 
         /// <summary>
@@ -125,19 +126,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// the Social cloud services.</exception>
         public PageRatingStatistics GetRatingStatistics(string target)
         {
-            PageRatingStatistics result = null;
-
             try
             {
-                var ratingStatisticsPage = ratingStatisticsService.Get(new Criteria<RatingStatisticsFilter>()
-                {
-                    Filter = new RatingStatisticsFilter()
+                var ratingStatisticsPage = ratingStatisticsService.Get(
+                    new Criteria
                     {
-                        Targets = new List<Reference> { Reference.Create(target) }
-                    },
-                    PageInfo = new PageInfo() { PageSize = 1 }
-                });
+                        Filter = this.ratingStatisticsFilters.Target.EqualTo(Reference.Create(target)),
+                        PageInfo = new PageInfo() { PageSize = 1 }
+                    }
+                );
 
+                PageRatingStatistics result = null;
                 if (ratingStatisticsPage.Results.Count() > 0)
                 {
                     var statistics = ratingStatisticsPage.Results.ToList().FirstOrDefault();
@@ -145,11 +144,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     {
                         result = new PageRatingStatistics
                         {
-                            Average = (double)statistics.Sum/statistics.TotalCount,
+                            Average = (double)statistics.Sum / statistics.TotalCount,
                             TotalCount = statistics.TotalCount
                         };
                     }
                 }
+
+                return result;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -167,8 +168,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return result;
         }
     }
 }

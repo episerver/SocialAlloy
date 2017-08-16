@@ -1,8 +1,11 @@
-﻿namespace EPiServer.SocialAlloy.ExtensionData.Membership
+﻿using EPiServer.Social.Common;
+
+namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// Custom extension data used in saving of member details for members associated with groups.
     /// </summary>
+    [ExtensionData("e91bf596-4c1a-428e-9db5-ae61629b3987")]
     public class MemberExtensionData
     {
         /// <summary>

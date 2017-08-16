@@ -15,7 +15,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public class CommunityMemberRepository : ICommunityMemberRepository
     {
         private readonly IMemberService memberService;
-        private CommunityMemberAdapter communityMemberAdapter;
+        private readonly CommunityMemberAdapter communityMemberAdapter;
+        private readonly MemberFilters memberFilters;
 
         /// <summary>
         /// Constructor
@@ -24,6 +25,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             this.memberService = memberService;
             this.communityMemberAdapter = new CommunityMemberAdapter();
+            this.memberFilters = new MemberFilters();
         }
 
         /// <summary>
@@ -34,8 +36,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The added member.</returns>
         public CommunityMember Add(CommunityMember communityMember)
         {
-            CommunityMember addedSocialMember = null;
-
             try
             {
                 var userReference = Reference.Create(communityMember.User);
@@ -43,10 +43,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                 var member = new Member(userReference, groupId);
                 var extensionData = new MemberExtensionData(communityMember.Email, communityMember.Company);
                 var addedCompositeMember = this.memberService.Add<MemberExtensionData>(member, extensionData);
-                addedSocialMember = communityMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
-
+                var addedSocialMember = communityMemberAdapter.Adapt(addedCompositeMember.Data, addedCompositeMember.Extension);
                 if (addedSocialMember == null)
                     throw new SocialRepositoryException("The new member could not be added. Please try again");
+                return addedSocialMember;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -64,8 +64,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return addedSocialMember;
         }
 
         /// <summary>
@@ -75,14 +73,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The list of members that are part of the specified group.</returns>
         public IEnumerable<CommunityMember> Get(CommunityMemberFilter communityMemberFilter)
         {
-            IEnumerable<CommunityMember> returnedMembers = null;
-
             try
             {
-                var compositeFilter = BuildCriteria(communityMemberFilter);
+                var filter = BuildCriteria(communityMemberFilter);
 
-                var compositeMember = this.memberService.Get(compositeFilter).Results;
-                returnedMembers = compositeMember.Select(x => communityMemberAdapter.Adapt(x.Data, x.Extension));
+                var members = this.memberService.Get<MemberExtensionData>(filter).Results;
+                return members.Select(x => communityMemberAdapter.Adapt(x.Data, x.Extension));
             }
             catch (SocialAuthenticationException ex)
             {
@@ -100,41 +96,37 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return returnedMembers;
         }
 
         /// <summary>
-        /// Build the appropriate CompositeCriteria based the provided CommunityMemberFilter.
-        /// The member filter will either contain a group id or a logged in user id. If neitheris provided an exception is thrown.
+        /// Build the appropriate criteria based the provided CommunityMemberFilter.
+        /// The member filter will either contain a group id or a logged in user id. 
+        /// If neither is provided an exception is thrown.
         /// </summary>
         /// <param name="communityMemberFilter">The provided member filter</param>
         /// <returns>A composite criteria of type MemberFilter and MemberExtensionData</returns>
-        private CompositeCriteria<MemberFilter, MemberExtensionData> BuildCriteria(CommunityMemberFilter communityMemberFilter)
+        private Criteria BuildCriteria(CommunityMemberFilter communityMemberFilter)
         {
-            var pageInfo = new PageInfo { PageSize = communityMemberFilter.PageSize };
-            var orderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) };
-            var compositeCriteria = new CompositeCriteria<MemberFilter, MemberExtensionData>()
+            FilterExpression filter = null;
+            if (!string.IsNullOrEmpty(communityMemberFilter.CommunityId))
             {
-                PageInfo = pageInfo,
-                OrderBy = orderBy
-            };
-
-            if (!string.IsNullOrEmpty(communityMemberFilter.CommunityId) && (string.IsNullOrEmpty(communityMemberFilter.UserId)))
-            {
-                compositeCriteria.Filter = new MemberFilter { Group = GroupId.Create(communityMemberFilter.CommunityId) };
-
+                filter = this.memberFilters.Group.EqualTo(GroupId.Create(communityMemberFilter.CommunityId));
             }
-            else if ((!string.IsNullOrEmpty(communityMemberFilter.UserId) && (string.IsNullOrEmpty(communityMemberFilter.CommunityId))))
+            else if (!string.IsNullOrEmpty(communityMemberFilter.UserId))
             {
-                compositeCriteria.Filter = new MemberFilter { User = Reference.Create(communityMemberFilter.UserId) };
+                filter = this.memberFilters.User.EqualTo(Reference.Create(communityMemberFilter.UserId));
             }
             else
             {
                 throw new SocialException("This implementation of a CommunityMemberFilter should only contain either a CommunityId or a UserReference.");
             }
 
-            return compositeCriteria;
+            return new Criteria
+            {
+                PageInfo = new PageInfo { PageSize = communityMemberFilter.PageSize },
+                OrderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) },
+                Filter = filter
+            };
         }
     }
 }

@@ -14,6 +14,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
     public static class CommentExtensions
     {
         private static ICommentService service;
+        private static CommentFilters commentFilters;
+
         // Format specifiers for building target content and author strings used to form 
         // references in Episerver Social. 
         private const string userReferenceFormat = "user://{0}";
@@ -25,6 +27,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         static CommentExtensions()
         {
             service = ServiceLocator.Current.GetInstance<ICommentService>();
+            commentFilters = new CommentFilters();
         }
 
         /// <summary> 
@@ -38,18 +41,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         /// <returns> 
         /// Returns a page of comments.
         /// </returns> 
-        public static ResultPage<Comment> GetComments(this IContent content, Visibility visibile, int offset, int size)
+        public static ResultPage<Comment> GetComments(this IContent content, bool visibile, int offset, int size)
         {
             var targetReference = Reference.Create(
                   String.Format(resourceReferenceFormat, content.ContentGuid.ToString()));
 
-            var criteria = new Criteria<CommentFilter>
+            var criteria = new Criteria
             {
-                Filter = new CommentFilter
-                {
-                    Parent = targetReference,
-                    Visibility = visibile
-                },
+                Filter = commentFilters.Parent.EqualTo(targetReference).And(
+                         commentFilters.IsVisible.EqualTo(visibile)),
                 PageInfo = new PageInfo
                 {
                     PageOffset = offset,
@@ -61,7 +61,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
                     new SortInfo(CommentSortFields.Created, false)
                 }
             };
-
 
             return service.Get(criteria);
         }

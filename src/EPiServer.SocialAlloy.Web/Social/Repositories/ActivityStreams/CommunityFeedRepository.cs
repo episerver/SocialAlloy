@@ -17,6 +17,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         private readonly IFeedService feedService;
         private readonly IContentRepository contentRepository;
         private readonly ICommunityActivityAdapter activityAdapter;
+        private readonly FeedItemFilters feedItemFilters;
 
         /// <summary>
         /// Constructor
@@ -31,6 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             this.feedService = feedService;
             this.contentRepository = contentRepository;
             this.activityAdapter = adapter;
+            this.feedItemFilters = new FeedItemFilters();
         }
 
         /// <summary>
@@ -40,26 +42,21 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>A list of feed items.</returns>
         public IEnumerable<CommunityFeedItemViewModel> Get(CommunityFeedFilter filter)
         {
-            var feedItems = new List<Composite<FeedItem, CommunityActivity>>();
-
             try
             {
-                feedItems = this.feedService.Get(
-                    new CompositeCriteria<FeedItemFilter, CommunityActivity>
+                var feedItems = this.feedService.Get<CommunityActivity>(
+                    new Criteria
                     {
                         PageInfo = new PageInfo
                         {
                             PageSize = filter.PageSize
-                        },
-                        IncludeSubclasses = true,
-                        Filter = new FeedItemFilter
-                        {
-                            Subscriber = Reference.Create(filter.Subscriber)
-                        }
-                        ,
-                        OrderBy = { new SortInfo(FeedItemSortFields.ActivityDate, false) }
+                        }, 
+                        Filter = this.feedItemFilters.Subscriber.EqualTo(Reference.Create(filter.Subscriber)),
+                        OrderBy = { new SortInfo(FeedItemSortFields.ActivityDate, false) },
                     }
                 ).Results.ToList();
+
+                return AdaptFeedItems(feedItems);
             }
             catch (SocialAuthenticationException ex)
             {
@@ -77,11 +74,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return AdaptFeedItems(feedItems);
         }
 
-        private IEnumerable<CommunityFeedItemViewModel> AdaptFeedItems(List<Composite<FeedItem, CommunityActivity>> feedItems)
+        private IEnumerable<CommunityFeedItemViewModel> AdaptFeedItems(List<FeedItem<CommunityActivity>> feedItems)
         {
             return feedItems.Select(c => this.activityAdapter.Adapt(c));
         }

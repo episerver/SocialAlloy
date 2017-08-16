@@ -1,10 +1,13 @@
-﻿namespace EPiServer.SocialAlloy.ExtensionData.Membership
+﻿using EPiServer.Social.Common;
+
+namespace EPiServer.SocialAlloy.ExtensionData.Membership
 {
     /// <summary>
     /// The AddMemberRequest is a serializable class representing 
     /// a request for membership to a group. It is intended to
     /// support the moderation process around group membership.
     /// </summary>
+    [ExtensionData("f38f2d16-75b4-4e7b-a580-c0c03cd8a596")]
     public class AddMemberRequest : MemberExtensionData
     {
         /// <summary>
