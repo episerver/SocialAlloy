@@ -31,35 +31,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EPiServer.Social.Common, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.2.0.0-pre-000766\lib\EPiServer.Social.Common.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Common.2.0.0-pre-000802\lib\EPiServer.Social.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Common.Rest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000766\lib\EPiServer.Social.Common.Rest.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000802\lib\EPiServer.Social.Common.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Common.Rest.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000766\lib\EPiServer.Social.Common.Rest.Configuration.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000802\lib\EPiServer.Social.Common.Rest.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Common.Rest.Contracts, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000766\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Common.Rest.2.0.0-pre-000802\lib\EPiServer.Social.Common.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Groups, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000766\lib\EPiServer.Social.Groups.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000802\lib\EPiServer.Social.Groups.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Groups.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000766\lib\EPiServer.Social.Groups.Core.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000802\lib\EPiServer.Social.Groups.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Groups.Rest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000766\lib\EPiServer.Social.Groups.Rest.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000802\lib\EPiServer.Social.Groups.Rest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Social.Groups.Rest.Contracts, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000766\lib\EPiServer.Social.Groups.Rest.Contracts.dll</HintPath>
+      <HintPath>..\packages\EPiServer.Social.Groups.2.0.0-pre-000802\lib\EPiServer.Social.Groups.Rest.Contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
