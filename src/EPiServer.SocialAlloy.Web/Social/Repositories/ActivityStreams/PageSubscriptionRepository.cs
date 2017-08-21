@@ -108,8 +108,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 var removeSubscription = AdaptSubscription(subscription);
-
-                var subscriptionFilters = new SubscriptionFilters();
                 var subscriberFilter = subscriptionFilters.Subscriber.EqualTo(removeSubscription.Subscriber);
                 var targetFilter = subscriptionFilters.Target.EqualTo(removeSubscription.Target);
                 var typeFilter = subscriptionFilters.Type.EqualTo(removeSubscription.Type.Type);
@@ -142,8 +140,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The Episerver Social Subscription.</returns>
         private Subscription AdaptSubscription(PageSubscription subscription)
         {
-            return new Subscription(Reference.Create(subscription.Subscriber), 
-                                    Reference.Create(subscription.Target), 
+            return new Subscription(Reference.Create(subscription.Subscriber),
+                                    Reference.Create(subscription.Target),
                                     SubscriptionType.Create("Page"));
         }
 
@@ -171,15 +169,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The FilterExpression</returns>
         private FilterExpression AdaptSubscriptionFilter(PageSubscriptionFilter filter)
         {
-            var subscriberFilter = this.subscriptionFilters.Subscriber.EqualTo(
-                !string.IsNullOrWhiteSpace(filter.Subscriber) ? filter.Subscriber : ""
-            );
+            var filters = new List<FilterExpression>();
 
-            var targetFilter = this.subscriptionFilters.Target.EqualTo(
-                !string.IsNullOrWhiteSpace(filter.Target) ? filter.Target : ""
-            );
+            if (!string.IsNullOrWhiteSpace(filter.Subscriber))
+            {
+                filters.Add(this.subscriptionFilters.Subscriber.EqualTo(filter.Subscriber));
+            }
 
-            return new AndExpression(subscriberFilter, targetFilter);
+            if (!string.IsNullOrWhiteSpace(filter.Target))
+            {
+                filters.Add(this.subscriptionFilters.Target.EqualTo(filter.Target));
+            }
+
+            return (filters.Count > 1) ? new AndExpression(filters) : filters.FirstOrDefault();
         }
     }
 }

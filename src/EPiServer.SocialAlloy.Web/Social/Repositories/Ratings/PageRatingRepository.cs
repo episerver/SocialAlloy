@@ -2,6 +2,7 @@
 using EPiServer.Social.Ratings.Core;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;
 using EPiServer.SocialAlloy.Web.Social.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
@@ -79,13 +80,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// the Social cloud services.</exception>
         public int? GetRating(PageRatingFilter filter)
         {
+            var filters = new List<FilterExpression>();
+
+            if (!string.IsNullOrWhiteSpace(filter.Rater))
+            {
+                this.ratingFilters.Rater.EqualTo(Reference.Create(filter.Rater));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Target))
+            {
+                this.ratingFilters.Target.EqualTo(Reference.Create(filter.Target));
+            }
+
             try
             {
                 var ratingPage = ratingService.Get(
                     new Criteria
                     {
-                        Filter = this.ratingFilters.Rater.EqualTo(Reference.Create(filter.Rater)).And(
-                                 this.ratingFilters.Target.EqualTo(Reference.Create(filter.Target))),
+                        Filter = (filters.Count > 0) ? new AndExpression(filters) : null,
                         PageInfo = new PageInfo() { PageSize = 1 }
                     }
                 );
@@ -144,7 +156,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
                     {
                         result = new PageRatingStatistics
                         {
-                            Average = (double)statistics.Sum / statistics.TotalCount,
+                            Average = statistics.Mean,
                             TotalCount = statistics.TotalCount
                         };
                     }

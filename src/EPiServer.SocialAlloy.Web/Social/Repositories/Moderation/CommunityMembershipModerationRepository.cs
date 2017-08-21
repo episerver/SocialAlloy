@@ -23,6 +23,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         private readonly IUserRepository userRepository;
         private readonly CommunityMembershipWorkflowAdapter workflowAdapter;
         private readonly CommunityMemberAdapter memberAdapter;
+        private readonly WorkflowFilters workflowFilters;
         private readonly WorkflowItemFilters workflowitemFilters;
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             this.userRepository = userRepository;
             this.workflowAdapter = new CommunityMembershipWorkflowAdapter();
             this.memberAdapter = new CommunityMemberAdapter();
+            this.workflowFilters = new WorkflowFilters();
             this.workflowitemFilters = new WorkflowItemFilters();
         }
 
@@ -131,11 +133,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <returns>composite of WorkflowItem and AddMemberRequest</returns>
         private Composite<WorkflowItem, AddMemberRequest> GetComposite(string user, string group)
         {
-            //Construct a filter to return the desired target under moderation
-            var targetFilter = this.workflowitemFilters.Target.EqualTo(Reference.Create(CreateUri(group, user)));
+            // Construct the filters to apply to get the desired target under moderation
+            var filters = new List<FilterExpression>();
+
+            filters.Add(this.workflowitemFilters.Target.EqualTo(Reference.Create(CreateUri(group, user))));
+            filters.Add(this.workflowitemFilters.Extension.Type.Is<AddMemberRequest>());
+
             var filter = new Criteria
             {
-                Filter = targetFilter
+                Filter = new AndExpression(filters)
             };
 
             try
@@ -432,6 +438,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         {
             var criteria = new Criteria
             {
+                Filter = this.workflowFilters.Extension.Type.Is<MembershipModeration>(),
                 PageInfo = new PageInfo { PageSize = 30 }
             };
 
@@ -446,11 +453,14 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <returns>Collection of workflow items</returns>
         private IEnumerable<WorkflowItem<AddMemberRequest>> GetWorkflowItemsFor(Workflow workflow)
         {
-            var workflowFilter = this.workflowitemFilters.Workflow.EqualTo(workflow.Id);
+            var filters = new List<FilterExpression>();
+
+            filters.Add(this.workflowitemFilters.Workflow.EqualTo(workflow.Id));
+            filters.Add(this.workflowitemFilters.Extension.Type.Is<AddMemberRequest>());
 
             var criteria = new Criteria
             {
-                Filter = workflowFilter,
+                Filter = new AndExpression(filters),
                 PageInfo = new PageInfo { PageSize = 30 },   // Limit to 30 items                    
             };
 

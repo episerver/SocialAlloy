@@ -35,21 +35,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         /// of Comments posted for an IContent instance.  
         /// </summary> 
         /// <param name="content">A component stored in the content repository. Example: a product.</param> 
-        /// <param name="visible">The visibility filter by which to retrieve comments.</param>
+        /// <param name="visible">The visibility setting by which to retrieve comments.</param>
         /// <param name="offset">The zero-based start index of the comment to retrieve.</param> 
         /// <param name="size">The maximum number of comments to retreive.</param> 
         /// <returns> 
         /// Returns a page of comments.
         /// </returns> 
-        public static ResultPage<Comment> GetComments(this IContent content, bool visibile, int offset, int size)
+        public static ResultPage<Comment> GetComments(this IContent content, bool? visible, int offset, int size)
         {
+            var filters = new List<BinaryExpression>();
             var targetReference = Reference.Create(
                   String.Format(resourceReferenceFormat, content.ContentGuid.ToString()));
 
+            filters.Add(commentFilters.Parent.EqualTo(targetReference));
+
+            if (visible != null)
+            {
+                filters.Add(commentFilters.IsVisible.EqualTo(visible == true ? true : false));
+            }
+
             var criteria = new Criteria
             {
-                Filter = commentFilters.Parent.EqualTo(targetReference).And(
-                         commentFilters.IsVisible.EqualTo(visibile)),
+                Filter = new AndExpression(filters),
                 PageInfo = new PageInfo
                 {
                     PageOffset = offset,

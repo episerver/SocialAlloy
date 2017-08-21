@@ -113,13 +113,20 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 var groupIdList = communityIds.Select(x => GroupId.Create(x)).ToList();
                 var groupCount = groupIdList.Count();
+
+                var filters = new List<FilterExpression>();
+                filters.Add(this.groupFilters.Id.Any(groupIdList));
+                filters.Add(this.groupFilters.Extension.Type.Is<GroupExtensionData>());
+
                 var criteria = new Criteria
                 {
-                    Filter = this.groupFilters.Id.Any(groupIdList),
+                    Filter = new AndExpression(filters),
                     PageInfo = new PageInfo { PageSize = groupCount },
                     OrderBy = new List<SortInfo> { new SortInfo(GroupSortFields.Name, true) }
                 };
-                var groups = this.groupService.Get< GroupExtensionData>(criteria);
+
+                var groups = this.groupService.Get<GroupExtensionData>(criteria);
+
                 return groups.Results.Select(x => new Community(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();
             }
             catch (SocialAuthenticationException ex)

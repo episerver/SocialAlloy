@@ -107,25 +107,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>A composite criteria of type MemberFilter and MemberExtensionData</returns>
         private Criteria BuildCriteria(CommunityMemberFilter communityMemberFilter)
         {
-            FilterExpression filter = null;
+            var filters = new List<FilterExpression>();
+
             if (!string.IsNullOrEmpty(communityMemberFilter.CommunityId))
             {
-                filter = this.memberFilters.Group.EqualTo(GroupId.Create(communityMemberFilter.CommunityId));
+                filters.Add(this.memberFilters.Group.EqualTo(GroupId.Create(communityMemberFilter.CommunityId)));
             }
             else if (!string.IsNullOrEmpty(communityMemberFilter.UserId))
             {
-                filter = this.memberFilters.User.EqualTo(Reference.Create(communityMemberFilter.UserId));
+                filters.Add(this.memberFilters.User.EqualTo(Reference.Create(communityMemberFilter.UserId)));
             }
             else
             {
                 throw new SocialException("This implementation of a CommunityMemberFilter should only contain either a CommunityId or a UserReference.");
             }
 
+            filters.Add(this.memberFilters.Extension.Type.Is<MemberExtensionData>());
+
             return new Criteria
             {
+                Filter = new AndExpression(filters),
                 PageInfo = new PageInfo { PageSize = communityMemberFilter.PageSize },
-                OrderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) },
-                Filter = filter
+                OrderBy = new List<SortInfo> { new SortInfo(MemberSortFields.Id, false) }
             };
         }
     }
