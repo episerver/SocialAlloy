@@ -1,5 +1,4 @@
-﻿using EPiServer.Social.ActivityStreams.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Models;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
