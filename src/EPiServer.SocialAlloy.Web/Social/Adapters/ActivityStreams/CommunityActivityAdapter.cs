@@ -1,5 +1,4 @@
 ﻿using EPiServer.Social.ActivityStreams.Core;
-using EPiServer.Social.Common;
 using EPiServer.SocialAlloy.Web.Social.Models;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using System;
@@ -11,7 +10,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
     /// interpreting various types of Social activities in the Episerver Social sample and 
     /// converting them to a CommunityFeedItemViewModel.
     /// </summary>
-    public class CommunityActivityAdapter : ICommunityActivityAdapter
+    public class CommunityActivityAdapter
     {
         private CommunityFeedItemViewModel feedModel;
         private IUserRepository userRepository;
@@ -22,9 +21,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommunityActivityAdapter(IUserRepository userRepository, 
-                                     IContentRepository contentRepository,
-                                     IPageRepository pageRepository)
+        public CommunityActivityAdapter(IUserRepository userRepository, IPageRepository pageRepository)
         {
             this.userRepository = userRepository;
             this.pageRepository = pageRepository;
@@ -35,7 +32,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
         /// </summary>
         /// <param name="composite"></param>
         /// <returns></returns>
-        public CommunityFeedItemViewModel Adapt(Composite<FeedItem, CommunityActivity> composite)
+        public CommunityFeedItemViewModel Adapt(FeedItem<CommunityActivity> composite)
         {
             // Create and populate the CommunityFeedItemViewModel 
             feedModel = new CommunityFeedItemViewModel
@@ -47,45 +44,46 @@ namespace EPiServer.SocialAlloy.Web.Social.Adapters
             this.pageName = this.pageRepository.GetPageName(composite.Data.Target.Id);
 
             // Interpret the activity
-            composite.Extension.Accept(this);
+            feedModel.Heading = AdaptHeading(composite);
+            feedModel.Description = AdaptDescription(composite);
 
             return this.feedModel;
         }
 
-        #region ISocialActivityAdapter methods
-
-        /// <summary>
-        /// Interprets a PageCommentActivity
-        /// </summary>
-        /// <param name="activity">the PageCommentActivity to interpret</param>
-        public void Visit(PageCommentActivity activity)
+        private string AdaptHeading(FeedItem<CommunityActivity> feedItem)
         {
-            // Interpret activity and set description.
-            feedModel.Heading = String.Format("{0} commented on \"{1}\".", this.actor, pageName);
-            feedModel.Description = activity.Body;
+            var heading = "";
+            var activity = feedItem.Extension as CommunityActivity;
+
+            // if reviews were supported we may have done something like the following:
+            /*if (activity.commentBody != null && activity.ratingValue != null)
+            {
+                heading = String.Format("{0} reviewed \"{1}\".", feedItem.Data.Actor, pageName);
+            } else ...*/
+
+            if (activity.Body != null)
+            {
+                heading = String.Format($"{this.actor} commented on {this.pageName}");
+            }
+            else if (activity.Value != null)
+            {
+                heading = String.Format($"{this.actor} rated {this.pageName} with a {activity.Value}");
+            }
+
+            return heading;
         }
 
-        /// <summary>
-        /// Interprets a PageRatingActivity
-        /// </summary>
-        /// <param name="activity">the PageRatingActivity to interpret</param>
-        public void Visit(PageRatingActivity activity)
+        private string AdaptDescription(FeedItem<CommunityActivity> feedItem)
         {
-            // Interpret activity and set description.
-            feedModel.Heading = String.Format("{0} rated \"{1}\" with a {2}.", this.actor, pageName, activity.Value);
+            var description = "";
+            var activity = feedItem.Extension as CommunityActivity;
+
+            if (activity.Body != null)
+            {
+                description = activity.Body;
+            }
+
+            return description;
         }
-
-        /// <summary>
-        /// Interprets a CommunityActivity
-        /// </summary>
-        /// <param name="activity">the CommunityActivity to interpret</param>
-        public void Visit(CommunityActivity activity)
-        {
-            activity.Accept(this);
-        }
-
-        #endregion
-
-        
     }
 }

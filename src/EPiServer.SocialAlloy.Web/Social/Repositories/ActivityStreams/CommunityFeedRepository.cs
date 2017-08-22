@@ -13,25 +13,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     /// </summary>
     public class CommunityFeedRepository : ICommunityFeedRepository
     {
-        private readonly IUserRepository userRepository;
         private readonly IFeedService feedService;
-        private readonly IContentRepository contentRepository;
-        private readonly ICommunityActivityAdapter activityAdapter;
+        private readonly CommunityActivityAdapter activityAdapter;
         private readonly FeedItemFilters feedItemFilters;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userRepository">an instance of the user repository</param>
+        /// <param name="pageRepository">an instance of the page repository</param>
         /// <param name="feedService">an instance of the Social Feed Service</param>
-        /// <param name="contentRepository">an instance of the Episerver's content repository</param>
         /// <param name="adapter">an instance of the CommunityActivityAdapter</param>
-        public CommunityFeedRepository(IUserRepository userRepository, IFeedService feedService, IContentRepository contentRepository, ICommunityActivityAdapter adapter)
+        public CommunityFeedRepository(IUserRepository userRepository, 
+                                       IPageRepository pageRepository,
+                                       IFeedService feedService)
         {
-            this.userRepository = userRepository;
             this.feedService = feedService;
-            this.contentRepository = contentRepository;
-            this.activityAdapter = adapter;
+            this.activityAdapter = new CommunityActivityAdapter(userRepository, pageRepository);
             this.feedItemFilters = new FeedItemFilters();
         }
 
@@ -40,6 +38,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="filter">a filter by which to retrieve feed items by</param>
         /// <returns>A list of feed items.</returns>
+        /// <remarks>
+        /// This shows an important aspect of the social platform. Activity feeds were
+        /// generated using either a PageCommentActivity or PageRatingActivity model.
+        /// We can use a totally different model to retrieve the activity feed data.
+        /// The CommunityActivity has both a Body and Value property. The platform will
+        /// fill either property in the CommunityActivity model depending on what the
+        /// feed item is. If reviews were supported then the feed would contain both
+        /// pieces of data (a comment body and a rating value) and the platform would
+        /// have filled the output CommunityActivity model with both pieces of data.
+        /// </remarks>
         public IEnumerable<CommunityFeedItemViewModel> Get(CommunityFeedFilter filter)
         {
             try

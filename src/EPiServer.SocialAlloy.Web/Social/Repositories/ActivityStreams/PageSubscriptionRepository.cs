@@ -31,7 +31,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="subscription">The subscription to add.</param>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// Episerver Social Framework.</exception>
-        public void Add(PageSubscription subscription)
+        public void Add(PageActivitySubscription subscription)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="subscription">The subscription to remove.</param>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// Episerver Social cloud subscription repository.</exception>
-        public void Remove(PageSubscription subscription)
+        public void Remove(PageActivitySubscription subscription)
         {
             try
             {
@@ -134,26 +134,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adapt the application PageSubscription to the Episerver Social Subscription 
+        /// Adapt the application PageActivitySubscription to the Episerver Social Subscription 
         /// </summary>
-        /// <param name="subscription">The application's PageSubscription.</param>
+        /// <param name="subscription">The application's PageActivitySubscription.</param>
         /// <returns>The Episerver Social Subscription.</returns>
-        private Subscription AdaptSubscription(PageSubscription subscription)
+        private Subscription AdaptSubscription(PageActivitySubscription subscription)
         {
             return new Subscription(Reference.Create(subscription.Subscriber),
                                     Reference.Create(subscription.Target),
-                                    SubscriptionType.Create("Page"));
+                                    SubscriptionType.Create(typeof(PageActivity).Name));
         }
 
         /// <summary>
-        /// Adapt a list of Episerver Social Subscription to application's PageSubscription.
+        /// Adapt a list of Episerver Social Subscription to application's PageActivitySubscription.
         /// </summary>
         /// <param name="subscriptions">The list of Episerver Social Subscription.</param>
-        /// <returns>The list of application PageSubscription.</returns>
-        private IEnumerable<PageSubscription> AdaptSocialSubscription(List<Subscription> subscriptions)
+        /// <returns>The list of application PageActivitySubscription.</returns>
+        private IEnumerable<PageActivitySubscription> AdaptSocialSubscription(List<Subscription> subscriptions)
         {
             return subscriptions.Select(c =>
-                new PageSubscription
+                new PageActivitySubscription
                 {
                     Id = c.Id.ToString(),
                     Subscriber = c.Subscriber.ToString(),

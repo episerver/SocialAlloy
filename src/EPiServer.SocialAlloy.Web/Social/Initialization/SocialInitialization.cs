@@ -3,7 +3,6 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Business.Initialization;
-using EPiServer.SocialAlloy.Web.Social.Adapters;
 using EPiServer.SocialAlloy.Web.Social.Repositories;
 using EPiServer.SocialAlloy.Web.Social.Repositories.Moderation;
 using Microsoft.AspNet.Identity;
@@ -56,7 +55,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Initialization
             configuration.For<IPageCommentRepository>().Use<PageCommentRepository>();
             configuration.For<IPageRatingRepository>().Use<PageRatingRepository>();
             configuration.For<IPageSubscriptionRepository>().Use<PageSubscriptionRepository>();
-            configuration.For<ICommunityActivityAdapter>().Use<CommunityActivityAdapter>();
             configuration.For<ICommunityFeedRepository>().Use<CommunityFeedRepository>();
             configuration.For<ICommunityActivityRepository>().Use<CommunityActivityRepository>();
             configuration.For<ICommunityRepository>().Use<CommunityRepository>();

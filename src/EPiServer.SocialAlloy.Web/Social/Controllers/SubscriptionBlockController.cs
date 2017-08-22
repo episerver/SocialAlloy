@@ -89,7 +89,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Controllers
         /// <returns>The action result.</returns>
         private ActionResult HandleAction(string actionName, SubscriptionFormViewModel formViewModel)
         {
-            var subscription = new PageSubscription
+            var subscription = new PageActivitySubscription
             {
                 Subscriber = this.userRepository.GetUserId(this.User),
                 Target = this.pageRepository.GetPageId(formViewModel.CurrentPageLink),

@@ -131,7 +131,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="user">The user under moderation</param>
         /// <param name="group">The group that membership is being moderated</param>
         /// <returns>composite of WorkflowItem and AddMemberRequest</returns>
-        private Composite<WorkflowItem, AddMemberRequest> GetComposite(string user, string group)
+        private WorkflowItem<AddMemberRequest> GetComposite(string user, string group)
         {
             // Construct the filters to apply to get the desired target under moderation
             var filters = new List<FilterExpression>();

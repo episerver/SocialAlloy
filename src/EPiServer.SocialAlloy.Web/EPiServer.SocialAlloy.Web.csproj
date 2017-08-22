@@ -431,6 +431,7 @@
     <Compile Include="Social\Controllers\ProfilePageController.cs" />
     <Compile Include="Social\Initialization\SocialContentSeeding.cs" />
     <Compile Include="Social\Initialization\SocialInitializationEvents.cs" />
+    <Compile Include="Social\Models\ActivityStreams\PageActivity.cs" />
     <Compile Include="Social\Models\Groups\CommunityMemberViewModel.cs" />
     <Compile Include="Social\Models\Groups\MembershipAffiliationBlockViewModel.cs" />
     <Compile Include="Social\Pages\CommunityPage.cs" />
@@ -540,8 +541,6 @@
     <Compile Include="Social\Models\Groups\GroupAdmissionBlockViewModel.cs" />
     <Compile Include="Social\Models\Groups\GroupCreationBlockViewModel.cs" />
     <Compile Include="Social\Models\ActivityStreams\FeedBlockViewModel.cs" />
-    <Compile Include="Social\Models\ActivityStreams\ICommunityActivity.cs" />
-    <Compile Include="Social\Adapters\ActivityStreams\ICommunityActivityAdapter.cs" />
     <Compile Include="Social\Models\Ratings\RatingFormViewModel.cs" />
     <Compile Include="Social\Models\Ratings\RatingBlockViewModel.cs" />
     <Compile Include="Social\Models\Comments\CommentFormViewModel.cs" />
@@ -691,7 +690,9 @@
     <Content Include="Static\jwplayer\video.mp4" />
     <Content Include="Views\Web.config" />
     <Content Include="Global.asax" />
-    <None Include="EPiServerLog.config" />
+    <None Include="EPiServerLog.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
