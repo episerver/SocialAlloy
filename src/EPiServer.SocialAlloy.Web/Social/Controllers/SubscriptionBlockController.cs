@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using EPiServer.SocialAlloy.Web.Social.Blocks;
 using EPiServer.SocialAlloy.Web.Social.Common.Controllers;
 using EPiServer.SocialAlloy.Web.Social.Common.Exceptions;

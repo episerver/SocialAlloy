@@ -15,10 +15,5 @@
         /// The maximum number of activity feed items to retrieve.
         /// </summary>
         public int PageSize { get; set; }
-
-        /// <summary>
-        /// The offset to start retrieving the next page of activity feed items from.
-        /// </summary>
-        public int PageOffset { get; set; }
     }
 }

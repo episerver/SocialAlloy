@@ -27,6 +27,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Models
             SendActivity = block.SendActivity;
             CurrentPageLink = pageReference;
         }
+
         /// <summary>
         /// Gets or sets the reference link of the page containing the comment form.
         /// </summary>
