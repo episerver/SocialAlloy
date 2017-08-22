@@ -43,7 +43,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         /// </returns> 
         public static ResultPage<Comment> GetComments(this IContent content, bool? visible, int offset, int size)
         {
-            var filters = new List<BinaryExpression>();
+            var filters = new List<FilterExpression>();
             var targetReference = Reference.Create(
                   String.Format(resourceReferenceFormat, content.ContentGuid.ToString()));
 
