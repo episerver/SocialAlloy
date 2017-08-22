@@ -52,14 +52,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             try
             {
+                // Only get feed items that match the specified subscriber
+                var subscriberFilter = this.feedItemFilters.Subscriber.EqualTo(Reference.Create(filter.Subscriber));
+
+                // Also ensure that only feed for page activities are retrieved
+                var pageCommentActivityTypeIdFilter = this.feedItemFilters.Extension.Type.Is(PageCommentActivity.TypeId);
+                var pageRatingActivityTypeIdFilter = this.feedItemFilters.Extension.Type.Is(PageRatingActivity.TypeId);
+                var typeIdFilter = new OrExpression(pageCommentActivityTypeIdFilter, pageRatingActivityTypeIdFilter);
+
+                // The final filter...
+                var feedItemFilter = new AndExpression(subscriberFilter, typeIdFilter);
+
                 var feedItems = this.feedService.Get<CommunityActivity>(
                     new Criteria
                     {
-                        PageInfo = new PageInfo
-                        {
-                            PageSize = filter.PageSize
-                        }, 
-                        Filter = this.feedItemFilters.Subscriber.EqualTo(Reference.Create(filter.Subscriber)),
+                        Filter = feedItemFilter,
+                        PageInfo = new PageInfo { PageSize = filter.PageSize }, 
                         OrderBy = { new SortInfo(FeedItemSortFields.ActivityDate, false) },
                     }
                 ).Results.ToList();
