@@ -146,7 +146,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
 
             try
             {
-                //retrieve the first workflow that matches the target filter 
+                // Retrieve the first workflow that matches the target filter 
                 return this.workflowItemService.Get<AddMemberRequest>(filter).Results.LastOrDefault();
             }
             catch (SocialAuthenticationException ex)
@@ -364,10 +364,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         {
             try
             {
-                IEnumerable<Workflow<MembershipModeration>> workflows = Enumerable.Empty<Workflow<MembershipModeration>>();
-
-                var workflowFilters = new FieldExpressionBuilder<MembershipModeration>();
-                var filterWorkflowsByGroup = workflowFilters.Create(f => f.Group).EqualTo(group);
+                var filterWorkflowsByGroup = this.workflowFilters.Extension.Field<MembershipModeration>(f => f.Group).EqualTo(group);
                 var criteria = new Criteria
                 {
                     PageInfo = new PageInfo { PageSize = 1 },
@@ -375,7 +372,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                 };
 
                 CommunityMembershipWorkflow expectedSocialWorkflow = null;
-                workflows = this.workflowService.Get<MembershipModeration>(criteria).Results;
+                var workflows = this.workflowService.Get<MembershipModeration>(criteria).Results;
                 if (workflows.Count() > 0)
                 {
                     var workflow = workflows.First().Data;

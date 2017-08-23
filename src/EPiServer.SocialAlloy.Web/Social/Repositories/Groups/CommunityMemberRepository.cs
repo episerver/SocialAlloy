@@ -99,12 +99,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Build the appropriate criteria based the provided CommunityMemberFilter.
+        /// Build the appropriate criteria based on the provided CommunityMemberFilter.
         /// The member filter will either contain a group id or a logged in user id. 
         /// If neither is provided an exception is thrown.
         /// </summary>
         /// <param name="communityMemberFilter">The provided member filter</param>
-        /// <returns>A composite criteria of type MemberFilter and MemberExtensionData</returns>
+        /// <returns>A Criteria</returns>
         private Criteria BuildCriteria(CommunityMemberFilter communityMemberFilter)
         {
             var filters = new List<FilterExpression>();
