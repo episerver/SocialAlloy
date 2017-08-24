@@ -51,7 +51,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
 
             if (visible != null)
             {
-                filters.Add(commentFilters.IsVisible.EqualTo(visible == true ? true : false));
+                filters.Add(commentFilters.IsVisible.EqualTo(visible.Value));
             }
 
             var criteria = new Criteria

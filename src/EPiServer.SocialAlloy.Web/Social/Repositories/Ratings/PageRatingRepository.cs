@@ -84,12 +84,12 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
 
             if (!string.IsNullOrWhiteSpace(filter.Rater))
             {
-                this.ratingFilters.Rater.EqualTo(Reference.Create(filter.Rater));
+                filters.Add(this.ratingFilters.Rater.EqualTo(Reference.Create(filter.Rater)));
             }
 
             if (!string.IsNullOrWhiteSpace(filter.Target))
             {
-                this.ratingFilters.Target.EqualTo(Reference.Create(filter.Target));
+                filters.Add(this.ratingFilters.Target.EqualTo(Reference.Create(filter.Target)));
             }
 
             try
