@@ -15,6 +15,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     {
         private readonly IUserRepository userRepository;
         private readonly ICommentService commentService;
+        private readonly CommentFilters commentFilters;
 
         /// <summary>
         /// Constructor
@@ -23,6 +24,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         {
             this.userRepository = userRepository;
             this.commentService = commentService;
+            this.commentFilters = new CommentFilters();
         }
 
         /// <summary>
@@ -76,16 +78,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             try
             {
                 comments = this.commentService.Get(
-                    new Criteria<CommentFilter>
+                    new Criteria
                     {
                         PageInfo = new PageInfo
                         {
                             PageSize = filter.PageSize
                         },
-                        Filter = new CommentFilter
-                        {
-                            Parent = parent
-                        },
+                        Filter = this.commentFilters.Parent.EqualTo(parent),
                         OrderBy = { new SortInfo(CommentSortFields.Created, false) }
                     }
                 ).Results.ToList();

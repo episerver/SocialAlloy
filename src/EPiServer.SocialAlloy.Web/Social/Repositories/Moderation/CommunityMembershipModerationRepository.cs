@@ -21,8 +21,10 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         private readonly IWorkflowItemService workflowItemService;
         private readonly ICommunityMemberRepository memberRepository;
         private readonly IUserRepository userRepository;
-        private CommunityMembershipWorkflowAdapter workflowAdapter;
-        private CommunityMemberAdapter memberAdapter;
+        private readonly CommunityMembershipWorkflowAdapter workflowAdapter;
+        private readonly CommunityMemberAdapter memberAdapter;
+        private readonly WorkflowFilters workflowFilters;
+        private readonly WorkflowItemFilters workflowitemFilters;
 
         /// <summary>
         /// Constructor
@@ -38,6 +40,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             this.userRepository = userRepository;
             this.workflowAdapter = new CommunityMembershipWorkflowAdapter();
             this.memberAdapter = new CommunityMemberAdapter();
+            this.workflowFilters = new WorkflowFilters();
+            this.workflowitemFilters = new WorkflowItemFilters();
         }
 
         /// <summary>
@@ -127,18 +131,23 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <param name="user">The user under moderation</param>
         /// <param name="group">The group that membership is being moderated</param>
         /// <returns>composite of WorkflowItem and AddMemberRequest</returns>
-        private Composite<WorkflowItem, AddMemberRequest> GetComposite(string user, string group)
+        private WorkflowItem<AddMemberRequest> GetComposite(string user, string group)
         {
-            Composite<WorkflowItem, AddMemberRequest> memberRequest = null;
+            // Construct the filters to apply to get the desired target under moderation
+            var filters = new List<FilterExpression>();
 
-            //Construct a filter to return the desired target under moderation
-            var filter = new CompositeCriteria<WorkflowItemFilter, AddMemberRequest>();
-            filter.Filter.Target = Reference.Create(CreateUri(group, user));
+            filters.Add(this.workflowitemFilters.Target.EqualTo(Reference.Create(CreateUri(group, user))));
+            filters.Add(this.workflowitemFilters.Extension.Type.Is<AddMemberRequest>());
+
+            var filter = new Criteria
+            {
+                Filter = new AndExpression(filters)
+            };
 
             try
             {
-                //retrieve the first workflow that matches the target filter 
-                memberRequest =  this.workflowItemService.Get(filter).Results.LastOrDefault();
+                // Retrieve the first workflow that matches the target filter 
+                return this.workflowItemService.Get<AddMemberRequest>(filter).Results.LastOrDefault();
             }
             catch (SocialAuthenticationException ex)
             {
@@ -156,8 +165,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return memberRequest;
         }
 
         /// <summary>
@@ -250,26 +257,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
 
             var memberRequest = memberAdapter.Adapt(member);
 
-                try
-                {
-                    this.workflowItemService.Add(workflowItem, memberRequest);
-                }
-                catch (SocialAuthenticationException ex)
-                {
-                    throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
-                }
-                catch (MaximumDataSizeExceededException ex)
-                {
-                    throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
-                }
-                catch (SocialCommunicationException ex)
-                {
-                    throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
-                }
-                catch (SocialException ex)
-                {
-                    throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
-                }
+            try
+            {
+                this.workflowItemService.Add(workflowItem, memberRequest);
+            }
+            catch (SocialAuthenticationException ex)
+            {
+                throw new SocialRepositoryException("The application failed to authenticate with Episerver Social.", ex);
+            }
+            catch (MaximumDataSizeExceededException ex)
+            {
+                throw new SocialRepositoryException("The application request was deemed too large for Episerver Social.", ex);
+            }
+            catch (SocialCommunicationException ex)
+            {
+                throw new SocialRepositoryException("The application failed to communicate with Episerver Social.", ex);
+            }
+            catch (SocialException ex)
+            {
+                throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
+            }
         }
 
         /// <summary>
@@ -302,8 +309,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
                     // the specified action.
 
                     //retrieve the current state of the workflow item once the begintransitionsession begins.
-                    var filter = new WorkflowItemFilter { Target = requestReference };
-                    var criteria = new Criteria<WorkflowItemFilter> { Filter = filter };
+                    var targetFilter = this.workflowitemFilters.Target.EqualTo(requestReference);
+                    var criteria = new Criteria { Filter = targetFilter };
                     var workflowItem = this.workflowItemService.Get(criteria).Results.Last();
 
                     // Example: Current State: "Pending", Action: "Approve" => Transitioned State: "Approved"
@@ -355,27 +362,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <returns>Moderation workflow supporting the specified group</returns>
         private CommunityMembershipWorkflow GetWorkflowFor(string group)
         {
-            CommunityMembershipWorkflow expectedSocialWorkflow = null;
-            IEnumerable<Composite<Workflow, MembershipModeration>> listOfWorkflow = Enumerable.Empty<Composite<Workflow, MembershipModeration>>();
-
-            var filterWorkflowsByGroup =
-                FilterExpressionBuilder<MembershipModeration>.Field(m => m.Group)
-                                                             .EqualTo(group);
-
-            var criteria = new CompositeCriteria<WorkflowFilter, MembershipModeration>
-            {
-                PageInfo = new PageInfo { PageSize = 1 },
-                ExtensionFilter = filterWorkflowsByGroup
-            };
-
             try
             {
-                listOfWorkflow = this.workflowService.Get(criteria).Results;
-                if (listOfWorkflow.Count() > 0)
+                var filterWorkflowsByGroup = this.workflowFilters.Extension.Field<MembershipModeration>(f => f.Group).EqualTo(group);
+                var criteria = new Criteria
                 {
-                    var workflow = listOfWorkflow.First().Data;
+                    PageInfo = new PageInfo { PageSize = 1 },
+                    Filter = filterWorkflowsByGroup
+                };
+
+                CommunityMembershipWorkflow expectedSocialWorkflow = null;
+                var workflows = this.workflowService.Get<MembershipModeration>(criteria).Results;
+                if (workflows.Count() > 0)
+                {
+                    var workflow = workflows.First().Data;
                     expectedSocialWorkflow = new CommunityMembershipWorkflow(workflow.Id.Id, workflow.Name, workflow.InitialState.Name);
                 }
+
+                return expectedSocialWorkflow;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -393,8 +397,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return expectedSocialWorkflow;
         }
 
         /// <summary>
@@ -431,12 +433,13 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// <returns>Collection of workflows</returns>
         private IEnumerable<Workflow> GetWorkflows()
         {
-            var criteria = new CompositeCriteria<WorkflowFilter, MembershipModeration>
+            var criteria = new Criteria
             {
+                Filter = this.workflowFilters.Extension.Type.Is<MembershipModeration>(),
                 PageInfo = new PageInfo { PageSize = 30 }
             };
 
-            return this.workflowService.Get(criteria).Results.Select(x => x.Data);
+            return this.workflowService.Get<MembershipModeration>(criteria).Results.Select(x => x.Data);
         }
 
         /// <summary>
@@ -445,36 +448,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories.Moderation
         /// </summary>
         /// <param name="workflow">Workflow from which to retrieve items</param>
         /// <returns>Collection of workflow items</returns>
-        private IEnumerable<Composite<WorkflowItem, AddMemberRequest>> GetWorkflowItemsFor(Workflow workflow)
+        private IEnumerable<WorkflowItem<AddMemberRequest>> GetWorkflowItemsFor(Workflow workflow)
         {
-            IEnumerable<Composite<WorkflowItem, AddMemberRequest>> items;
+            var filters = new List<FilterExpression>();
 
-            if (workflow == null)
+            filters.Add(this.workflowitemFilters.Workflow.EqualTo(workflow.Id));
+            filters.Add(this.workflowitemFilters.Extension.Type.Is<AddMemberRequest>());
+
+            var criteria = new Criteria
             {
-                items = new List<Composite<WorkflowItem, AddMemberRequest>>();
-            }
-            else
-            {
-                var criteria = new CompositeCriteria<WorkflowItemFilter, AddMemberRequest>
-                {
-                    Filter = new WorkflowItemFilter
-                    {
-                        ExcludeHistoricalItems = true,      // Include only the current state for the requests
-                        Workflow = workflow.Id,             // Include only items for the selected group's workflow
-                    },
-                    PageInfo = new PageInfo { PageSize = 30 },   // Limit to 30 items                    
-                };
+                Filter = new AndExpression(filters),
+                PageInfo = new PageInfo { PageSize = 30 },   // Limit to 30 items                    
+            };
 
-                // Order the results alphabetically by their state and then
-                // by the date on which they were created.
+            // Order the results alphabetically by their state and then
+            // by the date on which they were created.
 
-                criteria.OrderBy.Add(new SortInfo(WorkflowItemSortFields.State, true));
-                criteria.OrderBy.Add(new SortInfo(WorkflowItemSortFields.Created, true));
+            criteria.OrderBy.Add(new SortInfo(WorkflowItemSortFields.State, true));
+            criteria.OrderBy.Add(new SortInfo(WorkflowItemSortFields.Created, true));
 
-                items = this.workflowItemService.Get(criteria).Results;
-            }
-
-            return items;
+            return this.workflowItemService.GetCurrent<AddMemberRequest>(criteria).Results;
         }
 
         /// <summary>

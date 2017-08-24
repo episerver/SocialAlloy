@@ -22,20 +22,46 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
+        /// Adds a page comment activity to the Episerver Social Activity Streams system.
+        /// </summary>
+        /// <param name="actor">the actor who initiated the activity</param>
+        /// <param name="target">the target of the activity</param>
+        /// <param name="activity">an instance of PageCommentActivity</param>
+        /// <exception cref="SocialRepositoryException">Thrown when errors occur 
+        /// interacting with the Social cloud services.</exception>
+        public void Add(string actor, string target, PageCommentActivity activity)
+        {
+            this.AddActivity(actor, target, activity);
+        }
+
+        /// <summary>
+        /// Adds a page rating activity to the Episerver Social Activity Streams system.
+        /// </summary>
+        /// <param name="actor">the actor who initiated the activity</param>
+        /// <param name="target">the target of the activity</param>
+        /// <param name="activity">an instance of PageRatingActivity</param>
+        /// <exception cref="SocialRepositoryException">Thrown when errors occur 
+        /// interacting with the Social cloud services.</exception>
+        public void Add(string actor, string target, PageRatingActivity activity)
+        {
+            this.AddActivity(actor, target, activity);
+        }
+
+        /// <summary>
         /// Adds an activity to the Episerver Social Activity Streams system.
         /// </summary>
         /// <param name="actor">the actor who initiated the activity</param>
         /// <param name="target">the target of the activity</param>
-        /// <param name="activity">an instance of CommunityActivity</param>
+        /// <param name="activity">the page activity data</param>
         /// <exception cref="SocialRepositoryException">Thrown when errors occur 
         /// interacting with the Social cloud services.</exception>
-        public void Add(string actor, string target, CommunityActivity activity)
+        private void AddActivity(string actor, string target, PageActivity activity)
         {
             try
             {
-                service.Add(new Activity(
-                                Reference.Create(actor),
-                                Reference.Create(target)), activity
+                service.Add(
+                    new Activity(Reference.Create(actor),Reference.Create(target)), 
+                    activity
                 );
             }
             catch (SocialAuthenticationException ex)

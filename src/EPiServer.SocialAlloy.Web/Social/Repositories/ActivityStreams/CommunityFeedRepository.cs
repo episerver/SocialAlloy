@@ -13,24 +13,24 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     /// </summary>
     public class CommunityFeedRepository : ICommunityFeedRepository
     {
-        private readonly IUserRepository userRepository;
         private readonly IFeedService feedService;
-        private readonly IContentRepository contentRepository;
-        private readonly ICommunityActivityAdapter activityAdapter;
+        private readonly CommunityActivityAdapter activityAdapter;
+        private readonly FeedItemFilters feedItemFilters;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userRepository">an instance of the user repository</param>
+        /// <param name="pageRepository">an instance of the page repository</param>
         /// <param name="feedService">an instance of the Social Feed Service</param>
-        /// <param name="contentRepository">an instance of the Episerver's content repository</param>
         /// <param name="adapter">an instance of the CommunityActivityAdapter</param>
-        public CommunityFeedRepository(IUserRepository userRepository, IFeedService feedService, IContentRepository contentRepository, ICommunityActivityAdapter adapter)
+        public CommunityFeedRepository(IUserRepository userRepository, 
+                                       IPageRepository pageRepository,
+                                       IFeedService feedService)
         {
-            this.userRepository = userRepository;
             this.feedService = feedService;
-            this.contentRepository = contentRepository;
-            this.activityAdapter = adapter;
+            this.activityAdapter = new CommunityActivityAdapter(userRepository, pageRepository);
+            this.feedItemFilters = new FeedItemFilters();
         }
 
         /// <summary>
@@ -38,28 +38,41 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// </summary>
         /// <param name="filter">a filter by which to retrieve feed items by</param>
         /// <returns>A list of feed items.</returns>
+        /// <remarks>
+        /// This shows an important aspect of the social platform. Activity feeds were
+        /// generated using either a PageCommentActivity or PageRatingActivity model.
+        /// We can use a totally different model to retrieve the activity feed data.
+        /// The CommunityActivity has both a Body and Value property. The platform will
+        /// fill either property in the CommunityActivity model depending on what the
+        /// feed item is. If reviews were supported then the feed would contain both
+        /// pieces of data (a comment body and a rating value) and the platform would
+        /// have filled the output CommunityActivity model with both pieces of data.
+        /// </remarks>
         public IEnumerable<CommunityFeedItemViewModel> Get(CommunityFeedFilter filter)
         {
-            var feedItems = new List<Composite<FeedItem, CommunityActivity>>();
-
             try
             {
-                feedItems = this.feedService.Get(
-                    new CompositeCriteria<FeedItemFilter, CommunityActivity>
+                // Only get feed items that match the specified subscriber
+                var subscriberFilter = this.feedItemFilters.Subscriber.EqualTo(Reference.Create(filter.Subscriber));
+
+                // Also ensure that only feed for page activities are retrieved
+                var pageCommentActivityTypeIdFilter = this.feedItemFilters.Extension.Type.Is(PageCommentActivity.TypeId);
+                var pageRatingActivityTypeIdFilter = this.feedItemFilters.Extension.Type.Is(PageRatingActivity.TypeId);
+                var typeIdFilter = new OrExpression(pageCommentActivityTypeIdFilter, pageRatingActivityTypeIdFilter);
+
+                // The final filter...
+                var feedItemFilter = new AndExpression(subscriberFilter, typeIdFilter);
+
+                var feedItems = this.feedService.Get<CommunityActivity>(
+                    new Criteria
                     {
-                        PageInfo = new PageInfo
-                        {
-                            PageSize = filter.PageSize
-                        },
-                        IncludeSubclasses = true,
-                        Filter = new FeedItemFilter
-                        {
-                            Subscriber = Reference.Create(filter.Subscriber)
-                        }
-                        ,
-                        OrderBy = { new SortInfo(FeedItemSortFields.ActivityDate, false) }
+                        Filter = feedItemFilter,
+                        PageInfo = new PageInfo { PageSize = filter.PageSize }, 
+                        OrderBy = { new SortInfo(FeedItemSortFields.ActivityDate, false) },
                     }
                 ).Results.ToList();
+
+                return AdaptFeedItems(feedItems);
             }
             catch (SocialAuthenticationException ex)
             {
@@ -77,11 +90,9 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return AdaptFeedItems(feedItems);
         }
 
-        private IEnumerable<CommunityFeedItemViewModel> AdaptFeedItems(List<Composite<FeedItem, CommunityActivity>> feedItems)
+        private IEnumerable<CommunityFeedItemViewModel> AdaptFeedItems(List<FeedItem<CommunityActivity>> feedItems)
         {
             return feedItems.Select(c => this.activityAdapter.Adapt(c));
         }

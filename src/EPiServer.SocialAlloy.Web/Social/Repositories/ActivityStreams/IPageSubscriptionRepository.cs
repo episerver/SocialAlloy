@@ -1,5 +1,4 @@
-﻿using EPiServer.Social.ActivityStreams.Core;
-using EPiServer.SocialAlloy.Web.Social.Models;
+﻿using EPiServer.SocialAlloy.Web.Social.Models;
 
 namespace EPiServer.SocialAlloy.Web.Social.Repositories
 {
@@ -16,7 +15,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The added subscription.</returns>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// social subscription repository.</exception>
-        void Add(PageSubscription subscription);
+        void Add(PageActivitySubscription subscription);
 
         /// <summary>
         /// Gets whether subscriptions exist in the social subscription repository that match a filter.
@@ -33,6 +32,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="subscription">The subscription to remove.</param>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// social subscription repository.</exception>
-        void Remove(PageSubscription subscription);
+        void Remove(PageActivitySubscription subscription);
     }
 }

@@ -1,18 +1,27 @@
-﻿using EPiServer.SocialAlloy.Web.Social.Adapters;
-using System;
-
-namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
-    /// Represents a base class for all types of community activities in the site.
+    /// Represents community activities on pages in the site.
     /// </summary>
-    public abstract class CommunityActivity : ICommunityActivity
+    public class CommunityActivity
     {
         /// <summary>
-        /// Accepts an ICommunityActivityAdapter instance capable of interpreting this activity instance.
+        /// Constructor
         /// </summary>
-        /// <param name="adapter">an instance of ICommunityActivityAdapter</param>
-        public abstract void Accept(ICommunityActivityAdapter adapter);
-    }
+        public CommunityActivity()
+        {
+            this.Body = null;
+            this.Value = null;
+        }
 
+        /// <summary>
+        /// Gets or sets the body of a page comment activity.
+        /// </summary>
+        public string Body;
+
+        /// <summary>
+        /// Gets or sets the value of a page rating activity.
+        /// </summary>
+        public int? Value;
+    }
 }

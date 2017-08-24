@@ -1,9 +1,9 @@
 ﻿namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
-    /// The PageSubscription class describes a subscription model used by the SocialAlloy site.
+    /// The PageActivitySubscription class describes a page subscription model used by the SocialAlloy site.
     /// </summary>
-    public class PageSubscription
+    public class PageActivitySubscription
     {
         /// <summary>
         /// Gets or sets the subscription Id.

@@ -1,9 +1,6 @@
 ﻿using EPiServer.SocialAlloy.Web.Social.Blocks.Groups;
 using EPiServer.SocialAlloy.Web.Social.Common.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EPiServer.SocialAlloy.Web.Social.Models.Groups
 {

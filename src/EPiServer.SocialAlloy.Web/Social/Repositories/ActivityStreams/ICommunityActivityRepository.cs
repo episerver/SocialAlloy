@@ -8,11 +8,19 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public interface ICommunityActivityRepository
     {
         /// <summary>
-        /// Adds an activity.
+        /// Adds a page comment activity.
         /// </summary>
         /// <param name="actor">the actor who initiated the activity</param>
         /// <param name="target">the target of the activity</param>
-        /// <param name="activity">an instance of CommunityActivity</param>
-        void Add(string actor, string target, CommunityActivity activity);
+        /// <param name="activity">an instance of PageCommentActivity</param>
+        void Add(string actor, string target, PageCommentActivity activity);
+
+        /// <summary>
+        /// Adds a page rating activity.
+        /// </summary>
+        /// <param name="actor">the actor who initiated the activity</param>
+        /// <param name="target">the target of the activity</param>
+        /// <param name="activity">an instance of PageRatingActivity</param>
+        void Add(string actor, string target, PageRatingActivity activity);
     }
 }

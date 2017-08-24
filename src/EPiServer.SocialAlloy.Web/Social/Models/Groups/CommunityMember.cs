@@ -1,7 +1,4 @@
-﻿using EPiServer.Social.Common;
-using EPiServer.Social.Groups.Core;
-
-namespace EPiServer.SocialAlloy.Web.Social.Models
+﻿namespace EPiServer.SocialAlloy.Web.Social.Models
 {
     /// <summary>
     /// The CommunityMember describes a relationship

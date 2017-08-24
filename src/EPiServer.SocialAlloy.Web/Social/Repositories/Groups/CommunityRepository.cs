@@ -14,6 +14,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public class CommunityRepository : ICommunityRepository
     {
         private readonly IGroupService groupService;
+        private readonly GroupFilters groupFilters;
 
         /// <summary>
         /// Constructor
@@ -21,6 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         public CommunityRepository(IGroupService groupService)
         {
             this.groupService = groupService;
+            this.groupFilters = new GroupFilters();
         }
 
         /// <summary>
@@ -30,15 +32,15 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The added community.</returns>
         public Community Add(Community community)
         {
-            Composite<Group, GroupExtensionData> addedGroup = null;
-
             try
             {
                 var group = new Group(community.Name, community.Description);
                 var extension = new GroupExtensionData(community.PageLink);
-                addedGroup = this.groupService.Add<GroupExtensionData>(group, extension);
+                var addedGroup = this.groupService.Add<GroupExtensionData>(group, extension);
                 if (addedGroup == null)
                     throw new SocialRepositoryException("The new community could not be added. Please try again");
+
+                return new Community(addedGroup.Data.Id.Id, addedGroup.Data.Name, addedGroup.Data.Description, addedGroup.Extension.PageLink);
             }
             catch (SocialAuthenticationException ex)
             {
@@ -56,8 +58,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return new Community(addedGroup.Data.Id.Id, addedGroup.Data.Name, addedGroup.Data.Description, addedGroup.Extension.PageLink);
         }
 
         /// <summary>
@@ -67,20 +67,22 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The requested community.</returns>
         public Community Get(string communityName)
         {
-            Community community = null;
-
             try
             {
-                var criteria = new Criteria<GroupFilter>
+                var criteria = new Criteria
                 {
-                    Filter = new GroupFilter { Name = communityName },
+                    Filter = this.groupFilters.Name.EqualTo(communityName),
                     PageInfo = new PageInfo { PageSize = 1, PageOffset = 0 }
                 };
+
+                Community community = null;
                 var group = this.groupService.Get(criteria).Results.FirstOrDefault();
                 if (group != null)
                 {
                     community = new Community(group.Id.Id, group.Name, group.Description);
                 }
+
+                return community;
             }
             catch (SocialAuthenticationException ex)
             {
@@ -98,8 +100,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return community;
         }
 
         /// <summary>
@@ -109,19 +109,25 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The requested groups.</returns>
         public List<Community> Get(List<string> communityIds)
         {
-            List<Community> socialGroups = new List<Community>();
             try
             {
                 var groupIdList = communityIds.Select(x => GroupId.Create(x)).ToList();
                 var groupCount = groupIdList.Count();
-                var criteria = new CompositeCriteria<GroupFilter, GroupExtensionData>
+
+                var filters = new List<FilterExpression>();
+                filters.Add(this.groupFilters.Id.Any(groupIdList));
+                filters.Add(this.groupFilters.Extension.Type.Is<GroupExtensionData>());
+
+                var criteria = new Criteria
                 {
-                    Filter = new GroupFilter { GroupIds = groupIdList },
+                    Filter = new AndExpression(filters),
                     PageInfo = new PageInfo { PageSize = groupCount },
                     OrderBy = new List<SortInfo> { new SortInfo(GroupSortFields.Name, true) }
                 };
-                var returnedGroups = this.groupService.Get(criteria);
-                socialGroups = returnedGroups.Results.Select(x => new Community(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();
+
+                var groups = this.groupService.Get<GroupExtensionData>(criteria);
+
+                return groups.Results.Select(x => new Community(x.Data.Id.Id, x.Data.Name, x.Data.Description, x.Extension.PageLink)).ToList();
             }
             catch (SocialAuthenticationException ex)
             {
@@ -143,9 +149,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social could not find the community requested.", ex);
             }
-
-
-            return socialGroups;
         }
 
         /// <summary>
@@ -155,15 +158,16 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <returns>The updated community.</returns>
         public Community Update(Community community)
         {
-            Composite<Group, GroupExtensionData> updatedGroup = null;
-
             try
             {
                 var group = new Group(GroupId.Create(community.Id), community.Name, community.Description);
                 var extension = new GroupExtensionData(community.PageLink);
-                updatedGroup = this.groupService.Update<GroupExtensionData>(group, extension);
+
+                var updatedGroup = this.groupService.Update<GroupExtensionData>(group, extension);
                 if (updatedGroup == null)
                     throw new SocialRepositoryException("The new community could not be added. Please try again");
+
+                return new Community(updatedGroup.Data.Id.Id, updatedGroup.Data.Name, updatedGroup.Data.Description, updatedGroup.Extension.PageLink);
             }
             catch (SocialAuthenticationException ex)
             {
@@ -181,8 +185,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
             {
                 throw new SocialRepositoryException("Episerver Social failed to process the application request.", ex);
             }
-
-            return new Community(updatedGroup.Data.Id.Id, updatedGroup.Data.Name, updatedGroup.Data.Description, updatedGroup.Extension.PageLink);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
     public static class CommentExtensions
     {
         private static ICommentService service;
+        private static CommentFilters commentFilters;
+
         // Format specifiers for building target content and author strings used to form 
         // references in Episerver Social. 
         private const string userReferenceFormat = "user://{0}";
@@ -25,6 +27,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         static CommentExtensions()
         {
             service = ServiceLocator.Current.GetInstance<ICommentService>();
+            commentFilters = new CommentFilters();
         }
 
         /// <summary> 
@@ -32,24 +35,28 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
         /// of Comments posted for an IContent instance.  
         /// </summary> 
         /// <param name="content">A component stored in the content repository. Example: a product.</param> 
-        /// <param name="visible">The visibility filter by which to retrieve comments.</param>
+        /// <param name="visible">The visibility setting by which to retrieve comments.</param>
         /// <param name="offset">The zero-based start index of the comment to retrieve.</param> 
         /// <param name="size">The maximum number of comments to retreive.</param> 
         /// <returns> 
         /// Returns a page of comments.
         /// </returns> 
-        public static ResultPage<Comment> GetComments(this IContent content, Visibility visibile, int offset, int size)
+        public static ResultPage<Comment> GetComments(this IContent content, bool? visible, int offset, int size)
         {
+            var filters = new List<FilterExpression>();
             var targetReference = Reference.Create(
                   String.Format(resourceReferenceFormat, content.ContentGuid.ToString()));
 
-            var criteria = new Criteria<CommentFilter>
+            filters.Add(commentFilters.Parent.EqualTo(targetReference));
+
+            if (visible != null)
             {
-                Filter = new CommentFilter
-                {
-                    Parent = targetReference,
-                    Visibility = visibile
-                },
+                filters.Add(commentFilters.IsVisible.EqualTo(visible.Value));
+            }
+
+            var criteria = new Criteria
+            {
+                Filter = new AndExpression(filters),
                 PageInfo = new PageInfo
                 {
                     PageOffset = offset,
@@ -61,7 +68,6 @@ namespace EPiServer.SocialAlloy.Web.Social.Extensions
                     new SortInfo(CommentSortFields.Created, false)
                 }
             };
-
 
             return service.Get(criteria);
         }

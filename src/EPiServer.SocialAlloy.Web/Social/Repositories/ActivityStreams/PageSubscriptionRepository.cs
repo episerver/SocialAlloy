@@ -14,6 +14,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
     public class PageSubscriptionRepository : IPageSubscriptionRepository
     {
         private readonly ISubscriptionService subscriptionService;
+        private readonly SubscriptionFilters subscriptionFilters;
 
         /// <summary>
         /// Constructor
@@ -21,6 +22,7 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         public PageSubscriptionRepository(ISubscriptionService subscriptionService)
         {
             this.subscriptionService = subscriptionService;
+            this.subscriptionFilters = new SubscriptionFilters();
         }
 
         /// <summary>
@@ -29,12 +31,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="subscription">The subscription to add.</param>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// Episerver Social Framework.</exception>
-        public void Add(PageSubscription subscription)
+        public void Add(PageActivitySubscription subscription)
         {
-            var newSubscription = AdaptSubscription(subscription);
-
             try
             {
+                var newSubscription = AdaptSubscription(subscription);
                 this.subscriptionService.Add(newSubscription);
             }
             catch (SocialAuthenticationException ex)
@@ -64,11 +65,11 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// Episerver Social subscription repository.</exception>
         public bool Exist(PageSubscriptionFilter filter)
         {
-            var subscriptionFilter = AdaptSubscriptionFilter(filter);
             try
             {
+                var subscriptionFilter = AdaptSubscriptionFilter(filter);
                 return this.subscriptionService.Get(
-                    new Criteria<SubscriptionFilter>
+                    new Criteria
                     {
                         PageInfo = new PageInfo
                         {
@@ -102,23 +103,17 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         /// <param name="subscription">The subscription to remove.</param>
         /// <exception cref="SocialRepositoryException">Thrown if there are any issues sending the request to the 
         /// Episerver Social cloud subscription repository.</exception>
-        public void Remove(PageSubscription subscription)
+        public void Remove(PageActivitySubscription subscription)
         {
-            var removeSubscription = AdaptSubscription(subscription);
-
             try
             {
-                this.subscriptionService.Remove(
-                    new Criteria<SubscriptionFilter>
-                    {
-                        Filter = new SubscriptionFilter
-                        {
-                            Subscriber = removeSubscription.Subscriber,
-                            Target = removeSubscription.Target,
-                            Type = removeSubscription.Type
-                        }
-                    }
-                );
+                var removeSubscription = AdaptSubscription(subscription);
+                var subscriberFilter = subscriptionFilters.Subscriber.EqualTo(removeSubscription.Subscriber);
+                var targetFilter = subscriptionFilters.Target.EqualTo(removeSubscription.Target);
+                var typeFilter = subscriptionFilters.Type.EqualTo(removeSubscription.Type.Type);
+                var removeFilter = new AndExpression(subscriberFilter, targetFilter, typeFilter);
+
+                this.subscriptionService.Remove(removeFilter);
             }
             catch (SocialAuthenticationException ex)
             {
@@ -139,25 +134,26 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adapt the application PageSubscription to the Episerver Social Subscription 
+        /// Adapt the application PageActivitySubscription to the Episerver Social Subscription 
         /// </summary>
-        /// <param name="subscription">The application's PageSubscription.</param>
+        /// <param name="subscription">The application's PageActivitySubscription.</param>
         /// <returns>The Episerver Social Subscription.</returns>
-        private Subscription AdaptSubscription(PageSubscription subscription)
+        private Subscription AdaptSubscription(PageActivitySubscription subscription)
         {
-            return new Subscription(Reference.Create(subscription.Subscriber), 
-                                    Reference.Create(subscription.Target));
+            return new Subscription(Reference.Create(subscription.Subscriber),
+                                    Reference.Create(subscription.Target),
+                                    SubscriptionType.Create(typeof(PageActivity).Name));
         }
 
         /// <summary>
-        /// Adapt a list of Episerver Social Subscription to application's PageSubscription.
+        /// Adapt a list of Episerver Social Subscription to application's PageActivitySubscription.
         /// </summary>
         /// <param name="subscriptions">The list of Episerver Social Subscription.</param>
-        /// <returns>The list of application PageSubscription.</returns>
-        private IEnumerable<PageSubscription> AdaptSocialSubscription(List<Subscription> subscriptions)
+        /// <returns>The list of application PageActivitySubscription.</returns>
+        private IEnumerable<PageActivitySubscription> AdaptSocialSubscription(List<Subscription> subscriptions)
         {
             return subscriptions.Select(c =>
-                new PageSubscription
+                new PageActivitySubscription
                 {
                     Id = c.Id.ToString(),
                     Subscriber = c.Subscriber.ToString(),
@@ -167,17 +163,25 @@ namespace EPiServer.SocialAlloy.Web.Social.Repositories
         }
 
         /// <summary>
-        /// Adapt a PageSubscriptionFilter to a SubscriptionFilter
+        /// Adapt a PageSubscriptionFilter to a FilterExpression
         /// </summary>
         /// <param name="filter">The PageSubscriptionFilter </param>
-        /// <returns>The SubscriptionFilter</returns>
-        private SubscriptionFilter AdaptSubscriptionFilter(PageSubscriptionFilter filter)
+        /// <returns>The FilterExpression</returns>
+        private FilterExpression AdaptSubscriptionFilter(PageSubscriptionFilter filter)
         {
-            return new SubscriptionFilter
+            var filters = new List<FilterExpression>();
+
+            if (!string.IsNullOrWhiteSpace(filter.Subscriber))
             {
-                Subscriber = !string.IsNullOrWhiteSpace(filter.Subscriber) ? Reference.Create(filter.Subscriber) : Reference.Empty,
-                Target = !string.IsNullOrWhiteSpace(filter.Target) ? Reference.Create(filter.Target) : Reference.Empty,
-            };
+                filters.Add(this.subscriptionFilters.Subscriber.EqualTo(filter.Subscriber));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Target))
+            {
+                filters.Add(this.subscriptionFilters.Target.EqualTo(filter.Target));
+            }
+
+            return (filters.Count > 1) ? new AndExpression(filters) : filters.FirstOrDefault();
         }
     }
 }
