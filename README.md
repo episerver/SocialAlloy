@@ -12,7 +12,7 @@ An Episerver Social account is required to run this application. If you do not h
   * This script will copy the site's database and assets into the appropriate locations.
 * Open the SocialAlloy.sln in Visual Studio
 * Open the web.config and update the `episerver.social` configuration section with your account information.
-  * For more information on how to configure Episerver Social, [please visit our Getting Connected guide](http://world.episerver.com/documentation/developer-guides/social/social_platform-overview/Installing-Episerver-Social/#GettingConnected).
+  * For more information on how to configure Episerver Social, [please visit our Getting Connected guide](https://world.episerver.com/documentation/developer-guides/community-api/social_platform-overview/Installing-Optimizely-Social/#GettingConnected).
 
 ### Running the Application
 * Build the application in Visual Studio 2015
@@ -76,7 +76,7 @@ Developers looking to get started with Episerver Social will find the [repositor
 This website was assembled to serve as a demonstration and has not been tested for production use.
 
 ## More Information
-For detailed information on how to implement social content solutions with Episerver Social, [please visit Episerver World](http://world.episerver.com/documentation/developer-guides/social/).
+For detailed information on how to implement social content solutions with Episerver Social, [please visit Episerver World](http://world.episerver.com/documentation/developer-guides/community-api/).
 
 ## Forum
 Have questions, feature requests, or implementations that you'd like to share? Join the community on the [Episerver developer forum](http://world.episerver.com/forum/developer-forum/episerver-social/).
